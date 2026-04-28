@@ -4,15 +4,14 @@ import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, ShoppingCart, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Menu, ShoppingCart, ChevronDown, User } from "lucide-react"
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
 
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
@@ -26,6 +25,9 @@ const moreItems = [
   { label: "Contact Us", href: "/contact" },
 ]
 
+const linkCls =
+  "text-lg font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors duration-200 [font-family:var(--font-barlow)]"
+
 function DesktopDropdown({
   label,
   items,
@@ -34,34 +36,32 @@ function DesktopDropdown({
   items: { label: string; href: string }[]
 }) {
   const [open, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    function onClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
     }
-    document.addEventListener("mousedown", onClickOutside)
-    return () => document.removeEventListener("mousedown", onClickOutside)
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
   }, [])
 
   return (
     <div
-      ref={containerRef}
+      ref={ref}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       className="relative"
     >
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 text-sm font-medium text-foreground/75 hover:text-foreground transition-colors"
+        className={`flex items-center gap-1 ${linkCls}`}
       >
         {label}
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          className="flex"
+          className="flex items-center"
         >
           <ChevronDown className="size-4" />
         </motion.span>
@@ -70,18 +70,18 @@ function DesktopDropdown({
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            initial={{ opacity: 0, y: -8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute top-full left-0 mt-3 w-52 rounded-xl border border-border bg-background shadow-lg overflow-hidden z-50"
+            className="absolute top-full left-0 mt-5 w-64 rounded-2xl bg-white border border-zinc-200 shadow-xl shadow-black/8 overflow-hidden z-50"
           >
             {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="block px-4 py-3 text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                className="block px-6 py-3.5 text-base font-bold uppercase tracking-wide text-zinc-700 hover:text-zinc-950 hover:bg-zinc-50 transition-colors duration-150 [font-family:var(--font-barlow)]"
               >
                 {item.label}
               </Link>
@@ -105,10 +105,10 @@ function MobileAccordion({
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="border-b border-border">
+    <div className="border-b border-zinc-100">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between py-3.5 text-base font-medium text-foreground"
+        className="flex w-full items-center justify-between py-4 text-base font-bold uppercase tracking-wide text-zinc-800 [font-family:var(--font-barlow)]"
       >
         {label}
         <motion.span
@@ -116,7 +116,7 @@ function MobileAccordion({
           transition={{ duration: 0.2 }}
           className="flex"
         >
-          <ChevronDown className="size-4 text-muted-foreground" />
+          <ChevronDown className="size-4 text-zinc-500" />
         </motion.span>
       </button>
 
@@ -129,13 +129,13 @@ function MobileAccordion({
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="pb-2 flex flex-col">
+            <div className="pb-3 flex flex-col gap-0.5">
               {items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={onNavigate}
-                  className="py-2.5 pl-4 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="py-2.5 pl-5 text-sm font-semibold uppercase tracking-wide text-zinc-500 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
                 >
                   {item.label}
                 </Link>
@@ -152,102 +152,116 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-8">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:backdrop-blur-md">
 
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <Image
-              src="/logo/sg-fit-logo-1.png"
-              alt="SG FIT"
-              width={48}
-              height={48}
-              className="h-11 w-auto"
-              priority
-            />
-          </Link>
+      {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
+      <div className="hidden xl:block pt-10">
+        {/* Bar — full width, logo protrudes above & below */}
+        <div className="relative h-11">
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-7">
-            <Link
-              href="/"
-              className="text-sm font-medium text-foreground/75 hover:text-foreground transition-colors"
-            >
-              Home
-            </Link>
-            <DesktopDropdown label="Programs" items={programsItems} />
-            <Link
-              href="/shop"
-              className="text-sm font-medium text-foreground/75 hover:text-foreground transition-colors"
-            >
-              Shop
-            </Link>
-            <Link
-              href="/community"
-              className="text-sm font-medium text-foreground/75 hover:text-foreground transition-colors"
-            >
-              Community
-            </Link>
-            <DesktopDropdown label="More" items={moreItems} />
-          </nav>
+          {/* White bg: circular notch at bottom-center hugs the logo, drop-shadow follows the curve */}
+          <div
+            className="absolute inset-0 bg-white"
+            style={{
+              maskImage:
+                "radial-gradient(circle 64px at 50% 150%, transparent 63px, black 65px)",
+              WebkitMaskImage:
+                "radial-gradient(circle 64px at 50% 150%, transparent 63px, black 65px)",
+              filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.07))",
+            }}
+          />
 
-          {/* Desktop Right Actions */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/signup">Sign Up</Link>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/cart" aria-label="Cart">
-                <ShoppingCart className="size-5" />
-              </Link>
-            </Button>
+          {/* Logo — absolutely centered, protruding */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <Link href="/">
+              <Image
+                src="/logo/sg-fit-logo-1.png"
+                alt="SG FIT"
+                width={128}
+                height={128}
+                className="h-32 w-auto drop-shadow-xl"
+                priority
+              />
+            </Link>
           </div>
 
-          {/* Mobile / Tablet Right Actions */}
-          <div className="flex lg:hidden items-center gap-1 shrink-0">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/cart" aria-label="Cart">
-                <ShoppingCart className="size-5" />
-              </Link>
-            </Button>
+          {/* Left — Programs, Shop, Community, More */}
+          <div className="absolute left-0 inset-y-0 flex items-center pl-6 xl:pl-8 gap-8">
+            <DesktopDropdown label="Programs" items={programsItems} />
+            <Link href="/shop" className={linkCls}>Shop</Link>
+            <Link href="/community" className={linkCls}>Community</Link>
+            <DesktopDropdown label="More" items={moreItems} />
+          </div>
 
+          {/* Right — icons, Get Started */}
+          <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5">
+
+<Link href="/cart" aria-label="Cart" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
+              <ShoppingCart className="size-6" />
+            </Link>
+
+            <Link href="/login" aria-label="Account" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
+              <User className="size-6" />
+            </Link>
+
+            <Link
+              href="/get-started"
+              className="bg-zinc-950 text-white text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
+            >
+              GET STARTED
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Mobile / Tablet / iPad Pro (<xl) ──────────────────────── */}
+      <div className="xl:hidden pt-5">
+        <div className="relative h-14">
+
+          {/* White bg: circular notch at bottom-center hugs the logo, drop-shadow follows the curve */}
+          <div
+            className="absolute inset-0 bg-white"
+            style={{
+              maskImage:
+                "radial-gradient(circle 44px at 50% 150%, transparent 43px, black 45px)",
+              WebkitMaskImage:
+                "radial-gradient(circle 44px at 50% 150%, transparent 43px, black 45px)",
+              filter: "drop-shadow(0 5px 12px rgba(0,0,0,0.07))",
+            }}
+          />
+
+          {/* Logo — centered, protruding */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <Link href="/">
+              <Image
+                src="/logo/sg-fit-logo-1.png"
+                alt="SG FIT"
+                width={88}
+                height={88}
+                className="h-22 w-auto drop-shadow-lg"
+                priority
+              />
+            </Link>
+          </div>
+
+          {/* Hamburger — left */}
+          <div className="absolute left-4 sm:left-6 inset-y-0 flex items-center">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
-                  <Menu className="size-5" />
-                </Button>
+                <button aria-label="Open menu" className="text-zinc-800 hover:text-zinc-950 transition-colors p-1">
+                  <Menu className="size-6" />
+                </button>
               </SheetTrigger>
 
-              <SheetContent
-                side="right"
-                className={cn(
-                  "flex flex-col p-0 w-[300px] sm:w-[340px]",
-                )}
-              >
-                {/* Sheet Header */}
-                <SheetTitle className="flex items-center px-5 py-4 border-b border-border">
-                  <Image
-                    src="/logo/sg-fit-logo-1.png"
-                    alt="SG FIT"
-                    width={40}
-                    height={40}
-                    className="h-10 w-auto"
-                  />
-                </SheetTitle>
+              <SheetContent side="left" className="flex flex-col p-0 w-75 sm:w-85 bg-white">
 
-                {/* Mobile Nav Links */}
-                <nav className="flex-1 overflow-y-auto px-5 py-2">
-                  <Link
-                    href="/"
-                    onClick={() => setMobileOpen(false)}
-                    className="block border-b border-border py-3.5 text-base font-medium text-foreground"
-                  >
-                    Home
-                  </Link>
+                {/* Sheet header — spacer so the auto-rendered close button has its own row */}
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetDescription className="sr-only">Site navigation links</SheetDescription>
+                <div className="h-14 shrink-0 border-b border-zinc-100" aria-hidden="true" />
+
+                {/* Nav links */}
+                <nav className="flex-1 overflow-y-auto px-6 py-2">
                   <MobileAccordion
                     label="Programs"
                     items={programsItems}
@@ -256,14 +270,14 @@ export default function Navbar() {
                   <Link
                     href="/shop"
                     onClick={() => setMobileOpen(false)}
-                    className="block border-b border-border py-3.5 text-base font-medium text-foreground"
+                    className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
                   >
                     Shop
                   </Link>
                   <Link
                     href="/community"
                     onClick={() => setMobileOpen(false)}
-                    className="block border-b border-border py-3.5 text-base font-medium text-foreground"
+                    className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
                   >
                     Community
                   </Link>
@@ -274,25 +288,34 @@ export default function Navbar() {
                   />
                 </nav>
 
-                {/* Mobile Auth Buttons */}
-                <div className="flex flex-col gap-2.5 px-5 py-5 border-t border-border">
-                  <Button variant="outline" asChild className="w-full">
-                    <Link href="/login" onClick={() => setMobileOpen(false)}>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button asChild className="w-full">
-                    <Link href="/signup" onClick={() => setMobileOpen(false)}>
-                      Sign Up
-                    </Link>
-                  </Button>
+                {/* Actions */}
+                <div className="px-6 py-6 border-t border-zinc-100">
+                  <Link
+                    href="/get-started"
+                    onClick={() => setMobileOpen(false)}
+                    className="block w-full bg-zinc-950 text-white text-base font-bold uppercase tracking-wide py-3.5 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
+                  >
+                    Get Started
+                  </Link>
                 </div>
+
               </SheetContent>
             </Sheet>
           </div>
 
+          {/* Cart — right */}
+          <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3">
+            <Link href="/login" aria-label="Account" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
+              <User className="size-6" />
+            </Link>
+            <Link href="/cart" aria-label="Cart" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
+              <ShoppingCart className="size-6" />
+            </Link>
+          </div>
+
         </div>
       </div>
+
     </header>
   )
 }
