@@ -18,13 +18,19 @@ export default function AnnouncementBar() {
           className="overflow-hidden"
         >
           <div className="relative bg-zinc-950 px-4 sm:px-8 xl:px-12 py-3 xl:py-4 flex items-center justify-center">
-            <p className="text-center text-[11px] sm:text-sm xl:text-base font-bold tracking-[0.06em] uppercase text-white leading-snug xl:leading-none [font-family:var(--font-barlow)]">
-              <span className="mr-2">⚡</span>
-              This Week Only — 10% Off +{" "}
-              <span className="text-white">$1,000 in Free Mobility Training</span>{" "}
+            <p className="text-center text-[11px] sm:text-sm xl:text-base font-bold tracking-[0.06em] uppercase leading-snug xl:leading-none [font-family:var(--font-barlow)]">
+              <span
+                className="mr-2"
+                style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+              >⚡</span>
+              <span
+                style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #C9953A)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+              >
+                This Week Only — 10% Off +{" "}$1,000 in Free Mobility Training
+              </span>{" "}
               <Link
                 href="/signup"
-                className="underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors duration-150"
+                className="text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white hover:decoration-white transition-colors duration-150"
               >
                 When You Subscribe
               </Link>

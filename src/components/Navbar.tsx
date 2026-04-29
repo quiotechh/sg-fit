@@ -152,7 +152,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:backdrop-blur-md">
+    <header className="w-full">
 
       {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
       <div className="hidden xl:block pt-10">
@@ -206,7 +206,8 @@ export default function Navbar() {
 
             <Link
               href="/get-started"
-              className="bg-zinc-950 text-white text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
+              className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
+              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
             >
               GET STARTED
             </Link>
@@ -293,7 +294,8 @@ export default function Navbar() {
                   <Link
                     href="/get-started"
                     onClick={() => setMobileOpen(false)}
-                    className="block w-full bg-zinc-950 text-white text-base font-bold uppercase tracking-wide py-3.5 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
+                    className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
+                    style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
                   >
                     Get Started
                   </Link>
