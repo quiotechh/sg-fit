@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { Raleway, Barlow, Geist_Mono } from "next/font/google";
+import {
+  Raleway,
+  Barlow,
+  Geist_Mono,
+  Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
 const raleway = Raleway({
@@ -21,6 +27,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: "SG Fit",
   description: "Your fitness journey starts here",
@@ -38,12 +50,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <AnnouncementBar />
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
