@@ -55,17 +55,17 @@ export default function CTASection() {
             Join thousands of women who have taken control of their fitness journey — with the programs, products, and community to back them up.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-row gap-3 sm:gap-4">
             <Link
               href="/get-started"
-              className="inline-block whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-sm px-8 py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150"
+              className="inline-block whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-xs px-5 py-3 sm:text-sm sm:px-8 sm:py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150 rounded-lg"
               style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
             >
               Get Started →
             </Link>
             <Link
               href="/community"
-              className="inline-block whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-sm px-8 py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200"
+              className="inline-block whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-xs px-5 py-3 sm:text-sm sm:px-8 sm:py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200 rounded-lg"
             >
               Learn More
             </Link>
