@@ -90,28 +90,28 @@ function CardBack({ card, padding }: { card: typeof cards[0], padding: string })
       {/* top accent bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-zinc-950" />
 
-      <div className={`absolute inset-0 flex flex-col justify-between ${padding} pt-6 xl:pt-8`}>
+      <div className={`absolute inset-0 flex flex-col justify-between ${padding} pt-5 sm:pt-6 xl:pt-8`}>
 
         {/* top section */}
         <div>
           {/* number · label */}
-          <p className="text-zinc-400 text-[10px] xl:text-xs font-bold uppercase tracking-widest mb-3 xl:mb-4 [font-family:var(--font-barlow)]">
+          <p className="text-zinc-400 text-[10px] xl:text-xs font-bold uppercase tracking-widest mb-2 sm:mb-3 xl:mb-4 [font-family:var(--font-barlow)]">
             {card.num} &nbsp;·&nbsp; {card.label}
           </p>
 
           {/* tagline — large, split across lines */}
           <h3
-            className="text-zinc-950 font-black uppercase [font-family:var(--font-barlow)] leading-none mb-5 xl:mb-7 text-2xl sm:text-3xl xl:text-4xl"
+            className="text-zinc-950 font-black uppercase [font-family:var(--font-barlow)] leading-none mb-4 sm:mb-5 xl:mb-7 text-xl sm:text-3xl xl:text-4xl"
             style={{ whiteSpace: "pre-line" }}
           >
             {card.back.tagline}
           </h3>
 
           {/* divider */}
-          <div className="w-8 h-0.5 bg-zinc-200 mb-4 xl:mb-5" />
+          <div className="w-8 h-0.5 bg-zinc-200 mb-3 sm:mb-4 xl:mb-5" />
 
           {/* items */}
-          <ul className="space-y-2 xl:space-y-2.5">
+          <ul className="space-y-1.5 sm:space-y-2 xl:space-y-2.5">
             {card.back.items.map((item) => (
               <li
                 key={item}
@@ -127,7 +127,7 @@ function CardBack({ card, padding }: { card: typeof cards[0], padding: string })
         {/* explore button */}
         <Link
           href={card.href}
-          className="inline-flex items-center justify-between w-full border-2 border-zinc-950 text-zinc-950 text-xs xl:text-sm font-black uppercase tracking-widest px-5 xl:px-6 py-2.5 xl:py-3 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-colors duration-200 group"
+          className="inline-flex items-center justify-between w-full border-2 border-zinc-950 text-zinc-950 text-xs xl:text-sm font-black uppercase tracking-widest px-5 xl:px-6 py-2 sm:py-2.5 xl:py-3 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-colors duration-200 group"
           onClick={(e) => e.stopPropagation()}
         >
           Explore {card.label}
@@ -204,7 +204,7 @@ export default function OfferCards() {
           return (
             <div
               key={card.id}
-              className="relative flex-1 h-[52vh] min-h-75 md:h-[50vw] md:min-h-56 rounded-xl sm:rounded-2xl border-2 border-black overflow-hidden cursor-pointer"
+              className="relative flex-1 h-[64vh] min-h-80 md:h-[50vw] md:min-h-56 rounded-xl sm:rounded-2xl border-2 border-black overflow-hidden cursor-pointer"
               onClick={() => setFlipped(isFlipped ? null : card.id)}
             >
               {/* FRONT */}

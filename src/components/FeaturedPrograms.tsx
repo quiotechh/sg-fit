@@ -30,15 +30,15 @@ export default function FeaturedPrograms() {
   return (
     <section className="bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 xl:gap-20 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-10 xl:gap-20 items-center">
           {/* ── Left: Copy + features ───────────────────────────────── */}
-          <div className="flex flex-col gap-12 order-2 xl:order-1">
+          <div className="flex flex-col gap-12 order-2 md:order-1">
             {/* Headline */}
             <div className="flex flex-col gap-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.28em] text-zinc-950 [font-family:var(--font-barlow)]">
+              <p className="text-sm sm:text-base font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 Programs
               </p>
-              <h2 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-none tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
+              <h2 className="text-4xl sm:text-5xl md:text-3xl lg:text-4xl xl:text-6xl font-black leading-none tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
                 Everything you need
                 <br />
                 to reach your goals.
@@ -68,16 +68,16 @@ export default function FeaturedPrograms() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-3 md:gap-2 lg:gap-3">
               <Link
                 href="/programs/workouts"
-                className="inline-flex items-center justify-center whitespace-nowrap border-2 bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-white hover:border-2 hover:border-zinc-950 hover:text-zinc-950 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
+                className="inline-flex items-center justify-center whitespace-nowrap border-2 bg-zinc-950 text-white text-sm md:text-xs lg:text-xs xl:text-sm font-black uppercase tracking-widest px-8 md:px-4 lg:px-5 xl:px-8 py-4 rounded-lg hover:bg-white hover:border-zinc-950 hover:text-zinc-950 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
               >
                 Browse Workout Plans
               </Link>
               <Link
                 href="/programs/nutrition"
-                className="inline-flex items-center justify-center whitespace-nowrap border-2 border-zinc-950 text-zinc-950 text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-950 hover:text-white active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
+                className="inline-flex items-center justify-center whitespace-nowrap border-2 border-zinc-950 text-zinc-950 rounded-lg text-sm md:text-xs lg:text-xs xl:text-sm font-black uppercase tracking-widest px-8 md:px-4 lg:px-5 xl:px-8 py-4 hover:bg-zinc-950 hover:text-white active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
               >
                 Browse Nutrition Plans
               </Link>
@@ -85,9 +85,9 @@ export default function FeaturedPrograms() {
           </div>
 
           {/* ── Right: Image + floating UI cards ───────────────────── */}
-          <div className="relative order-1 xl:order-2">
+          <div className="relative order-1 md:order-2">
             {/* Main image */}
-            <div className="relative w-full aspect-3/4 rounded-3xl overflow-hidden bg-zinc-200">
+            <div className="relative w-full aspect-3/4 md:aspect-4/5 xl:aspect-3/4 rounded-3xl overflow-hidden bg-zinc-200">
               {/*
                 Replace with:
                 <Image src="/images/programs-feature.jpg" alt="SG FIT Programs" fill className="object-cover object-top" />
@@ -139,7 +139,7 @@ export default function FeaturedPrograms() {
             {/* Floating pill — top right: members */}
             <div className="absolute top-6 -right-4 sm:-right-6 bg-white border border-zinc-100 rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
               <span className="text-base">⚡</span>
-              <span className="text-xs font-black uppercase tracking-wide text-zinc-950 [font-family:var(--font-barlow)]">
+              <span className="text-xs font-black uppercase tracking-wide text-amber-500 [font-family:var(--font-barlow)]">
                 10K+ Members
               </span>
             </div>

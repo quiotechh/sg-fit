@@ -226,7 +226,7 @@ export default function Testimonials() {
       <div className="text-center mt-12 sm:mt-16 px-4">
         <Link
           href="/shop"
-          className="inline-block bg-white text-zinc-950 font-black uppercase tracking-widest text-sm sm:text-base px-10 sm:px-14 py-4 sm:py-5 [font-family:var(--font-barlow)] hover:bg-zinc-200 active:scale-95 transition-all duration-150"
+          className="inline-block bg-white text-zinc-950 font-black uppercase tracking-widest text-sm sm:text-base px-10 sm:px-14 py-4 sm:py-5 [font-family:var(--font-barlow)] hover:bg-zinc-200 active:scale-95 rounded-lg transition-all duration-150"
         >
           Shop Now →
         </Link>

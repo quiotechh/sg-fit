@@ -200,14 +200,14 @@ export default function ShopSection() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/shop"
-                className="flex-1 text-center whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150"
+                className="flex-1 text-center whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest rounded-lg text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150"
                 style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
               >
                 Add to Cart
               </Link>
               <Link
                 href="/shop"
-                className="flex-1 text-center whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200"
+                className="flex-1 text-center whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all rounded-lg duration-200"
               >
                 View Product →
               </Link>
@@ -230,7 +230,8 @@ export default function ShopSection() {
           </p>
           <h3 className="uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-3xl sm:text-4xl xl:text-5xl">
             <span className="font-black sm:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>THE{" "}</span>
-            <span className="font-black hidden sm:inline" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>THE{" "}</span>
+            <span className="font-black hidden sm:inline lg:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>THE{" "}</span>
+            <span className="font-black hidden lg:inline" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>THE{" "}</span>
             <span className="font-black text-black">SG FIT COLLECTION</span>
           </h3>
         </div>
@@ -293,7 +294,7 @@ export default function ShopSection() {
         <div className="mt-10 sm:mt-12 text-center">
           <Link
             href="/shop"
-            className="inline-block border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-sm px-10 py-3.5 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200"
+            className="inline-block border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-sm px-10 py-3.5 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all rounded-lg duration-200"
           >
             View All Products →
           </Link>

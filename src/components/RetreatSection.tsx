@@ -38,26 +38,18 @@ export default function RetreatBanner() {
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 min-h-145 sm:min-h-160 items-center">
             {/* ── Left: Copy ── */}
             <div className="flex flex-col gap-7 px-7 py-12 sm:px-10 lg:px-14 lg:py-20">
-              <p className="text-[10px] font-black uppercase tracking-[0.28em] text-zinc-400 [font-family:var(--font-barlow)]">
+              <p className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 SG FIT · Luxury Retreat
               </p>
 
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tight [font-family:var(--font-barlow)]">
-                <span
-                  className="text-transparent italic"
-                  style={{ WebkitTextStroke: "2px #fff" }}
-                >
-                  Escape.
-                </span>
+                <span className="sm:hidden text-transparent italic" style={{ WebkitTextStroke: "1px #fff" }}>Escape.</span>
+                <span className="hidden sm:inline text-transparent italic" style={{ WebkitTextStroke: "2px #fff" }}>Escape.</span>
                 <br />
                 <span className="text-white">Train.</span>
                 <br />
-                <span
-                  className="text-transparent italic"
-                  style={{ WebkitTextStroke: "2px #fff" }}
-                >
-                  Transform.
-                </span>
+                <span className="sm:hidden text-transparent italic" style={{ WebkitTextStroke: "1px #fff" }}>Transform.</span>
+                <span className="hidden sm:inline text-transparent italic" style={{ WebkitTextStroke: "2px #fff" }}>Transform.</span>
               </h2>
 
               <p className="text-sm font-semibold text-zinc-400 leading-relaxed max-w-sm [font-family:var(--font-barlow)]">
