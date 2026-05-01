@@ -11,15 +11,15 @@ import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen gap-4">
+    <main className="flex flex-col min-h-screen">
       <Hero />
       <OfferCards />
-      <AboutSection />
       <Marquee />
       <FeaturedPrograms />
-      <ShopSection />
       <CommunityBanner />
+      <ShopSection />
       <Testimonials />
+      <AboutSection />
       <RetreatBanner />
       <CTASection />
     </main>
