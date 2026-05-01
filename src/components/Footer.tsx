@@ -20,23 +20,42 @@ const programs = [
 
 const company = [
   { label: "About", href: "/about" },
-  { label: "Retreats", href: "/retreats" },
+  {
+    label: "Retreats",
+    href: "https://retreat.sgfitwellness.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnyA-ePNCFew33_hiPIioPy_-eC8vkpJZ7SjEztRFKhGvGIf-wNKXs-ekQkiw_aem_crL-J5YoZxVVLmt6TI2wpQ",
+  },
   { label: "Affiliates", href: "/affiliates" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const support = [
-  { label: "FAQ", href: "/faq" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
-  { label: "Refund Policy", href: "/refunds" },
+  { label: "FAQ", href: "/support/faq" },
+  { label: "Privacy Policy", href: "/support/privacy-policy" },
+  { label: "Terms of Service", href: "/support/terms" },
+  { label: "Refund Policy", href: "/support/refund-policy" },
 ];
 
 const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/sharon_gambu/", Icon: FaInstagram },
-  { label: "YouTube", href: "https://www.youtube.com/@Sharon_ngambu", Icon: FaYoutube },
-  { label: "Facebook", href: "https://www.facebook.com/sharon.memela.73/", Icon: FaFacebookF },
-  { label: "TikTok", href: "https://www.tiktok.com/@sharongambu", Icon: FaTiktok },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/sharon_gambu/",
+    Icon: FaInstagram,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@Sharon_ngambu",
+    Icon: FaYoutube,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/sharon.memela.73/",
+    Icon: FaFacebookF,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@sharongambu",
+    Icon: FaTiktok,
+  },
   { label: "Email", href: "mailto:sgfitza@gmail.com", Icon: FaEnvelope },
 ];
 
@@ -58,20 +77,45 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-12 sm:py-14 xl:py-16 flex flex-col xl:flex-row items-center justify-between gap-8 sm:gap-10">
           {/* Headline */}
           <div className="text-center xl:text-left">
-            <p className="text-[11px] sm:text-xs font-black uppercase tracking-[0.18em] mb-2 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <p
+              className="text-[11px] sm:text-xs font-black uppercase tracking-[0.18em] mb-2 [font-family:var(--font-barlow)]"
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
               Stay in the Loop
             </p>
             <h2 className="text-3xl sm:text-4xl xl:text-[2.75rem] font-black uppercase tracking-tight leading-none [font-family:var(--font-barlow)]">
               Train Smarter.
               <br className="hidden sm:block" />{" "}
-              <span style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Live Stronger.</span>
+              <span
+                style={{
+                  background:
+                    "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Live Stronger.
+              </span>
             </h2>
           </div>
 
           {/* Newsletter */}
           <div className="w-full xl:w-auto xl:min-w-105 flex flex-col gap-2">
             {submitted ? (
-              <p className="text-sm font-bold uppercase tracking-widest text-center xl:text-left [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <p
+                className="text-sm font-bold uppercase tracking-widest text-center xl:text-left [font-family:var(--font-barlow)]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 ✓ You&apos;re in! Check your inbox.
               </p>
             ) : (
@@ -87,7 +131,11 @@ export default function Footer() {
                   />
                   <button
                     onClick={handleSubscribe}
-                    className="text-zinc-950 text-sm font-black uppercase tracking-widest px-6 active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+                    className="text-zinc-950 text-sm font-black uppercase tracking-widest px-6 active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                    }}
                   >
                     Subscribe
                   </button>
@@ -129,7 +177,14 @@ export default function Footer() {
 
         {/* Programs */}
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <p
+            className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]"
+            style={{
+              background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Programs
           </p>
           <ul className="flex flex-col gap-3.5">
@@ -148,7 +203,14 @@ export default function Footer() {
 
         {/* Company */}
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <p
+            className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]"
+            style={{
+              background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Company
           </p>
           <ul className="flex flex-col gap-3.5">
@@ -167,7 +229,14 @@ export default function Footer() {
 
         {/* Support */}
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <p
+            className="text-xs font-black uppercase tracking-[0.2em] mb-6 [font-family:var(--font-barlow)]"
+            style={{
+              background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Support
           </p>
           <ul className="flex flex-col gap-3.5">
