@@ -29,7 +29,7 @@ const features = [
 export default function FeaturedPrograms() {
   return (
     <section className="bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-16 sm:py-20 xl:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-10 xl:gap-20 items-center">
           {/* ── Left: Copy + features ───────────────────────────────── */}
           <div className="flex flex-col gap-12 order-2 md:order-1">

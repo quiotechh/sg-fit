@@ -55,7 +55,7 @@ export default function Footer() {
     <footer className="bg-zinc-950 text-white">
       {/* ── CTA Banner ─────────────────────────────────────────────── */}
       <div className="border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-14 xl:py-16 flex flex-col xl:flex-row items-center justify-between gap-10">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-12 sm:py-14 xl:py-16 flex flex-col xl:flex-row items-center justify-between gap-8 sm:gap-10">
           {/* Headline */}
           <div className="text-center xl:text-left">
             <p className="text-[11px] sm:text-xs font-black uppercase tracking-[0.18em] mb-2 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -102,7 +102,7 @@ export default function Footer() {
       </div>
 
       {/* ── Main Grid ──────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-16 xl:py-20 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-[1.6fr_1fr_1fr_1fr] gap-x-6 gap-y-12 md:gap-10 xl:gap-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 pt-12 sm:pt-16 xl:pt-20 pb-0 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-[1.6fr_1fr_1fr_1fr] gap-x-6 gap-y-10 sm:gap-y-12 md:gap-10 xl:gap-8">
         {/* Brand column */}
         <div className="col-span-2 md:col-span-3 xl:col-span-1 flex flex-col gap-6">
           <p className="text-sm font-semibold text-zinc-400 leading-relaxed max-w-xs [font-family:var(--font-barlow)]">
@@ -199,7 +199,7 @@ export default function Footer() {
 
       {/* ── Bottom Strip ───────────────────────────────────────────── */}
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 [font-family:var(--font-barlow)]">
             © {new Date().getFullYear()} SG Fit. All rights reserved.
           </p>

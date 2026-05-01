@@ -12,6 +12,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { useCart } from "@/context/CartContext"
 
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
@@ -117,6 +118,7 @@ function MobileAccordion({
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { totalItems, openCart } = useCart()
 
   return (
     // bg-white on the header ensures the pt-10/pt-5 padding area is always
@@ -161,9 +163,18 @@ export default function Navbar() {
 
           {/* Right — icons, Get Started */}
           <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5 z-20">
-            <Link href="/cart" aria-label="Cart" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
+            <button
+              onClick={openCart}
+              aria-label="Open cart"
+              className="relative text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
+            >
               <ShoppingCart className="size-6" />
-            </Link>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
+                  {totalItems}
+                </span>
+              )}
+            </button>
             <Link href="/login" aria-label="Account" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
               <User className="size-6" />
             </Link>
@@ -266,9 +277,18 @@ export default function Navbar() {
             <Link href="/login" aria-label="Account" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
               <User className="size-6" />
             </Link>
-            <Link href="/cart" aria-label="Cart" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
+            <button
+              onClick={openCart}
+              aria-label="Open cart"
+              className="relative text-zinc-700 hover:text-zinc-950 transition-colors p-1"
+            >
               <ShoppingCart className="size-6" />
-            </Link>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
 
         </div>

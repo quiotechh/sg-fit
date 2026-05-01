@@ -25,10 +25,10 @@ const tiles = [
 export default function CTASection() {
   return (
     <section className="bg-white w-full overflow-hidden">
-      <div className="flex flex-col md:flex-row items-center gap-12 md:gap-0 px-6 sm:px-10 md:px-0 py-16 sm:py-20 md:py-10 lg:py-20 xl:py-24">
+      <div className="flex flex-col md:flex-row items-center gap-10 sm:gap-12 md:gap-0 px-6 sm:px-10 md:px-0 pt-16 sm:pt-20 xl:pt-24 pb-16 sm:pb-20 md:pb-24 xl:pb-35">
 
         {/* ── LEFT — Text + CTA ──────────────────────────────────────── */}
-        <div className="flex-1 md:flex-[0.75] lg:flex-1 md:pl-8 lg:pl-16 xl:pl-24 md:pr-4 lg:pr-10">
+        <div className="flex-1 md:flex-[0.75] lg:flex-1 md:pl-10 lg:pl-16 xl:pl-24 md:pr-6 lg:pr-10">
           <p
             className="uppercase tracking-widest text-xs sm:text-sm font-bold mb-3 md:mb-2 lg:mb-4 [font-family:var(--font-barlow)]"
             style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
@@ -37,12 +37,16 @@ export default function CTASection() {
           </p>
 
           <h2 className="uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl md:text-3xl lg:text-5xl xl:text-6xl mb-4 md:mb-3 lg:mb-6">
-            {/* Mobile: lighter 1px stroke */}
+            {/* Mobile (<sm): 1px */}
             <span className="font-black block sm:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>
               A COMMUNITY
             </span>
-            {/* Tablet+: normal 2px stroke */}
-            <span className="font-black hidden sm:block" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>
+            {/* Tablet (sm–lg): 1px — font is smaller here so 2px looks too heavy */}
+            <span className="font-black hidden sm:block lg:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>
+              A COMMUNITY
+            </span>
+            {/* Desktop (lg+): 2px */}
+            <span className="font-black hidden lg:block" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>
               A COMMUNITY
             </span>
             <span className="font-black text-black block">BUILT FOR YOU</span>
@@ -58,14 +62,14 @@ export default function CTASection() {
           <div className="flex flex-row gap-3 sm:gap-4">
             <Link
               href="/get-started"
-              className="inline-block whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-xs px-5 py-3 sm:text-sm sm:px-8 sm:py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150 rounded-lg"
+              className="inline-block whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-sm px-7 py-3.5 sm:px-9 sm:py-4 xl:px-10 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150 rounded-lg"
               style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
             >
               Get Started →
             </Link>
             <Link
               href="/community"
-              className="inline-block whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-xs px-5 py-3 sm:text-sm sm:px-8 sm:py-4 md:text-xs md:tracking-wide md:px-5 md:py-3 lg:text-sm lg:tracking-widest lg:px-10 lg:py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200 rounded-lg"
+              className="inline-block whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-sm px-7 py-3.5 sm:px-9 sm:py-4 xl:px-10 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all duration-200 rounded-lg"
             >
               Learn More
             </Link>

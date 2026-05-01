@@ -25,7 +25,7 @@ export default function AboutSection() {
 
   return (
     <section className="bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-16 sm:py-20 xl:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-10 xl:gap-20 items-center">
 
           {/* ── Left: Rounded image ─────────────────────────────── */}
@@ -33,7 +33,7 @@ export default function AboutSection() {
             {/* Image container — rounded, tall, not full bleed */}
             <div className="relative w-full aspect-3/4 md:aspect-3/5 xl:aspect-3/4 rounded-3xl overflow-hidden bg-zinc-200">
               <Image
-                src="/images/sharon-about.jpeg"
+                src="/sg-fit-about-2.jpg"
                 alt="Sharon Gambu"
                 fill
                 className="object-cover object-center"

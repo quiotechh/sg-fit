@@ -9,6 +9,8 @@ import "./globals.css";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import CartSidebar from "@/components/CartSidebar";
+import { CartProvider } from "@/context/CartContext";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -53,10 +55,13 @@ export default function RootLayout({
       className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AnnouncementBar />
-        <Navbar />
-        {children}
-        <Footer />
+        <CartProvider>
+          <AnnouncementBar />
+          <Navbar />
+          {children}
+          <Footer />
+          <CartSidebar />
+        </CartProvider>
       </body>
     </html>
   );
