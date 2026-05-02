@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -32,13 +33,19 @@ const linkCls =
 function DesktopDropdown({
   label,
   items,
+  transparent,
 }: {
   label: string
   items: { label: string; href: string }[]
+  transparent: boolean
 }) {
+  const triggerCls = transparent
+    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
+    : linkCls
+
   return (
     <div className="group relative">
-      <button className={`flex items-center gap-1 ${linkCls}`}>
+      <button className={`flex items-center gap-1 ${triggerCls}`}>
         {label}
         <ChevronDown className="size-4 transition-transform duration-200 group-hover:rotate-180" />
       </button>
@@ -119,21 +126,30 @@ function MobileAccordion({
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { totalItems, openCart } = useCart()
+  const pathname = usePathname()
+  const transparent = pathname === "/about" || pathname === "/contact"
+
+  const navLinkCls = transparent
+    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
+    : linkCls
+  const iconCls = transparent
+    ? "text-white/80 hover:text-white transition-colors duration-200 p-1"
+    : "text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
+  const mobileIconCls = transparent
+    ? "text-white/80 hover:text-white transition-colors p-1"
+    : "text-zinc-700 hover:text-zinc-950 transition-colors p-1"
 
   return (
-    // bg-white on the header ensures the pt-10/pt-5 padding area is always
-    // white — no dark page background bleeding through on non-homepage routes.
-    <header className="w-full bg-white">
+    <header className={`w-full ${transparent ? "bg-transparent" : "bg-white"}`}>
 
       {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
       <div className="hidden xl:block pt-10">
         <div className="relative h-11">
 
-          {/* Solid white bar */}
-          <div className="absolute inset-0 bg-white" />
+          {/* Bar background */}
+          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
 
-          {/* White circle centered on the bar — logo always sits on white,
-              creates the convex bump look instead of a transparent notch */}
+          {/* White circle behind logo */}
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             style={{ width: "90px", height: "110px", zIndex: 1 }}
@@ -153,21 +169,17 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Left — Programs, Shop, Community, More */}
+          {/* Left nav links */}
           <div className="absolute left-0 inset-y-0 flex items-center pl-6 xl:pl-8 gap-8 z-20">
-            <DesktopDropdown label="Programs" items={programsItems} />
-            <Link href="/shop" className={linkCls}>Shop</Link>
-            <Link href="/community" className={linkCls}>Community</Link>
-            <DesktopDropdown label="More" items={moreItems} />
+            <DesktopDropdown label="Programs" items={programsItems} transparent={transparent} />
+            <Link href="/shop" className={navLinkCls}>Shop</Link>
+            <Link href="/community" className={navLinkCls}>Community</Link>
+            <DesktopDropdown label="More" items={moreItems} transparent={transparent} />
           </div>
 
-          {/* Right — icons, Get Started */}
+          {/* Right icons + CTA */}
           <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5 z-20">
-            <button
-              onClick={openCart}
-              aria-label="Open cart"
-              className="relative text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
-            >
+            <button onClick={openCart} aria-label="Open cart" className={`relative ${iconCls}`}>
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
@@ -175,7 +187,7 @@ export default function Navbar() {
                 </span>
               )}
             </button>
-            <Link href="/login" aria-label="Account" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
+            <Link href="/login" aria-label="Account" className={iconCls}>
               <User className="size-6" />
             </Link>
             <Link
@@ -194,8 +206,8 @@ export default function Navbar() {
       <div className="xl:hidden pt-5">
         <div className="relative h-14">
 
-          {/* Solid white bar */}
-          <div className="absolute inset-0 bg-white" />
+          {/* Bar background */}
+          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
 
           {/* White circle for mobile logo */}
           <div
@@ -221,7 +233,7 @@ export default function Navbar() {
           <div className="absolute left-4 sm:left-6 inset-y-0 flex items-center z-20">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <button aria-label="Open menu" className="text-zinc-800 hover:text-zinc-950 transition-colors p-1">
+                <button aria-label="Open menu" className={`${transparent ? "text-white/90 hover:text-white" : "text-zinc-800 hover:text-zinc-950"} transition-colors p-1`}>
                   <Menu className="size-6" />
                 </button>
               </SheetTrigger>
@@ -232,30 +244,10 @@ export default function Navbar() {
                 <div className="h-14 shrink-0 border-b border-zinc-100" aria-hidden="true" />
 
                 <nav className="flex-1 overflow-y-auto px-6 py-2">
-                  <MobileAccordion
-                    label="Programs"
-                    items={programsItems}
-                    onNavigate={() => setMobileOpen(false)}
-                  />
-                  <Link
-                    href="/shop"
-                    onClick={() => setMobileOpen(false)}
-                    className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
-                  >
-                    Shop
-                  </Link>
-                  <Link
-                    href="/community"
-                    onClick={() => setMobileOpen(false)}
-                    className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
-                  >
-                    Community
-                  </Link>
-                  <MobileAccordion
-                    label="More"
-                    items={moreItems}
-                    onNavigate={() => setMobileOpen(false)}
-                  />
+                  <MobileAccordion label="Programs" items={programsItems} onNavigate={() => setMobileOpen(false)} />
+                  <Link href="/shop" onClick={() => setMobileOpen(false)} className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]">Shop</Link>
+                  <Link href="/community" onClick={() => setMobileOpen(false)} className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]">Community</Link>
+                  <MobileAccordion label="More" items={moreItems} onNavigate={() => setMobileOpen(false)} />
                 </nav>
 
                 <div className="px-6 py-6 border-t border-zinc-100">
@@ -274,14 +266,10 @@ export default function Navbar() {
 
           {/* Icons — right */}
           <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3 z-20">
-            <Link href="/login" aria-label="Account" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
+            <Link href="/login" aria-label="Account" className={mobileIconCls}>
               <User className="size-6" />
             </Link>
-            <button
-              onClick={openCart}
-              aria-label="Open cart"
-              className="relative text-zinc-700 hover:text-zinc-950 transition-colors p-1"
-            >
+            <button onClick={openCart} aria-label="Open cart" className={`relative ${mobileIconCls}`}>
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
