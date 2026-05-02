@@ -1,40 +1,70 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, ShoppingCart, ChevronDown, User } from "lucide-react"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Menu,
+  ShoppingCart,
+  ChevronDown,
+  ChevronRight,
+  User,
+  Lock,
+} from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTrigger,
   SheetTitle,
-} from "@/components/ui/sheet"
-import { useCart } from "@/context/CartContext"
+} from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useCart } from "@/context/CartContext";
+
+// ── Toggle these to preview different UI states ──────────────────────
+const isLoggedIn = true;
+const hasMembership = false;
+// ─────────────────────────────────────────────────────────────────────
 
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
   { label: "Nutrition Guides", href: "/programs/nutrition" },
-]
+];
+
+const myProgramItems = [
+  { label: "Workout Programs", href: "/my-programs/workouts" },
+  { label: "Nutrition Guides", href: "/my-programs/nutrition" },
+];
 
 const moreItems = [
-  { label: "Retreats", href: "https://retreat.sgfitwellness.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnyA-ePNCFew33_hiPIioPy_-eC8vkpJZ7SjEztRFKhGvGIf-wNKXs-ekQkiw_aem_crL-J5YoZxVVLmt6TI2wpQ" },
+  {
+    label: "Retreats",
+    href: "https://retreat.sgfitwellness.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnyA-ePNCFew33_hiPIioPy_-eC8vkpJZ7SjEztRFKhGvGIf-wNKXs-ekQkiw_aem_crL-J5YoZxVVLmt6TI2wpQ",
+  },
   { label: "Affiliates", href: "/affiliates" },
   { label: "About", href: "/about" },
   { label: "Contact Us", href: "/contact" },
-]
+];
 
 const linkCls =
-  "text-lg font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors duration-200 [font-family:var(--font-barlow)]"
+  "text-lg font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors duration-200 [font-family:var(--font-barlow)]";
 
 function DesktopDropdown({
   label,
   items,
 }: {
-  label: string
-  items: { label: string; href: string }[]
+  label: string;
+  items: { label: string; href: string }[];
 }) {
   return (
     <div className="group relative">
@@ -43,7 +73,6 @@ function DesktopDropdown({
         <ChevronDown className="size-4 transition-transform duration-200 group-hover:rotate-180" />
       </button>
 
-      {/* pt-3 bridges the visual gap — keeps mouse inside hover area */}
       <div className="absolute top-full left-0 z-50 pt-3 pointer-events-none opacity-0 scale-95 origin-top transition-all duration-150 ease-out group-hover:pointer-events-auto group-hover:opacity-100 group-hover:scale-100">
         <div className="w-64 rounded-2xl bg-white border border-zinc-200 shadow-xl shadow-black/8 overflow-hidden">
           {items.map((item) => (
@@ -58,7 +87,7 @@ function DesktopDropdown({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function MobileAccordion({
@@ -66,11 +95,11 @@ function MobileAccordion({
   items,
   onNavigate,
 }: {
-  label: string
-  items: { label: string; href: string }[]
-  onNavigate: () => void
+  label: string;
+  items: { label: string; href: string }[];
+  onNavigate: () => void;
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="border-b border-zinc-100">
@@ -113,33 +142,107 @@ function MobileAccordion({
         )}
       </AnimatePresence>
     </div>
-  )
+  );
+}
+
+const itemCls =
+  "rounded-none px-6 py-2.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer flex items-center justify-between text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 hover:text-[#C9953A] focus:text-[#C9953A]";
+
+function ProfileDropdown() {
+  const router = useRouter();
+  const communityHref = hasMembership ? "/community" : "/membership";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          aria-label="My profile"
+          className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1 focus:outline-none"
+        >
+          <User className="size-6" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        sideOffset={12}
+        className="w-65 p-0 rounded-2xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
+      >
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger
+            className={`${itemCls} pt-4 data-open:text-[#C9953A] data-open:bg-zinc-50`}
+          >
+            My Programs
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="p-0 rounded-2xl border border-zinc-100 shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden min-w-50">
+            {myProgramItems.map((item) => (
+              <DropdownMenuItem
+                key={item.href}
+                onSelect={() => router.push(item.href)}
+                className={itemCls}
+              >
+                {item.label}
+                <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+
+        {/* Divider */}
+        <div className="mx-6 h-px bg-zinc-100 my-2" />
+
+        {/* Community */}
+        <DropdownMenuItem
+          onSelect={() => router.push(communityHref)}
+          className={`${itemCls} ${!hasMembership ? "text-zinc-400" : "text-zinc-700"}`}
+        >
+          SGians (Community)
+          {!hasMembership ? (
+            <Lock className="size-3.5 text-zinc-300 shrink-0" />
+          ) : (
+            <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
+          )}
+        </DropdownMenuItem>
+
+        {/* Help */}
+        <DropdownMenuItem
+          onSelect={() => router.push("/help")}
+          className={`${itemCls} text-zinc-700 mb-1`}
+        >
+          Help
+          <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
+        </DropdownMenuItem>
+
+        {/* Divider */}
+        <div className="mx-6 h-px bg-zinc-100" />
+
+        {/* Sign Out */}
+        <DropdownMenuItem
+          className={`${itemCls} text-zinc-700 hover:text-red-500 focus:text-red-500 py-4`}
+        >
+          Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const { totalItems, openCart } = useCart()
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { totalItems, openCart } = useCart();
 
   return (
-    // bg-white on the header ensures the pt-10/pt-5 padding area is always
-    // white — no dark page background bleeding through on non-homepage routes.
     <header className="w-full bg-white">
-
       {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
       <div className="hidden xl:block pt-10">
         <div className="relative h-11">
-
-          {/* Solid white bar */}
           <div className="absolute inset-0 bg-white" />
 
-          {/* White circle centered on the bar — logo always sits on white,
-              creates the convex bump look instead of a transparent notch */}
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             style={{ width: "90px", height: "110px", zIndex: 1 }}
           />
 
-          {/* Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
             <Link href="/">
               <Image
@@ -156,12 +259,20 @@ export default function Navbar() {
           {/* Left — Programs, Shop, Community, More */}
           <div className="absolute left-0 inset-y-0 flex items-center pl-6 xl:pl-8 gap-8 z-20">
             <DesktopDropdown label="Programs" items={programsItems} />
-            <Link href="/shop" className={linkCls}>Shop</Link>
-            <Link href="/community" className={linkCls}>Community</Link>
+            <Link href="/shop" className={linkCls}>
+              Shop
+            </Link>
+
+            {isLoggedIn && (
+              <Link href="/community" className={linkCls}>
+                Community
+              </Link>
+            )}
+
             <DesktopDropdown label="More" items={moreItems} />
           </div>
 
-          {/* Right — icons, Get Started */}
+          {/* Right — Cart, Auth */}
           <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5 z-20">
             <button
               onClick={openCart}
@@ -175,35 +286,44 @@ export default function Navbar() {
                 </span>
               )}
             </button>
-            <Link href="/login" aria-label="Account" className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1">
-              <User className="size-6" />
-            </Link>
-            <Link
-              href="/get-started"
-              className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
-              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
-            >
-              GET STARTED
-            </Link>
-          </div>
 
+            {isLoggedIn ? (
+              <ProfileDropdown />
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  aria-label="Account"
+                  className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
+                >
+                  <User className="size-6" />
+                </Link>
+                <Link
+                  href="/get-started"
+                  className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                  }}
+                >
+                  GET STARTED
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ── Mobile / Tablet / iPad Pro (<xl) ──────────────────────── */}
       <div className="xl:hidden pt-5">
         <div className="relative h-14">
-
-          {/* Solid white bar */}
           <div className="absolute inset-0 bg-white" />
 
-          {/* White circle for mobile logo */}
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             style={{ width: "76px", height: "66px", zIndex: 1 }}
           />
 
-          {/* Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
             <Link href="/">
               <Image
@@ -221,15 +341,26 @@ export default function Navbar() {
           <div className="absolute left-4 sm:left-6 inset-y-0 flex items-center z-20">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <button aria-label="Open menu" className="text-zinc-800 hover:text-zinc-950 transition-colors p-1">
+                <button
+                  aria-label="Open menu"
+                  className="text-zinc-800 hover:text-zinc-950 transition-colors p-1"
+                >
                   <Menu className="size-6" />
                 </button>
               </SheetTrigger>
 
-              <SheetContent side="left" className="flex flex-col p-0 w-75 sm:w-85 bg-white">
+              <SheetContent
+                side="left"
+                className="flex flex-col p-0 w-75 sm:w-85 bg-white"
+              >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <SheetDescription className="sr-only">Site navigation links</SheetDescription>
-                <div className="h-14 shrink-0 border-b border-zinc-100" aria-hidden="true" />
+                <SheetDescription className="sr-only">
+                  Site navigation links
+                </SheetDescription>
+                <div
+                  className="h-14 shrink-0 border-b border-zinc-100"
+                  aria-hidden="true"
+                />
 
                 <nav className="flex-1 overflow-y-auto px-6 py-2">
                   <MobileAccordion
@@ -244,6 +375,7 @@ export default function Navbar() {
                   >
                     Shop
                   </Link>
+
                   <Link
                     href="/community"
                     onClick={() => setMobileOpen(false)}
@@ -251,6 +383,7 @@ export default function Navbar() {
                   >
                     Community
                   </Link>
+
                   <MobileAccordion
                     label="More"
                     items={moreItems}
@@ -258,25 +391,76 @@ export default function Navbar() {
                   />
                 </nav>
 
-                <div className="px-6 py-6 border-t border-zinc-100">
-                  <Link
-                    href="/get-started"
-                    onClick={() => setMobileOpen(false)}
-                    className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
-                    style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
-                  >
-                    Get Started
-                  </Link>
-                </div>
+                {/* Sheet footer — changes based on auth state */}
+                {isLoggedIn ? (
+                  <div className="px-6 pt-1 pb-5 border-t border-zinc-100">
+                    <p className="py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 [font-family:var(--font-barlow)]">
+                      My Account
+                    </p>
+                    <MobileAccordion
+                      label="My Programs"
+                      items={myProgramItems}
+                      onNavigate={() => setMobileOpen(false)}
+                    />
+                    <Link
+                      href={hasMembership ? "/community" : "/membership"}
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center justify-between border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide transition-colors [font-family:var(--font-barlow)] ${
+                        !hasMembership
+                          ? "text-zinc-400"
+                          : "text-zinc-800 hover:text-zinc-950"
+                      }`}
+                    >
+                      <span className={!hasMembership ? "opacity-60" : ""}>
+                        SGians (Community)
+                      </span>
+                      {!hasMembership && (
+                        <Lock className="size-4 text-zinc-400" />
+                      )}
+                    </Link>
+                    <Link
+                      href="/help"
+                      onClick={() => setMobileOpen(false)}
+                      className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
+                    >
+                      Help
+                    </Link>
+                    <button className="w-full text-left py-4 text-base font-bold uppercase tracking-wide text-red-500 hover:text-red-700 transition-colors [font-family:var(--font-barlow)]">
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="px-6 py-6 border-t border-zinc-100">
+                    <Link
+                      href="/get-started"
+                      onClick={() => setMobileOpen(false)}
+                      className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                      }}
+                    >
+                      Get Started
+                    </Link>
+                  </div>
+                )}
               </SheetContent>
             </Sheet>
           </div>
 
           {/* Icons — right */}
           <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3 z-20">
-            <Link href="/login" aria-label="Account" className="text-zinc-700 hover:text-zinc-950 transition-colors p-1">
-              <User className="size-6" />
-            </Link>
+            {isLoggedIn ? (
+              <ProfileDropdown />
+            ) : (
+              <Link
+                href="/login"
+                aria-label="Account"
+                className="text-zinc-700 hover:text-zinc-950 transition-colors p-1"
+              >
+                <User className="size-6" />
+              </Link>
+            )}
             <button
               onClick={openCart}
               aria-label="Open cart"
@@ -290,10 +474,8 @@ export default function Navbar() {
               )}
             </button>
           </div>
-
         </div>
       </div>
-
     </header>
-  )
+  );
 }

@@ -61,9 +61,26 @@ export default function CommunityPage() {
           className="object-cover object-top"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-      </section>
+        {/* Gradient — matches hero.tsx */}
+        <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
 
+        <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 xl:px-16 pb-16 sm:pb-24 xl:pb-28">
+          <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl mb-5">
+            <span
+              className="block"
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              The Community
+            </span>
+            <span className="block text-white/80">BECOME AN SGIAN.</span>
+          </h1>
+        </div>
+      </section>
       {/* ── WHAT IS THE COMMUNITY — image right, text left ── */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
@@ -277,14 +294,14 @@ export default function CommunityPage() {
         <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Image */}
-            <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden order-2 lg:order-1">
+            <div className="relative w-full aspect-3/4 rounded-3xl overflow-hidden order-2 lg:order-1">
               <Image
                 src="/community/sgfit-community-4.jpg"
                 alt="SGians community vibe"
                 fill
                 className="object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-zinc-950/60 to-transparent" />
             </div>
 
             <div className="order-1 lg:order-2 flex flex-col gap-8">
