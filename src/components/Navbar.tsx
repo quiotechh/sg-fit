@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -62,13 +63,19 @@ const linkCls =
 function DesktopDropdown({
   label,
   items,
+  transparent,
 }: {
   label: string;
   items: { label: string; href: string }[];
+  transparent: boolean;
 }) {
+  const triggerCls = transparent
+    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
+    : linkCls;
+
   return (
     <div className="group relative">
-      <button className={`flex items-center gap-1 ${linkCls}`}>
+      <button className={`flex items-center gap-1 ${triggerCls}`}>
         {label}
         <ChevronDown className="size-4 transition-transform duration-200 group-hover:rotate-180" />
       </button>
@@ -148,7 +155,7 @@ function MobileAccordion({
 const itemCls =
   "rounded-none px-6 py-2.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer flex items-center justify-between text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 hover:text-[#C9953A] focus:text-[#C9953A]";
 
-function ProfileDropdown() {
+function ProfileDropdown({ iconCls }: { iconCls: string }) {
   const router = useRouter();
   const communityHref = hasMembership ? "/community" : "/membership";
 
@@ -157,7 +164,7 @@ function ProfileDropdown() {
       <DropdownMenuTrigger asChild>
         <button
           aria-label="My profile"
-          className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1 focus:outline-none"
+          className={`${iconCls} focus:outline-none`}
         >
           <User className="size-6" />
         </button>
@@ -188,10 +195,8 @@ function ProfileDropdown() {
           </DropdownMenuSubContent>
         </DropdownMenuSub>
 
-        {/* Divider */}
         <div className="mx-6 h-px bg-zinc-100 my-2" />
 
-        {/* Community */}
         <DropdownMenuItem
           onSelect={() => router.push(communityHref)}
           className={`${itemCls} ${!hasMembership ? "text-zinc-400" : "text-zinc-700"}`}
@@ -204,7 +209,6 @@ function ProfileDropdown() {
           )}
         </DropdownMenuItem>
 
-        {/* Help */}
         <DropdownMenuItem
           onSelect={() => router.push("/help")}
           className={`${itemCls} text-zinc-700 mb-1`}
@@ -213,10 +217,8 @@ function ProfileDropdown() {
           <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
         </DropdownMenuItem>
 
-        {/* Divider */}
         <div className="mx-6 h-px bg-zinc-100" />
 
-        {/* Sign Out */}
         <DropdownMenuItem
           className={`${itemCls} text-zinc-700 hover:text-red-500 focus:text-red-500 py-4`}
         >
@@ -230,13 +232,26 @@ function ProfileDropdown() {
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalItems, openCart } = useCart();
+  const pathname = usePathname();
+  const transparent = pathname === "/about" || pathname === "/contact";
+
+  const navLinkCls = transparent
+    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
+    : linkCls;
+  const iconCls = transparent
+    ? "text-white/80 hover:text-white transition-colors duration-200 p-1"
+    : "text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1";
+  const mobileIconCls = transparent
+    ? "text-white/80 hover:text-white transition-colors p-1"
+    : "text-zinc-700 hover:text-zinc-950 transition-colors p-1";
 
   return (
-    <header className="w-full bg-white">
+    <header className={`w-full ${transparent ? "bg-transparent" : "bg-white"}`}>
+
       {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
       <div className="hidden xl:block pt-10">
         <div className="relative h-11">
-          <div className="absolute inset-0 bg-white" />
+          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -256,29 +271,19 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Left — Programs, Shop, Community, More */}
+          {/* Left nav links */}
           <div className="absolute left-0 inset-y-0 flex items-center pl-6 xl:pl-8 gap-8 z-20">
-            <DesktopDropdown label="Programs" items={programsItems} />
-            <Link href="/shop" className={linkCls}>
-              Shop
-            </Link>
-
+            <DesktopDropdown label="Programs" items={programsItems} transparent={transparent} />
+            <Link href="/shop" className={navLinkCls}>Shop</Link>
             {isLoggedIn && (
-              <Link href="/community" className={linkCls}>
-                Community
-              </Link>
+              <Link href="/community" className={navLinkCls}>Community</Link>
             )}
-
-            <DesktopDropdown label="More" items={moreItems} />
+            <DesktopDropdown label="More" items={moreItems} transparent={transparent} />
           </div>
 
           {/* Right — Cart, Auth */}
           <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5 z-20">
-            <button
-              onClick={openCart}
-              aria-label="Open cart"
-              className="relative text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
-            >
+            <button onClick={openCart} aria-label="Open cart" className={`relative ${iconCls}`}>
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
@@ -288,23 +293,16 @@ export default function Navbar() {
             </button>
 
             {isLoggedIn ? (
-              <ProfileDropdown />
+              <ProfileDropdown iconCls={iconCls} />
             ) : (
               <>
-                <Link
-                  href="/login"
-                  aria-label="Account"
-                  className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1"
-                >
+                <Link href="/login" aria-label="Account" className={iconCls}>
                   <User className="size-6" />
                 </Link>
                 <Link
                   href="/get-started"
                   className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
-                  }}
+                  style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
                 >
                   GET STARTED
                 </Link>
@@ -317,7 +315,7 @@ export default function Navbar() {
       {/* ── Mobile / Tablet / iPad Pro (<xl) ──────────────────────── */}
       <div className="xl:hidden pt-5">
         <div className="relative h-14">
-          <div className="absolute inset-0 bg-white" />
+          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -343,24 +341,16 @@ export default function Navbar() {
               <SheetTrigger asChild>
                 <button
                   aria-label="Open menu"
-                  className="text-zinc-800 hover:text-zinc-950 transition-colors p-1"
+                  className={`${transparent ? "text-white/90 hover:text-white" : "text-zinc-800 hover:text-zinc-950"} transition-colors p-1`}
                 >
                   <Menu className="size-6" />
                 </button>
               </SheetTrigger>
 
-              <SheetContent
-                side="left"
-                className="flex flex-col p-0 w-75 sm:w-85 bg-white"
-              >
+              <SheetContent side="left" className="flex flex-col p-0 w-75 sm:w-85 bg-white">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <SheetDescription className="sr-only">
-                  Site navigation links
-                </SheetDescription>
-                <div
-                  className="h-14 shrink-0 border-b border-zinc-100"
-                  aria-hidden="true"
-                />
+                <SheetDescription className="sr-only">Site navigation links</SheetDescription>
+                <div className="h-14 shrink-0 border-b border-zinc-100" aria-hidden="true" />
 
                 <nav className="flex-1 overflow-y-auto px-6 py-2">
                   <MobileAccordion
@@ -375,7 +365,6 @@ export default function Navbar() {
                   >
                     Shop
                   </Link>
-
                   <Link
                     href="/community"
                     onClick={() => setMobileOpen(false)}
@@ -383,7 +372,6 @@ export default function Navbar() {
                   >
                     Community
                   </Link>
-
                   <MobileAccordion
                     label="More"
                     items={moreItems}
@@ -414,9 +402,7 @@ export default function Navbar() {
                       <span className={!hasMembership ? "opacity-60" : ""}>
                         SGians (Community)
                       </span>
-                      {!hasMembership && (
-                        <Lock className="size-4 text-zinc-400" />
-                      )}
+                      {!hasMembership && <Lock className="size-4 text-zinc-400" />}
                     </Link>
                     <Link
                       href="/help"
@@ -435,10 +421,7 @@ export default function Navbar() {
                       href="/get-started"
                       onClick={() => setMobileOpen(false)}
                       className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
-                      }}
+                      style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
                     >
                       Get Started
                     </Link>
@@ -451,21 +434,13 @@ export default function Navbar() {
           {/* Icons — right */}
           <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3 z-20">
             {isLoggedIn ? (
-              <ProfileDropdown />
+              <ProfileDropdown iconCls={mobileIconCls} />
             ) : (
-              <Link
-                href="/login"
-                aria-label="Account"
-                className="text-zinc-700 hover:text-zinc-950 transition-colors p-1"
-              >
+              <Link href="/login" aria-label="Account" className={mobileIconCls}>
                 <User className="size-6" />
               </Link>
             )}
-            <button
-              onClick={openCart}
-              aria-label="Open cart"
-              className="relative text-zinc-700 hover:text-zinc-950 transition-colors p-1"
-            >
+            <button onClick={openCart} aria-label="Open cart" className={`relative ${mobileIconCls}`}>
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
