@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (text: string) => void;
+};
+
+export default function CreatePostModal({ open, onClose, onSubmit }: Props) {
+  const [text, setText] = useState("");
+
+  const handleClose = () => {
+    setText("");
+    onClose();
+  };
+
+  const handleSubmit = () => {
+    if (!text.trim()) return;
+    onSubmit(text.trim());
+    handleClose();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-140 lg:max-w-180 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#eeece8]">
+          <DialogTitle className="text-[15px] font-black uppercase tracking-[0.08em] text-[#0a0a0a] [font-family:var(--font-barlow)]">
+            Create Post
+          </DialogTitle>
+          <DialogClose className="w-8 h-8 rounded-full border-0 bg-[#f8f7f5] flex items-center justify-center text-[#9e9a90] text-base cursor-pointer hover:bg-[#eeece8] hover:text-[#0a0a0a] transition-all duration-200">
+            ✕
+          </DialogClose>
+        </div>
+
+        {/* Body */}
+        <div className="px-6 py-5 flex items-start gap-3.5">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-black text-[#0a0a0a] shrink-0 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">
+            YO
+          </div>
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
+            }}
+            placeholder="Share your progress, thoughts, or wins today..."
+            rows={5}
+            autoFocus
+            className="flex-1 border-none outline-none bg-[#f8f7f5] rounded-[14px] px-4 py-3 text-[14px] text-[#0a0a0a] font-medium resize-none transition-all duration-200 [font-family:var(--font-barlow)] placeholder:text-[#9e9a90] focus:bg-[#f5f5f5]"
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between px-6 pb-6 pt-3 border-t border-[#eeece8]">
+          <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] bg-transparent text-[12px] font-semibold text-[#9e9a90] cursor-pointer uppercase tracking-[0.04em] transition-all duration-200 hover:border-[#C9953A] hover:text-[#C9953A] [font-family:var(--font-barlow)]">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            Add Photo
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-2.5 rounded-[12px] border-none text-[12px] font-black text-[#0a0a0a] uppercase tracking-widest cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(201,149,58,0.3)] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(201,149,58,0.4)] active:scale-[0.97] [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]"
+          >
+            Post
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
