@@ -36,7 +36,7 @@ import { useCart } from "@/context/CartContext";
 const isLoggedIn = true;
 const hasMembership = false;
 // ─────────────────────────────────────────────────────────────────────
-
+ 
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
   { label: "Nutrition Guides", href: "/programs/nutrition" },
