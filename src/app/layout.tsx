@@ -4,12 +4,9 @@ import {
   Barlow,
   Geist_Mono,
   Playfair_Display,
+  Cormorant_Garamond,
 } from "next/font/google";
 import "./globals.css";
-import AnnouncementBar from "@/components/AnnouncementBar";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import CartSidebar from "@/components/CartSidebar";
 import { CartProvider } from "@/context/CartContext";
 
 const raleway = Raleway({
@@ -21,7 +18,7 @@ const raleway = Raleway({
 const barlow = Barlow({
   variable: "--font-barlow",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -33,6 +30,12 @@ const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -52,15 +55,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} ${playfairDisplay.variable} ${cormorantGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <CartProvider>
-          <AnnouncementBar />
-          <Navbar />
-          {children}
-          <Footer />
-          <CartSidebar />
+          {children} 
         </CartProvider>
       </body>
     </html>
