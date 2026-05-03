@@ -25,18 +25,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/context/CartContext";
 
 // ── Toggle these to preview different UI states ──────────────────────
 const isLoggedIn = true;
-const hasMembership = false;
+const hasMembership = true;
 // ─────────────────────────────────────────────────────────────────────
-
+ 
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
   { label: "Nutrition Guides", href: "/programs/nutrition" },
@@ -157,10 +154,11 @@ const itemCls =
 
 function ProfileDropdown({ iconCls }: { iconCls: string }) {
   const router = useRouter();
-  const communityHref = hasMembership ? "/community" : "/membership";
+  const [myProgramsOpen, setMyProgramsOpen] = useState(false);
+  const communityHref = hasMembership ? "/community-dashboard" : "/membership";
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={() => setMyProgramsOpen(false)}>
       <DropdownMenuTrigger asChild>
         <button
           aria-label="My profile"
@@ -175,25 +173,37 @@ function ProfileDropdown({ iconCls }: { iconCls: string }) {
         sideOffset={12}
         className="w-65 p-0 rounded-2xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
       >
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger
-            className={`${itemCls} pt-4 data-open:text-[#C9953A] data-open:bg-zinc-50`}
-          >
-            My Programs
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="p-0 rounded-2xl border border-zinc-100 shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden min-w-50">
-            {myProgramItems.map((item) => (
-              <DropdownMenuItem
-                key={item.href}
-                onSelect={() => router.push(item.href)}
-                className={itemCls}
-              >
-                {item.label}
-                <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        {/* My Programs — inline accordion */}
+        <DropdownMenuItem
+          onSelect={(e) => { e.preventDefault(); setMyProgramsOpen((v) => !v); }}
+          className={`${itemCls} pt-4`}
+        >
+          My Programs
+          <ChevronDown className={`size-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ${myProgramsOpen ? "rotate-180" : ""}`} />
+        </DropdownMenuItem>
+
+        <AnimatePresence initial={false}>
+          {myProgramsOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.18, ease: "easeInOut" }}
+              className="overflow-hidden bg-zinc-50"
+            >
+              {myProgramItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.href}
+                  onSelect={() => router.push(item.href)}
+                  className="px-8 py-2.5 text-[12px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 focus:bg-zinc-100 flex items-center justify-between"
+                >
+                  {item.label}
+                  <ChevronRight className="size-3 text-zinc-300 shrink-0" />
+                </DropdownMenuItem>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="mx-6 h-px bg-zinc-100 my-2" />
 
@@ -391,7 +401,7 @@ export default function Navbar() {
                       onNavigate={() => setMobileOpen(false)}
                     />
                     <Link
-                      href={hasMembership ? "/community" : "/membership"}
+                      href={hasMembership ? "/community-dashboard" : "/membership"}
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center justify-between border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide transition-colors [font-family:var(--font-barlow)] ${
                         !hasMembership
