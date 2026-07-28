@@ -1,6 +1,9 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import { Mail, Clock, FileText, RotateCcw, ShieldCheck } from "lucide-react"
 import HelpForm from "./HelpForm"
+import { auth } from "@/lib/auth"
 
 export const metadata = {
   title: "Help & Support — SG Fit",
@@ -12,7 +15,10 @@ const quickLinks = [
   { label: "Terms of Use",    subtitle: "Legal stuff",                href: "/support/terms",           icon: ShieldCheck },
 ]
 
-export default function HelpPage() {
+export default async function HelpPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">

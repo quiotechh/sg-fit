@@ -1,7 +1,10 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import { ChevronRight } from "lucide-react"
 import { programs } from "@/data/programs"
 import MyProgramCard from "@/components/MyProgramCard"
+import { auth } from "@/lib/auth"
 
 // Mock: slugs the logged-in user has purchased
 // Replace with real DB/auth query later
@@ -15,7 +18,10 @@ export const metadata = {
   title: "My Workout Programs — SG Fit",
 }
 
-export default function MyWorkoutProgramsPage() {
+export default async function MyWorkoutProgramsPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-8 sm:py-14 xl:py-16">

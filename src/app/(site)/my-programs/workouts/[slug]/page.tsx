@@ -1,8 +1,10 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react"
 import { programs } from "@/data/programs"
 import { weeklyPlans } from "@/data/weeklyPlans"
+import { auth } from "@/lib/auth"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -21,6 +23,9 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function MyProgramDetailPage({ params }: Props) {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
   const { slug } = await params
 
   if (!purchasedSlugs.includes(slug)) notFound()

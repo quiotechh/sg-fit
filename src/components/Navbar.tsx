@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -28,9 +28,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/context/CartContext";
+import { authClient } from "@/lib/auth-client";
 
-// ── Toggle these to preview different UI states ──────────────────────
-const isLoggedIn = true;
+// ── Toggle this to preview logged-in UI states ────────────────────────
 const hasMembership = true;
 // ─────────────────────────────────────────────────────────────────────
  
@@ -152,7 +152,7 @@ function MobileAccordion({
 const itemCls =
   "rounded-none px-6 py-2.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer flex items-center justify-between text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 hover:text-[#C9953A] focus:text-[#C9953A]";
 
-function ProfileDropdown({ iconCls }: { iconCls: string }) {
+function ProfileDropdown({ iconCls, onSignOut }: { iconCls: string; onSignOut: () => void }) {
   const router = useRouter();
   const [myProgramsOpen, setMyProgramsOpen] = useState(false);
   const communityHref = hasMembership ? "/community-dashboard" : "/membership";
@@ -230,6 +230,7 @@ function ProfileDropdown({ iconCls }: { iconCls: string }) {
         <div className="mx-6 h-px bg-zinc-100" />
 
         <DropdownMenuItem
+          onSelect={onSignOut}
           className={`${itemCls} text-zinc-700 hover:text-red-500 focus:text-red-500 py-4`}
         >
           Sign Out
@@ -243,7 +244,25 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalItems, openCart } = useCart();
   const pathname = usePathname();
+  const { data: session, refetch: refetchSession } = authClient.useSession();
+  const isLoggedIn = !!session;
   const transparent = pathname === "/about" || pathname === "/contact";
+
+  // Official Next.js pattern for detecting navigation (including back/forward)
+  // in a persistent layout component: https://nextjs.org/docs/app/api-reference/functions/use-router#router-events
+  useEffect(() => {
+    refetchSession();
+  }, [pathname, refetchSession]);
+
+  async function handleSignOut() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = "/"
+        },
+      },
+    });
+  }
 
   const navLinkCls = transparent
     ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
@@ -303,14 +322,14 @@ export default function Navbar() {
             </button>
 
             {isLoggedIn ? (
-              <ProfileDropdown iconCls={iconCls} />
+              <ProfileDropdown iconCls={iconCls} onSignOut={handleSignOut} />
             ) : (
               <>
                 <Link href="/login" aria-label="Account" className={iconCls}>
                   <User className="size-6" />
                 </Link>
                 <Link
-                  href="/get-started"
+                  href="/signup"
                   className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
                   style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
                 >
@@ -421,14 +440,17 @@ export default function Navbar() {
                     >
                       Help
                     </Link>
-                    <button className="w-full text-left py-4 text-base font-bold uppercase tracking-wide text-red-500 hover:text-red-700 transition-colors [font-family:var(--font-barlow)]">
+                    <button
+                      onClick={() => { setMobileOpen(false); handleSignOut(); }}
+                      className="w-full text-left py-4 text-base font-bold uppercase tracking-wide text-red-500 hover:text-red-700 transition-colors [font-family:var(--font-barlow)]"
+                    >
                       Sign Out
                     </button>
                   </div>
                 ) : (
                   <div className="px-6 py-6 border-t border-zinc-100">
                     <Link
-                      href="/get-started"
+                      href="/signup"
                       onClick={() => setMobileOpen(false)}
                       className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
                       style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
@@ -444,7 +466,7 @@ export default function Navbar() {
           {/* Icons — right */}
           <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3 z-20">
             {isLoggedIn ? (
-              <ProfileDropdown iconCls={mobileIconCls} />
+              <ProfileDropdown iconCls={mobileIconCls} onSignOut={handleSignOut} />
             ) : (
               <Link href="/login" aria-label="Account" className={mobileIconCls}>
                 <User className="size-6" />

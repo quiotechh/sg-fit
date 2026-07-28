@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import BFCacheReload from "@/components/BFCacheReload";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -58,8 +59,9 @@ export default function RootLayout({
       className={`${raleway.variable} ${barlow.variable} ${geistMono.variable} ${playfairDisplay.variable} ${cormorantGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <BFCacheReload />
         <CartProvider>
-          {children} 
+          {children}
         </CartProvider>
       </body>
     </html>
