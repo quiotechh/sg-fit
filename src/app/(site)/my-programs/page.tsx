@@ -1,5 +1,8 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import { ArrowRight, Dumbbell, Utensils } from "lucide-react"
+import { auth } from "@/lib/auth"
 
 export const metadata = {
   title: "My Programs — SG Fit",
@@ -33,7 +36,10 @@ const categories = [
   },
 ]
 
-export default function MyProgramsPage() {
+export default async function MyProgramsPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">

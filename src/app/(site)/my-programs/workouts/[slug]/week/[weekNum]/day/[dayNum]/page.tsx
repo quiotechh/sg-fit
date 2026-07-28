@@ -1,9 +1,11 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { ChevronRight, Flame, Dumbbell, Zap, Wind, Clock, Info } from "lucide-react"
 import { programs } from "@/data/programs"
 import { weeklyPlans } from "@/data/weeklyPlans"
 import { dayPlans, type SectionType } from "@/data/dayPlans"
+import { auth } from "@/lib/auth"
 
 interface Props {
   params: Promise<{ slug: string; weekNum: string; dayNum: string }>
@@ -24,6 +26,9 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function DayPage({ params }: Props) {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
   const { slug, weekNum, dayNum } = await params
   const wk = parseInt(weekNum)
   const dy = parseInt(dayNum)
