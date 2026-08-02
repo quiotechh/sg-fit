@@ -33,7 +33,7 @@ import { authClient } from "@/lib/auth-client";
 // ── Toggle this to preview logged-in UI states ────────────────────────
 const hasMembership = true;
 // ─────────────────────────────────────────────────────────────────────
- 
+
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
   { label: "Nutrition Guides", href: "/programs/nutrition" },
@@ -152,7 +152,28 @@ function MobileAccordion({
 const itemCls =
   "rounded-none px-6 py-2.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer flex items-center justify-between text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 hover:text-[#C9953A] focus:text-[#C9953A]";
 
-function ProfileDropdown({ iconCls, onSignOut }: { iconCls: string; onSignOut: () => void }) {
+// Fallback avatar for users without a profile image (e.g. email/password
+// signups — Google logins get `image` set automatically by Better Auth).
+function getInitials(name?: string | null) {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/);
+  const initials =
+    parts.length > 1
+      ? `${parts[0][0]}${parts[parts.length - 1][0]}`
+      : parts[0].slice(0, 2);
+  return initials.toUpperCase();
+}
+
+function ProfileDropdown({
+  iconCls,
+  onSignOut,
+}: {
+  iconCls: string;
+  onSignOut: () => void;
+}) {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  const [imageError, setImageError] = useState(false);
   const router = useRouter();
   const [myProgramsOpen, setMyProgramsOpen] = useState(false);
   const communityHref = hasMembership ? "/community-dashboard" : "/membership";
@@ -164,7 +185,25 @@ function ProfileDropdown({ iconCls, onSignOut }: { iconCls: string; onSignOut: (
           aria-label="My profile"
           className={`${iconCls} focus:outline-none`}
         >
-          <User className="size-6" />
+          {user?.image ? (
+            <img
+              src={user.image}
+              alt={user.name ?? "Profile"}
+              className="size-8 rounded-full object-cover"
+              referrerPolicy="no-referrer"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div
+              className="size-8 rounded-full flex items-center justify-center text-[10px] font-black text-zinc-950 [font-family:var(--font-barlow)]"
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              }}
+            >
+              {getInitials(user?.name)}
+            </div>
+          )}
         </button>
       </DropdownMenuTrigger>
 
@@ -173,13 +212,49 @@ function ProfileDropdown({ iconCls, onSignOut }: { iconCls: string; onSignOut: (
         sideOffset={12}
         className="w-65 p-0 rounded-2xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
       >
+        {/* User info header — name/email/avatar from the current session */}
+        <div className="flex items-center gap-3 px-6 pt-5 pb-4 border-b border-zinc-100">
+          {user?.image ? (
+            <img
+              src={user.image}
+              alt={user.name ?? "Profile"}
+              className="size-10 rounded-full object-cover shrink-0"
+              referrerPolicy="no-referrer"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div
+              className="size-10 rounded-full flex items-center justify-center text-xs font-black text-zinc-950 shrink-0 [font-family:var(--font-barlow)]"
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              }}
+            >
+              {getInitials(user?.name)}
+            </div>
+          )}
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-black text-zinc-950 truncate [font-family:var(--font-barlow)]">
+              {user?.name || "Account"}
+            </span>
+            <span className="text-xs font-medium text-zinc-400 truncate [font-family:var(--font-barlow)]">
+              {user?.email}
+            </span>
+          </div>
+        </div>
+
         {/* My Programs — inline accordion */}
         <DropdownMenuItem
-          onSelect={(e) => { e.preventDefault(); setMyProgramsOpen((v) => !v); }}
+          onSelect={(e) => {
+            e.preventDefault();
+            setMyProgramsOpen((v) => !v);
+          }}
           className={`${itemCls} pt-4`}
         >
           My Programs
-          <ChevronDown className={`size-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ${myProgramsOpen ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`size-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ${myProgramsOpen ? "rotate-180" : ""}`}
+          />
         </DropdownMenuItem>
 
         <AnimatePresence initial={false}>
@@ -258,7 +333,7 @@ export default function Navbar() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          window.location.href = "/"
+          window.location.href = "/";
         },
       },
     });
@@ -276,11 +351,12 @@ export default function Navbar() {
 
   return (
     <header className={`w-full ${transparent ? "bg-transparent" : "bg-white"}`}>
-
       {/* ── Desktop (xl+) ──────────────────────────────────────────── */}
       <div className="hidden xl:block pt-10">
         <div className="relative h-11">
-          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
+          <div
+            className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`}
+          />
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -302,17 +378,33 @@ export default function Navbar() {
 
           {/* Left nav links */}
           <div className="absolute left-0 inset-y-0 flex items-center pl-6 xl:pl-8 gap-8 z-20">
-            <DesktopDropdown label="Programs" items={programsItems} transparent={transparent} />
-            <Link href="/shop" className={navLinkCls}>Shop</Link>
+            <DesktopDropdown
+              label="Programs"
+              items={programsItems}
+              transparent={transparent}
+            />
+            <Link href="/shop" className={navLinkCls}>
+              Shop
+            </Link>
             {isLoggedIn && (
-              <Link href="/community" className={navLinkCls}>Community</Link>
+              <Link href="/community" className={navLinkCls}>
+                Community
+              </Link>
             )}
-            <DesktopDropdown label="More" items={moreItems} transparent={transparent} />
+            <DesktopDropdown
+              label="More"
+              items={moreItems}
+              transparent={transparent}
+            />
           </div>
 
           {/* Right — Cart, Auth */}
           <div className="absolute right-0 inset-y-0 flex items-center pr-6 xl:pr-8 gap-5 z-20">
-            <button onClick={openCart} aria-label="Open cart" className={`relative ${iconCls}`}>
+            <button
+              onClick={openCart}
+              aria-label="Open cart"
+              className={`relative ${iconCls}`}
+            >
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
@@ -331,7 +423,10 @@ export default function Navbar() {
                 <Link
                   href="/signup"
                   className="text-zinc-950 text-lg font-bold tracking-wide px-7 py-2.5 rounded-lg active:scale-95 transition-all duration-150 whitespace-nowrap [font-family:var(--font-barlow)]"
-                  style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                  }}
                 >
                   GET STARTED
                 </Link>
@@ -344,7 +439,9 @@ export default function Navbar() {
       {/* ── Mobile / Tablet / iPad Pro (<xl) ──────────────────────── */}
       <div className="xl:hidden pt-5">
         <div className="relative h-14">
-          <div className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`} />
+          <div
+            className={`absolute inset-0 ${transparent ? "bg-transparent" : "bg-white"}`}
+          />
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -376,10 +473,18 @@ export default function Navbar() {
                 </button>
               </SheetTrigger>
 
-              <SheetContent side="left" className="flex flex-col p-0 w-75 sm:w-85 bg-white">
+              <SheetContent
+                side="left"
+                className="flex flex-col p-0 w-75 sm:w-85 bg-white"
+              >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <SheetDescription className="sr-only">Site navigation links</SheetDescription>
-                <div className="h-14 shrink-0 border-b border-zinc-100" aria-hidden="true" />
+                <SheetDescription className="sr-only">
+                  Site navigation links
+                </SheetDescription>
+                <div
+                  className="h-14 shrink-0 border-b border-zinc-100"
+                  aria-hidden="true"
+                />
 
                 <nav className="flex-1 overflow-y-auto px-6 py-2">
                   <MobileAccordion
@@ -420,7 +525,9 @@ export default function Navbar() {
                       onNavigate={() => setMobileOpen(false)}
                     />
                     <Link
-                      href={hasMembership ? "/community-dashboard" : "/membership"}
+                      href={
+                        hasMembership ? "/community-dashboard" : "/membership"
+                      }
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center justify-between border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide transition-colors [font-family:var(--font-barlow)] ${
                         !hasMembership
@@ -431,7 +538,9 @@ export default function Navbar() {
                       <span className={!hasMembership ? "opacity-60" : ""}>
                         SGians (Community)
                       </span>
-                      {!hasMembership && <Lock className="size-4 text-zinc-400" />}
+                      {!hasMembership && (
+                        <Lock className="size-4 text-zinc-400" />
+                      )}
                     </Link>
                     <Link
                       href="/help"
@@ -441,7 +550,10 @@ export default function Navbar() {
                       Help
                     </Link>
                     <button
-                      onClick={() => { setMobileOpen(false); handleSignOut(); }}
+                      onClick={() => {
+                        setMobileOpen(false);
+                        handleSignOut();
+                      }}
                       className="w-full text-left py-4 text-base font-bold uppercase tracking-wide text-red-500 hover:text-red-700 transition-colors [font-family:var(--font-barlow)]"
                     >
                       Sign Out
@@ -453,7 +565,10 @@ export default function Navbar() {
                       href="/signup"
                       onClick={() => setMobileOpen(false)}
                       className="block w-full text-zinc-950 text-base font-bold uppercase tracking-wide py-3.5 rounded-lg active:scale-95 transition-all text-center [font-family:var(--font-barlow)]"
-                      style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                      }}
                     >
                       Get Started
                     </Link>
@@ -466,13 +581,24 @@ export default function Navbar() {
           {/* Icons — right */}
           <div className="absolute right-4 sm:right-6 inset-y-0 flex items-center gap-3 z-20">
             {isLoggedIn ? (
-              <ProfileDropdown iconCls={mobileIconCls} onSignOut={handleSignOut} />
+              <ProfileDropdown
+                iconCls={mobileIconCls}
+                onSignOut={handleSignOut}
+              />
             ) : (
-              <Link href="/login" aria-label="Account" className={mobileIconCls}>
+              <Link
+                href="/login"
+                aria-label="Account"
+                className={mobileIconCls}
+              >
                 <User className="size-6" />
               </Link>
             )}
-            <button onClick={openCart} aria-label="Open cart" className={`relative ${mobileIconCls}`}>
+            <button
+              onClick={openCart}
+              aria-label="Open cart"
+              className={`relative ${mobileIconCls}`}
+            >
               <ShoppingCart className="size-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-zinc-950 text-white text-[9px] font-black flex items-center justify-center [font-family:var(--font-barlow)]">
