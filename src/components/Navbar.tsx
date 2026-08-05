@@ -27,7 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/store/cartStore"
 import { authClient } from "@/lib/auth-client";
 
 // ── Toggle this to preview logged-in UI states ────────────────────────

@@ -2,9 +2,8 @@ import { notFound, redirect } from "next/navigation"
 import { headers } from "next/headers"
 import Link from "next/link"
 import { ChevronRight, Flame, Dumbbell, Zap, Wind, Clock, Info } from "lucide-react"
-import { programs } from "@/data/programs"
-import { weeklyPlans } from "@/data/weeklyPlans"
-import { dayPlans, type SectionType } from "@/data/dayPlans"
+import { getProgramBySlug, getDayTemplate } from "@/lib/programs"
+import type { SectionType, WorkoutSection } from "@/data/dayPlans"
 import { auth } from "@/lib/auth"
 
 interface Props {
@@ -35,20 +34,15 @@ export default async function DayPage({ params }: Props) {
 
   if (!purchasedSlugs.includes(slug)) notFound()
 
-  const program = programs.find((p) => p.slug === slug && p.category === "workouts")
-  const weeks   = weeklyPlans[slug]
-  if (!program || !weeks) notFound()
+  const program = await getProgramBySlug("workouts", slug)
+  if (!program) notFound()
 
-  const week = weeks[wk - 1]
-  const day  = week?.days[dy - 1]
-  if (!day) notFound()
+  const dayTemplate = await getDayTemplate(program.id, wk, dy)
+  if (!dayTemplate) notFound()
 
-  const planKey  = `${slug}-d${dy}`
-  const dayPlan  = dayPlans[planKey]
-  if (!dayPlan) notFound()
-
-  const tip = dayPlan.weekTips[wk - 1] ?? dayPlan.weekTips[0]
-  const totalExercises = dayPlan.sections.reduce((acc, s) => acc + s.exercises.length, 0)
+  const sections = dayTemplate.sections as unknown as WorkoutSection[]
+  const tip = dayTemplate.tip
+  const totalExercises = sections.reduce((acc, s) => acc + s.exercises.length, 0)
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -76,16 +70,16 @@ export default async function DayPage({ params }: Props) {
 
           {/* Day name */}
           <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black uppercase leading-none tracking-tight text-zinc-950 [font-family:var(--font-barlow)] mb-1.5">
-            {day.name}
+            {dayTemplate.name}
           </h1>
           <p className="text-sm sm:text-base font-semibold text-zinc-400 [font-family:var(--font-barlow)] mb-6">
-            {day.focus}
+            {dayTemplate.focus}
           </p>
 
           {/* Stat pills */}
           <div className="flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-2 bg-zinc-100 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide text-zinc-700 [font-family:var(--font-barlow)]">
-              <Clock className="size-3.5 shrink-0" />{day.duration}
+              <Clock className="size-3.5 shrink-0" />{dayTemplate.duration}
             </span>
             <span className="inline-flex items-center gap-2 bg-zinc-100 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide text-zinc-700 [font-family:var(--font-barlow)]">
               <Dumbbell className="size-3.5 shrink-0" />{totalExercises} exercises
@@ -108,7 +102,7 @@ export default async function DayPage({ params }: Props) {
           </div>
 
           {/* Workout sections */}
-          {dayPlan.sections.map((section) => {
+          {sections.map((section) => {
             const meta = sectionMeta[section.type]
             const Icon = meta.icon
 
@@ -216,7 +210,7 @@ export default async function DayPage({ params }: Props) {
               >
                 Next Day <ChevronRight className="size-3.5" />
               </Link>
-            ) : wk < weeks.length ? (
+            ) : wk < program.totalWeeks ? (
               <Link
                 href={`/my-programs/workouts/${slug}/week/${wk + 1}/day/1`}
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-zinc-950 [font-family:var(--font-barlow)] hover:gap-3 transition-all duration-200"

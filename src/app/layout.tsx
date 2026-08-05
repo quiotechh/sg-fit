@@ -7,7 +7,7 @@ import {
   Cormorant_Garamond,
 } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
+
 import BFCacheReload from "@/components/BFCacheReload";
 
 const raleway = Raleway({
@@ -60,9 +60,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <BFCacheReload />
-        <CartProvider>
-          {children}
-        </CartProvider>
+        {children}
       </body>
     </html>
   );

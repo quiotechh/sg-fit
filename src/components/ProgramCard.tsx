@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import type { Program } from "@/data/programs"
+import type { Program } from "@/generated/prisma/client"
 
 export default function ProgramCard({ program }: { program: Program }) {
   const href = `/programs/${program.category}/${program.slug}`

@@ -11,7 +11,7 @@ import {
   Shield,
   Mail,
 } from "lucide-react"
-import { useCart } from "@/context/CartContext"
+import { useCart } from "@/store/cartStore"
 
 export default function CartSidebar() {
   const {
