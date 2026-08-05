@@ -1,8 +1,8 @@
 "use client"
 
 import { ShoppingCart } from "lucide-react"
-import { useCart } from "@/context/CartContext"
-import type { Program } from "@/data/programs"
+import { useCart } from "@/store/cartStore"
+import type { Program } from "@/generated/prisma/client"
 
 export default function AddToCartButton({ program }: { program: Program }) {
   const { addItem, items } = useCart()

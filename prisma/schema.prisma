@@ -22,6 +22,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  purchases     Purchase[]
 
   @@unique([email])
   @@map("user")
@@ -74,3 +75,61 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Purchase {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  programSlug String
+  category    String
+  price       Float
+  purchasedAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("purchase")
+}
+
+model Program {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  category      String
+  title         String
+  subtitle      String
+  description   String
+  price         Float
+  originalPrice Float?
+  duration      String
+  level         String
+  sessions      String?
+  tags          String[]
+  includes      String[]
+  highlights    String[]
+  bgClass       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  totalWeeks    Int
+  dayTemplates  DayTemplate[]
+
+  @@index([category])
+  @@map("program")
+}
+
+
+
+model DayTemplate {
+  id         String   @id @default(cuid())
+  programId  String
+  program    Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  weekNumber Int
+  dayNumber  Int
+  name       String
+  focus      String
+  duration   String
+  tip        String?
+  sections   Json
+
+  @@unique([programId, weekNumber, dayNumber])
+  @@map("day_template")
+}
+
+

@@ -2,17 +2,13 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import { ChevronRight } from "lucide-react"
-import { programs } from "@/data/programs"
+import { getProgramsByCategory } from "@/lib/programs"
 import MyProgramCard from "@/components/MyProgramCard"
 import { auth } from "@/lib/auth"
 
 // Mock: slugs the logged-in user has purchased
 // Replace with real DB/auth query later
 const purchasedSlugs = ["6-week-shred", "hiit-ignite"]
-
-const myPrograms = programs.filter(
-  (p) => p.category === "workouts" && purchasedSlugs.includes(p.slug)
-)
 
 export const metadata = {
   title: "My Workout Programs — SG Fit",
@@ -21,6 +17,9 @@ export const metadata = {
 export default async function MyWorkoutProgramsPage() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session) redirect("/login")
+
+  const allWorkouts = await getProgramsByCategory("workouts")
+  const myPrograms = allWorkouts.filter((p) => purchasedSlugs.includes(p.slug))
 
   return (
     <main className="flex flex-col min-h-screen bg-white">

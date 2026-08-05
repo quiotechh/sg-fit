@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import {
-  categoryConfigs,
-  getProgramsByCategory,
-  getAllCategories,
-} from "@/data/programs"
+import { categoryConfigs, getAllCategories } from "@/data/programs"
+import { getProgramsByCategory } from "@/lib/programs"
 import PageHero from "@/components/PageHero"
 import ProgramCard from "@/components/ProgramCard"
 
@@ -29,7 +26,7 @@ export default async function CategoryPage({ params }: Props) {
   const config = categoryConfigs[category]
   if (!config) notFound()
 
-  const programs = getProgramsByCategory(category)
+  const programs = await getProgramsByCategory(category)
 
   return (
     <main className="flex flex-col min-h-screen">

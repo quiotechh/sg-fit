@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle, Shield } from "lucide-react"
-import { programs, categoryConfigs, getProgramsByCategory } from "@/data/programs"
+import { categoryConfigs } from "@/data/programs"
+import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs } from "@/lib/programs"
 import ProgramCard from "@/components/ProgramCard"
 import AddToCartButton from "@/components/AddToCartButton"
 
@@ -10,12 +11,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return programs.map((p) => ({ category: p.category, slug: p.slug }))
+  const all = await getAllProgramSlugs()
+  return all.map((p) => ({ category: p.category, slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props) {
   const { category, slug } = await params
-  const program = programs.find((p) => p.category === category && p.slug === slug)
+  const program = await getProgramBySlug(category, slug)
   if (!program) return {}
   return { title: `${program.title} — SG Fit` }
 }
@@ -26,10 +28,10 @@ export default async function ProgramDetailPage({ params }: Props) {
   const config = categoryConfigs[category]
   if (!config) notFound()
 
-  const program = programs.find((p) => p.category === category && p.slug === slug)
+  const program = await getProgramBySlug(category, slug)
   if (!program) notFound()
 
-  const related = getProgramsByCategory(category)
+  const related = (await getProgramsByCategory(category))
     .filter((p) => p.slug !== slug)
     .slice(0, 3)
 

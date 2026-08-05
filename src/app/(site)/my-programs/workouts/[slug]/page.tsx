@@ -2,8 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import { headers } from "next/headers"
 import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react"
-import { programs } from "@/data/programs"
-import { weeklyPlans } from "@/data/weeklyPlans"
+import { getProgramBySlug, getProgramWeeksGrouped } from "@/lib/programs"
 import { auth } from "@/lib/auth"
 
 interface Props {
@@ -18,7 +17,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
-  const program = programs.find((p) => p.slug === slug && p.category === "workouts")
+  const program = await getProgramBySlug("workouts", slug)
   return { title: program ? `${program.title} — My Programs` : "My Program" }
 }
 
@@ -30,10 +29,10 @@ export default async function MyProgramDetailPage({ params }: Props) {
 
   if (!purchasedSlugs.includes(slug)) notFound()
 
-  const program = programs.find((p) => p.slug === slug && p.category === "workouts")
+  const program = await getProgramBySlug("workouts", slug)
   if (!program) notFound()
 
-  const weeks = weeklyPlans[slug] ?? []
+  const weeks = await getProgramWeeksGrouped(program.id)
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -189,8 +188,8 @@ export default async function MyProgramDetailPage({ params }: Props) {
 
           {/* Weeks */}
           <div className="flex flex-col gap-10 sm:gap-12">
-            {weeks.map((week, wi) => (
-              <div key={wi} className="flex flex-col gap-4">
+            {weeks.map((week) => (
+              <div key={week.weekNumber} className="flex flex-col gap-4">
 
                 {/* Week header */}
                 <div className="flex items-center gap-3">
@@ -199,23 +198,23 @@ export default async function MyProgramDetailPage({ params }: Props) {
                     style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72)" }}
                   />
                   <span className="text-[11px] font-black uppercase tracking-[0.22em] text-zinc-400 [font-family:var(--font-barlow)]">
-                    Week {wi + 1}
+                    Week {week.weekNumber}
                   </span>
                   <div className="flex-1 h-px bg-zinc-200" />
                 </div>
 
                 {/* Day rows */}
                 <div className="flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden divide-y divide-zinc-100 shadow-sm">
-                  {week.days.map((day, di) => (
+                  {week.days.map((day) => (
                     <Link
-                      key={di}
-                      href={`/my-programs/workouts/${slug}/week/${wi + 1}/day/${di + 1}`}
+                      key={day.dayNumber}
+                      href={`/my-programs/workouts/${slug}/week/${week.weekNumber}/day/${day.dayNumber}`}
                       className="group flex items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 hover:bg-zinc-50 transition-colors duration-150"
                     >
                       {/* Number badge */}
                       <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-zinc-950 flex items-center justify-center shrink-0">
                         <span className="text-xs font-black text-white [font-family:var(--font-barlow)]">
-                          {di + 1}
+                          {day.dayNumber}
                         </span>
                       </div>
 

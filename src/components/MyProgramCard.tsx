@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, CheckCircle } from "lucide-react"
-import type { Program } from "@/data/programs"
+import type { Program } from "@/generated/prisma/client"
 
 export default function MyProgramCard({ program }: { program: Program }) {
   const href = `/my-programs/workouts/${program.slug}`
