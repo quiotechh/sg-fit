@@ -23,6 +23,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   purchases     Purchase[]
+  cartItems     CartItem[]
 
   @@unique([email])
   @@map("user")
@@ -80,14 +81,30 @@ model Purchase {
   id          String   @id @default(cuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  programSlug String
-  category    String
-  price       Float
+  programId   String
+  program     Program  @relation(fields: [programId], references: [id], onDelete: Restrict)
+  amountPaid  Float
+  couponCode  String?
+  paymentId   String?
   purchasedAt DateTime @default(now())
 
+  @@unique([userId, programId])
   @@index([userId])
   @@map("purchase")
 }
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  programId String
+  program   Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  addedAt   DateTime @default(now())
+
+  @@unique([userId, programId])
+  @@map("cart_item")
+}
+
 
 model Program {
   id            String   @id @default(cuid())
@@ -109,6 +126,8 @@ model Program {
   updatedAt     DateTime @updatedAt
   totalWeeks    Int
   dayTemplates  DayTemplate[]
+  cartItems    CartItem[]
+  purchases     Purchase[]
 
   @@index([category])
   @@map("program")
