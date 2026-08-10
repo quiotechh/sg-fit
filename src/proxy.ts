@@ -12,7 +12,9 @@ export async function proxy(request: NextRequest) {
   const isAuthPage = authPages.includes(request.nextUrl.pathname)
 
   if (!session && !isAuthPage) {
-    const response = NextResponse.redirect(new URL("/login", request.url))
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname)
+    const response = NextResponse.redirect(loginUrl)
     response.headers.set("Cache-Control", "no-store")
     return response
   }
@@ -35,5 +37,6 @@ export const config = {
     "/help",
     "/login",
     "/signup",
+    "/checkout/:path*"
   ],
 }

@@ -9,6 +9,7 @@ import {
 import "./globals.css";
 
 import BFCacheReload from "@/components/BFCacheReload";
+import CartSync from "@/components/CartSync";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -60,6 +61,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <BFCacheReload />
+        <CartSync />
         {children}
       </body>
     </html>

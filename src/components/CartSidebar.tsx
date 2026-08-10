@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import Link from "next/link"
+import { useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   X,
   ShoppingCart,
@@ -10,10 +10,14 @@ import {
   ArrowRight,
   Shield,
   Mail,
-} from "lucide-react"
-import { useCart } from "@/store/cartStore"
+} from "lucide-react";
+import { useCart } from "@/store/cartStore";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+
 
 export default function CartSidebar() {
+
   const {
     items,
     isOpen,
@@ -31,29 +35,34 @@ export default function CartSidebar() {
     subtotal,
     discountAmount,
     total,
-  } = useCart()
+  } = useCart();
+
+   const { data: session } = authClient.useSession();
+   const router = useRouter();
 
   // Trap focus and prevent body scroll when open
-  const panelRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
-      panelRef.current?.focus()
+      document.body.style.overflow = "hidden";
+      panelRef.current?.focus();
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = "" }
-  }, [isOpen])
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   // Close on Escape key
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") closeCart()
+      if (e.key === "Escape") closeCart();
     }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [closeCart])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [closeCart]);
 
   return (
     <div
@@ -76,14 +85,14 @@ export default function CartSidebar() {
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-
         {/* ── Header ─────────────────────────────────────────────── */}
         <div className="shrink-0 flex items-center justify-between px-5 sm:px-6 py-4 bg-zinc-950">
           <div className="flex items-center gap-3">
             <h2
               className="text-sm font-black uppercase tracking-[0.25em] [font-family:var(--font-barlow)]"
               style={{
-                background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -107,7 +116,6 @@ export default function CartSidebar() {
 
         {/* ── Scrollable content ───────────────────────────────────── */}
         <div className="flex-1 overflow-y-auto">
-
           {/* Empty state */}
           {items.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-5 h-full px-8 text-center py-20">
@@ -138,7 +146,6 @@ export default function CartSidebar() {
             <div className="px-5 sm:px-6 pt-4 pb-2 flex flex-col divide-y divide-zinc-100">
               {items.map((item) => (
                 <div key={item.slug} className="flex items-center gap-4 py-4">
-
                   {/* Thumbnail — gradient placeholder, swap for real image later */}
                   <div
                     className={`w-15 h-15 rounded-xl shrink-0 bg-linear-to-br ${item.bgClass}`}
@@ -160,25 +167,27 @@ export default function CartSidebar() {
                       ${item.price}
                     </span>
                     <button
-                      onClick={() => removeItem(item.slug)}
+                      onClick={() => {
+                        removeItem(item.slug);
+                        if (session) {
+                          fetch(`/api/cart/${item.slug}`, { method: "DELETE" });
+                        }
+                      }}
                       aria-label={`Remove ${item.title}`}
                       className="text-zinc-300 hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="size-3.5" />
                     </button>
                   </div>
-
                 </div>
               ))}
             </div>
           )}
-
         </div>
 
         {/* ── Footer — only when cart has items ───────────────────── */}
         {items.length > 0 && (
           <div className="shrink-0 border-t border-zinc-100 flex flex-col gap-4 px-5 sm:px-6 py-5">
-
             {/* Coupon code */}
             <div className="flex flex-col gap-2">
               <label className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500 [font-family:var(--font-barlow)]">
@@ -192,7 +201,10 @@ export default function CartSidebar() {
                     <span className="text-xs font-black uppercase tracking-wide text-zinc-950 [font-family:var(--font-barlow)]">
                       {appliedCoupon.code}
                     </span>
-                    <span className="ml-2 text-xs font-semibold [font-family:var(--font-barlow)]" style={{ color: "#B8841F" }}>
+                    <span
+                      className="ml-2 text-xs font-semibold [font-family:var(--font-barlow)]"
+                      style={{ color: "#B8841F" }}
+                    >
                       {appliedCoupon.type === "percent"
                         ? `−${appliedCoupon.discount}%`
                         : `−$${appliedCoupon.discount}`}{" "}
@@ -252,7 +264,9 @@ export default function CartSidebar() {
             <div className="flex flex-col gap-1.5 py-3 border-t border-zinc-100">
               <div className="flex items-center justify-between text-sm [font-family:var(--font-barlow)]">
                 <span className="font-semibold text-zinc-400">Subtotal</span>
-                <span className="font-black text-zinc-950">${subtotal.toFixed(2)}</span>
+                <span className="font-black text-zinc-950">
+                  ${subtotal.toFixed(2)}
+                </span>
               </div>
 
               {appliedCoupon && (
@@ -278,10 +292,21 @@ export default function CartSidebar() {
 
             {/* Checkout button */}
             <button
+              onClick={() => {
+                closeCart();
+                if (session) {
+                  router.push("/checkout");
+                } else {
+                  router.push("/login?redirect=/checkout");
+                }
+              }}
               className="w-full inline-flex items-center justify-center gap-3 text-zinc-950 text-sm font-black uppercase tracking-widest px-6 py-4 rounded-xl active:scale-[0.98] transition-all duration-150 [font-family:var(--font-barlow)] group"
-              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              }}
             >
-              Checkout — ${total.toFixed(2)}
+              {session ? `Checkout — $${total.toFixed(2)}` : "Sign In to Checkout"}
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
 
@@ -292,11 +317,9 @@ export default function CartSidebar() {
                 14-day money-back guarantee
               </p>
             </div>
-
           </div>
         )}
-
       </div>
     </div>
-  )
+  );
 }
