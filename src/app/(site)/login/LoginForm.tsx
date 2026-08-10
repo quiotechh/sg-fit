@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 
 export default function LoginForm() {
-  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get("redirect") || "/my-programs"
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -19,7 +20,7 @@ export default function LoginForm() {
   async function handleGoogleLogin() {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/my-programs",
+      callbackURL: redirect,
     })
   }
 
@@ -27,13 +28,13 @@ export default function LoginForm() {
     e.preventDefault()
     setError("")
     await authClient.signIn.email(
-      { email, password, callbackURL: "/my-programs" },
+      { email, password, callbackURL: redirect },
       {
         onRequest: () => {
           setLoading(true)
         },
         onSuccess: () => {
-          router.push("/my-programs")
+          window.location.href = redirect
         },
         onError: (ctx) => {
           setError(ctx.error.message)

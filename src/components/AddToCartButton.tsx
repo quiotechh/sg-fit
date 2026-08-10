@@ -3,9 +3,12 @@
 import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/store/cartStore"
 import type { Program } from "@/generated/prisma/client"
+import { authClient } from "@/lib/auth-client"
+
 
 export default function AddToCartButton({ program }: { program: Program }) {
   const { addItem, items } = useCart()
+  const { data: session } = authClient.useSession()
 
   const alreadyInCart = items.some((i) => i.slug === program.slug)
 
@@ -19,6 +22,14 @@ export default function AddToCartButton({ program }: { program: Program }) {
       price:    program.price,
       bgClass:  program.bgClass,
     })
+
+    if (session) {
+      fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: program.slug }),
+      })
+    }
   }
 
   return (
