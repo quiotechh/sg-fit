@@ -1,33 +1,32 @@
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { headers } from "next/headers"
-import { ChevronRight } from "lucide-react"
-import { getProgramsByCategory } from "@/lib/programs"
-import MyProgramCard from "@/components/MyProgramCard"
-import { auth } from "@/lib/auth"
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { ChevronRight } from "lucide-react";
+import { getUserPurchasePrograms } from "@/lib/programs";
+import MyProgramCard from "@/components/MyProgramCard";
+import { auth } from "@/lib/auth";
 
 // Mock: slugs the logged-in user has purchased
-// Replace with real DB/auth query later
-const purchasedSlugs = ["6-week-shred", "hiit-ignite"]
 
 export const metadata = {
   title: "My Workout Programs — SG Fit",
-}
+};
 
 export default async function MyWorkoutProgramsPage() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) redirect("/login")
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
 
-  const allWorkouts = await getProgramsByCategory("workouts")
-  const myPrograms = allWorkouts.filter((p) => purchasedSlugs.includes(p.slug))
+  const myPrograms = await getUserPurchasePrograms(session.user.id, "workouts");
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-8 sm:py-14 xl:py-16">
-
         {/* Breadcrumb */}
         <div className="flex flex-wrap items-center gap-1.5 text-zinc-400 text-xs font-bold uppercase tracking-wide [font-family:var(--font-barlow)] mb-10 sm:mb-14">
-          <Link href="/my-programs" className="hover:text-zinc-950 transition-colors">
+          <Link
+            href="/my-programs"
+            className="hover:text-zinc-950 transition-colors"
+          >
             My Programs
           </Link>
           <ChevronRight className="size-3 shrink-0" />
@@ -50,7 +49,8 @@ export default async function MyWorkoutProgramsPage() {
             My Workout Programs
           </h1>
           <p className="mt-2 text-zinc-500 text-sm sm:text-base font-medium [font-family:var(--font-barlow)]">
-            {myPrograms.length} program{myPrograms.length !== 1 ? "s" : ""} purchased
+            {myPrograms.length} program{myPrograms.length !== 1 ? "s" : ""}{" "}
+            purchased
           </p>
         </div>
 
@@ -67,7 +67,9 @@ export default async function MyWorkoutProgramsPage() {
               No Programs Yet
             </p>
             <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)] mb-3">
-              You haven&apos;t purchased<br />any programs yet.
+              You haven&apos;t purchased
+              <br />
+              any programs yet.
             </h2>
             <p className="text-zinc-500 text-sm font-medium [font-family:var(--font-barlow)] mb-8 max-w-sm">
               Browse our workout programs and start your transformation today.
@@ -75,7 +77,10 @@ export default async function MyWorkoutProgramsPage() {
             <Link
               href="/programs/workouts"
               className="inline-flex items-center gap-2 text-zinc-950 text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
-              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              }}
             >
               Browse Programs
             </Link>
@@ -101,8 +106,7 @@ export default async function MyWorkoutProgramsPage() {
             </Link>
           </div>
         )}
-
       </section>
     </main>
-  )
+  );
 }

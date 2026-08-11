@@ -1,20 +1,19 @@
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { headers } from "next/headers"
-import { ArrowRight, Dumbbell, Utensils } from "lucide-react"
-import { auth } from "@/lib/auth"
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { ArrowRight, Dumbbell, Utensils } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { getUserPurchasePrograms } from "@/lib/programs";
 
 export const metadata = {
   title: "My Programs — SG Fit",
-}
+};
 
-// Mock purchased counts — replace with DB query later
 const categories = [
   {
     label: "Workout",
     sublabel: "Programs",
     href: "/my-programs/workouts",
-    purchased: 2,
     ctaLabel: "View My Workouts",
     icon: Dumbbell,
     decorative: "TRAIN",
@@ -26,7 +25,6 @@ const categories = [
     label: "Nutrition",
     sublabel: "Guides",
     href: "/my-programs/nutrition",
-    purchased: 0,
     ctaLabel: "Browse Guides",
     icon: Utensils,
     decorative: "FUEL",
@@ -34,21 +32,34 @@ const categories = [
     accentFrom: "#C9953A",
     accentTo: "#F0CC72",
   },
-]
+];
 
 export default async function MyProgramsPage() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) redirect("/login")
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+
+  const [workoutPurchases, nutritionPurchases] = await Promise.all([
+    getUserPurchasePrograms(session.user.id, "workouts"),
+    getUserPurchasePrograms(session.user.id, "nutrition"),
+  ]);
+
+  const purchasedCounts: Record<string, number> = {
+    "/my-programs/workouts": workoutPurchases.length,
+    "/my-programs/nutrition": nutritionPurchases.length,
+  };
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">
-
         {/* Header */}
         <div className="mb-10 sm:mb-14">
           <p
             className="text-[10px] sm:text-xs font-black uppercase tracking-[0.28em] mb-2 [font-family:var(--font-barlow)]"
-            style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+            style={{
+              background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
           >
             Account
           </p>
@@ -63,8 +74,9 @@ export default async function MyProgramsPage() {
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 xl:gap-8">
           {categories.map((cat) => {
-            const Icon = cat.icon
-            const hasPurchased = cat.purchased > 0
+            const Icon = cat.icon;
+            const purchased = purchasedCounts[cat.href];
+            const hasPurchased = purchased > 0;
 
             return (
               <Link
@@ -88,7 +100,10 @@ export default async function MyProgramsPage() {
                 <div className="flex items-start justify-between">
                   <div
                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center"
-                    style={{ background: `linear-gradient(135deg, ${cat.accentFrom}22, ${cat.accentTo}11)`, border: `1px solid ${cat.accentFrom}33` }}
+                    style={{
+                      background: `linear-gradient(135deg, ${cat.accentFrom}22, ${cat.accentTo}11)`,
+                      border: `1px solid ${cat.accentFrom}33`,
+                    }}
                   >
                     <Icon
                       className="size-5 sm:size-6"
@@ -99,12 +114,16 @@ export default async function MyProgramsPage() {
                   <div className="flex flex-col items-end gap-1">
                     <span
                       className="text-4xl sm:text-5xl xl:text-6xl font-black leading-none [font-family:var(--font-barlow)]"
-                      style={{ background: `linear-gradient(135deg, ${cat.accentFrom}, ${cat.accentTo})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                      style={{
+                        background: `linear-gradient(135deg, ${cat.accentFrom}, ${cat.accentTo})`,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
                     >
-                      {cat.purchased}
+                      {purchased}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 [font-family:var(--font-barlow)]">
-                      {cat.purchased === 1 ? "program" : "programs"}
+                      {purchased === 1 ? "program" : "programs"}
                     </span>
                   </div>
                 </div>
@@ -124,19 +143,19 @@ export default async function MyProgramsPage() {
 
                   <div
                     className="self-start inline-flex items-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-zinc-950 text-xs sm:text-sm font-black uppercase tracking-widest [font-family:var(--font-barlow)] group-hover:gap-4 transition-all duration-200"
-                    style={{ background: `linear-gradient(135deg, ${cat.accentFrom}, ${cat.accentTo}, #B8841F)` }}
+                    style={{
+                      background: `linear-gradient(135deg, ${cat.accentFrom}, ${cat.accentTo}, #B8841F)`,
+                    }}
                   >
                     {cat.ctaLabel}
                     <ArrowRight className="size-3.5 sm:size-4 shrink-0" />
                   </div>
                 </div>
-
               </Link>
-            )
+            );
           })}
         </div>
-
       </section>
     </main>
-  )
+  );
 }
