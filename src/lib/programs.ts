@@ -89,6 +89,15 @@ export async function isDayCompleted(purchaseId: string, dayId: string) {
   return !!row;
 }
 
+export async function getProgressCounts(programId: string, purchaseId: string) {
+  const totalDays = await prisma.dayTemplate.count({
+    where: { programId },
+  });
+  const completedCount = await prisma.dayProgress.count({
+    where: { purchaseId },
+  });
+  return { totalDays, completedCount };
+}
 
 export function getWeekDays(programId: string, weekNumber: number) {
   return prisma.dayTemplate.findMany({
@@ -113,5 +122,3 @@ export async function getProgramWeeksGrouped(programId: string) {
     .sort(([a], [b]) => a - b)
     .map(([weekNumber, days]) => ({ weekNumber, days }));
 }
-
-

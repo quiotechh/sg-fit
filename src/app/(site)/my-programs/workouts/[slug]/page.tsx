@@ -22,6 +22,20 @@ export async function generateMetadata({ params }: Props) {
   return { title: program ? `${program.title} — My Programs` : "My Program" };
 }
 
+function findNextIncompleteDay(
+  weeks: { weekNumber: number; days: { id: string; dayNumber: number }[] }[],
+  completedDayIds: Set<string>,
+) {
+  for (const week of weeks) {
+    for (const day of week.days) {
+      if (!completedDayIds.has(day.id)) {
+        return { weekNumber: week.weekNumber, dayNumber: day.dayNumber };
+      }
+    }
+  }
+  return null;
+}
+
 export default async function MyProgramDetailPage({ params }: Props) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
@@ -33,6 +47,8 @@ export default async function MyProgramDetailPage({ params }: Props) {
 
   const weeks = await getProgramWeeksGrouped(program.id);
   const completedDayIds = await getCompletedDayIds(program.purchaseId);
+
+  const nextDay = findNextIncompleteDay(weeks, completedDayIds);
 
   const totalDays = weeks.reduce((sum, week) => sum + week.days.length, 0);
   const completedCount = completedDayIds.size;
@@ -231,6 +247,20 @@ export default async function MyProgramDetailPage({ params }: Props) {
               <p className="mt-1.5 text-sm font-medium text-zinc-400 [font-family:var(--font-barlow)]">
                 {completedCount}/{totalDays} days completed
               </p>
+
+              {nextDay ? (
+                <Link
+                  href={`/my-programs/workouts/${slug}/week/${nextDay.weekNumber}/day/${nextDay.dayNumber}`}
+                  className="inline-flex items-center gap-1.5 mt-4 px-3 py-1.5 rounded-full bg-zinc-950 text-white hover:bg-zinc-800 text-[11px] font-black uppercase tracking-widest transition-colors [font-family:var(--font-barlow)]"
+                >
+                  Continue — Week {nextDay.weekNumber}, Day {nextDay.dayNumber}
+                  <ChevronRight className="size-3.5" />
+                </Link>
+              ) : (
+                <p className="mt-4 text-xs font-black uppercase tracking-widest text-[#C9953A] [font-family:var(--font-barlow)]">
+                  Program Complete 🏆
+                </p>
+              )}
             </div>
 
             <div className="relative w-16 h-16 shrink-0">

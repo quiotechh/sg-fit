@@ -10,7 +10,7 @@ import {
   Clock,
   Info,
 } from "lucide-react";
-import { getPurchasedDayTemplate } from "@/lib/programs";
+import { getProgressCounts, getPurchasedDayTemplate } from "@/lib/programs";
 import type { SectionType, WorkoutSection } from "@/data/dayPlans";
 import { auth } from "@/lib/auth";
 import { isDayCompleted } from "@/lib/programs";
@@ -56,6 +56,8 @@ export default async function DayPage({ params }: Props) {
   const { program, dayTemplate } = result;
 
   const completed = await isDayCompleted(program.purchaseId, dayTemplate.id);
+
+  const { totalDays, completedCount } = await getProgressCounts(program.id, program.purchaseId);
 
   const sections = dayTemplate.sections as unknown as WorkoutSection[];
   const tip = dayTemplate.tip;
@@ -251,6 +253,8 @@ export default async function DayPage({ params }: Props) {
               dayId={dayTemplate.id}
               path={`/my-programs/workouts/${slug}/week/${wk}/day/${dy}`}
               initialCompleted={completed}
+              totalDays={totalDays}
+  completedCount={completedCount}
             />
           </div>
 

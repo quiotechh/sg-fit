@@ -3,12 +3,15 @@
 import { useState, useTransition } from "react";
 import { CheckCircle, RotateCcw } from "lucide-react";
 import { markDayComplete, unmarkDayComplete } from "@/lib/actions";
+import confetti from "canvas-confetti";
 
 interface Props {
   purchaseId: string;
   dayId: string;
   path: string;
   initialCompleted: boolean;
+  totalDays: number;
+  completedCount: number;
 }
 
 export default function MarkCompleteButton({
@@ -16,6 +19,8 @@ export default function MarkCompleteButton({
   dayId,
   path,
   initialCompleted,
+  totalDays,
+  completedCount
 }: Props) {
   const [completed, setCompleted] = useState(initialCompleted);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +32,14 @@ export default function MarkCompleteButton({
       try {
         await markDayComplete(purchaseId, dayId, path);
         setCompleted(true);
+        if (completedCount + 1 === totalDays) {
+          confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.6 },
+            colors: ["#C9953A", "#F0CC72", "#B8841F"]
+          });
+        }
       } catch {
         setError("Kuch galat ho gaya, dobara try karo.");
       }
