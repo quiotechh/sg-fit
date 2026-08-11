@@ -1,58 +1,68 @@
-import { notFound, redirect } from "next/navigation"
-import { headers } from "next/headers"
-import Link from "next/link"
-import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react"
-import { getProgramBySlug, getProgramWeeksGrouped } from "@/lib/programs"
-import { auth } from "@/lib/auth"
+import { notFound, redirect } from "next/navigation";
+import { headers } from "next/headers";
+import Link from "next/link";
+import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react";
+import {
+  getPurchasedProgram,
+  getProgramWeeksGrouped,
+  getCompletedDayIds,
+} from "@/lib/programs";
+import { auth } from "@/lib/auth";
 
 interface Props {
-  params: Promise<{ slug: string }>
-}
-
-const purchasedSlugs = ["6-week-shred", "hiit-ignite"]
-
-export function generateStaticParams() {
-  return purchasedSlugs.map((slug) => ({ slug }))
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params
-  const program = await getProgramBySlug("workouts", slug)
-  return { title: program ? `${program.title} — My Programs` : "My Program" }
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return { title: "My Program" };
+
+  const { slug } = await params;
+  const program = await getPurchasedProgram(session.user.id, "workouts", slug);
+  return { title: program ? `${program.title} — My Programs` : "My Program" };
 }
 
 export default async function MyProgramDetailPage({ params }: Props) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) redirect("/login")
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
 
-  const { slug } = await params
+  const { slug } = await params;
 
-  if (!purchasedSlugs.includes(slug)) notFound()
+  const program = await getPurchasedProgram(session.user.id, "workouts", slug);
+  if (!program) notFound();
 
-  const program = await getProgramBySlug("workouts", slug)
-  if (!program) notFound()
+  const weeks = await getProgramWeeksGrouped(program.id);
+  const completedDayIds = await getCompletedDayIds(program.purchaseId);
 
-  const weeks = await getProgramWeeksGrouped(program.id)
+  const totalDays = weeks.reduce((sum, week) => sum + week.days.length, 0);
+  const completedCount = completedDayIds.size;
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
-
       {/* ── SPLIT HERO ─────────────────────────────────────────────────── */}
       <section className="px-4 sm:px-10 xl:px-16 py-6 sm:py-12 xl:py-14">
         <div className="max-w-7xl mx-auto">
-
           {/* Breadcrumb */}
           <div className="flex flex-wrap items-center gap-1.5 text-zinc-400 text-[11px] font-bold uppercase tracking-widest [font-family:var(--font-barlow)] mb-6 sm:mb-10">
-            <Link href="/my-programs" className="hover:text-zinc-950 transition-colors">My Programs</Link>
+            <Link
+              href="/my-programs"
+              className="hover:text-zinc-950 transition-colors"
+            >
+              My Programs
+            </Link>
             <ChevronRight className="size-3 shrink-0" />
-            <Link href="/my-programs/workouts" className="hover:text-zinc-950 transition-colors">My Workout Programs</Link>
+            <Link
+              href="/my-programs/workouts"
+              className="hover:text-zinc-950 transition-colors"
+            >
+              My Workout Programs
+            </Link>
             <ChevronRight className="size-3 shrink-0" />
             <span className="text-zinc-950">{program.title}</span>
           </div>
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 xl:gap-14 items-start">
-
             {/* ── LEFT: Visual panel ─────────────────────────────────────── */}
             <div
               className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-linear-to-br ${program.bgClass}
@@ -63,7 +73,12 @@ export default async function MyProgramDetailPage({ params }: Props) {
               <div className="flex flex-col gap-3">
                 <p
                   className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
-                  style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
                   Workout Program
                 </p>
@@ -98,12 +113,16 @@ export default async function MyProgramDetailPage({ params }: Props) {
 
             {/* ── RIGHT: Info panel ──────────────────────────────────────── */}
             <div className="flex flex-col gap-6 sm:gap-8 lg:sticky lg:top-8">
-
               {/* Title block */}
               <div className="flex flex-col gap-2.5">
                 <p
                   className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
-                  style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
                   Workout Program
                 </p>
@@ -118,13 +137,16 @@ export default async function MyProgramDetailPage({ params }: Props) {
               {/* Stat pills */}
               <div className="flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-2 bg-zinc-100 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide text-zinc-700 [font-family:var(--font-barlow)]">
-                  <Clock className="size-3.5 shrink-0" />{program.duration}
+                  <Clock className="size-3.5 shrink-0" />
+                  {program.duration}
                 </span>
                 <span className="inline-flex items-center gap-2 bg-zinc-100 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide text-zinc-700 [font-family:var(--font-barlow)]">
-                  <Users className="size-3.5 shrink-0" />4x / Week
+                  <Users className="size-3.5 shrink-0" />
+                  4x / Week
                 </span>
                 <span className="inline-flex items-center gap-2 bg-zinc-100 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide text-zinc-700 [font-family:var(--font-barlow)]">
-                  <Zap className="size-3.5 shrink-0" />{program.level}
+                  <Zap className="size-3.5 shrink-0" />
+                  {program.level}
                 </span>
               </div>
 
@@ -160,7 +182,6 @@ export default async function MyProgramDetailPage({ params }: Props) {
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -169,12 +190,17 @@ export default async function MyProgramDetailPage({ params }: Props) {
       {/* ── WEEKLY PLAN ────────────────────────────────────────────────── */}
       <section className="bg-zinc-50 border-t border-zinc-100 px-4 sm:px-10 xl:px-16 py-14 sm:py-18 xl:py-20">
         <div className="max-w-4xl mx-auto">
-
           {/* Section header */}
+          {/*
           <div className="mb-10 sm:mb-12">
             <p
               className="text-[10px] font-black uppercase tracking-[0.28em] mb-1.5 [font-family:var(--font-barlow)]"
-              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+              style={{
+                background:
+                  "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
             >
               Your Schedule
             </p>
@@ -185,17 +211,75 @@ export default async function MyProgramDetailPage({ params }: Props) {
               {weeks.length} weeks · 4 sessions per week
             </p>
           </div>
+          */}
+          <div className="mb-10 sm:mb-12 flex items-center justify-between gap-6">
+            <div>
+              <p
+                className="text-[10px] font-black uppercase tracking-[0.28em] mb-1.5 [font-family:var(--font-barlow)]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Your Schedule
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
+                Your Program
+              </h2>
+              <p className="mt-1.5 text-sm font-medium text-zinc-400 [font-family:var(--font-barlow)]">
+                {completedCount}/{totalDays} days completed
+              </p>
+            </div>
+
+            <div className="relative w-16 h-16 shrink-0">
+              <svg className="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="28"
+                  fill="none"
+                  stroke="#e4e4e7"
+                  strokeWidth="6"
+                />
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="28"
+                  fill="none"
+                  stroke="#C9953A"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeDasharray={2 * Math.PI * 28}
+                  strokeDashoffset={
+                    2 *
+                    Math.PI *
+                    28 *
+                    (1 - (totalDays > 0 ? completedCount / totalDays : 0))
+                  }
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-black text-zinc-950 [font-family:var(--font-barlow)]">
+                {totalDays > 0
+                  ? Math.round((completedCount / totalDays) * 100)
+                  : 0}
+                %
+              </span>
+            </div>
+          </div>
 
           {/* Weeks */}
           <div className="flex flex-col gap-10 sm:gap-12">
             {weeks.map((week) => (
               <div key={week.weekNumber} className="flex flex-col gap-4">
-
                 {/* Week header */}
                 <div className="flex items-center gap-3">
                   <div
                     className="w-2 h-2 rounded-full shrink-0"
-                    style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72)" }}
+                    style={{
+                      background: "linear-gradient(135deg, #C9953A, #F0CC72)",
+                    }}
                   />
                   <span className="text-[11px] font-black uppercase tracking-[0.22em] text-zinc-400 [font-family:var(--font-barlow)]">
                     Week {week.weekNumber}
@@ -212,11 +296,30 @@ export default async function MyProgramDetailPage({ params }: Props) {
                       className="group flex items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 hover:bg-zinc-50 transition-colors duration-150"
                     >
                       {/* Number badge */}
+                      {/*
                       <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-zinc-950 flex items-center justify-center shrink-0">
                         <span className="text-xs font-black text-white [font-family:var(--font-barlow)]">
                           {day.dayNumber}
                         </span>
                       </div>
+                      */}
+                      {completedDayIds.has(day.id) ? (
+                        <div
+                          className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, #C9953A, #F0CC72)",
+                          }}
+                        >
+                          <CheckCircle className="size-4 sm:size-5 text-white" />
+                        </div>
+                      ) : (
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-zinc-950 flex items-center justify-center shrink-0">
+                          <span className="text-xs font-black text-white [font-family:var(--font-barlow)]">
+                            {day.dayNumber}
+                          </span>
+                        </div>
+                      )}
 
                       {/* Name + focus */}
                       <div className="flex-1 min-w-0">
@@ -240,13 +343,11 @@ export default async function MyProgramDetailPage({ params }: Props) {
                     </Link>
                   ))}
                 </div>
-
               </div>
             ))}
           </div>
         </div>
       </section>
-
     </main>
-  )
+  );
 }
