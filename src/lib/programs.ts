@@ -122,3 +122,43 @@ export async function getProgramWeeksGrouped(programId: string) {
     .sort(([a], [b]) => a - b)
     .map(([weekNumber, days]) => ({ weekNumber, days }));
 }
+
+export async function getWeeklyActivity(userId: string, weeksBack: number = 8) {
+  const now = new Date();
+  const rangeStart = new Date(now);
+  rangeStart.setDate(rangeStart.getDate() - weeksBack * 7);
+
+  const rows = await prisma.dayProgress.findMany({
+    where: {
+      purchase: { userId, program: { category: "workouts" } },
+      completedAt: { gte: rangeStart },
+    },
+    select: {
+      completedAt: true,
+      purchase: { select: { program: { select: { title: true } } } },
+    },
+  });
+
+  const buckets: Record<string, string | number>[] = Array.from(
+    { length: weeksBack },
+    (_, i) => ({
+      label: i === weeksBack - 1 ? "This week" : `${weeksBack - 1 - i}w ago`,
+    }),
+  );
+
+  for (const row of rows) {
+    const daysAgo = Math.floor(
+      (now.getTime() - row.completedAt.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    const weeksAgo = Math.floor(daysAgo / 7);
+    const bucketIndex = weeksBack - 1 - weeksAgo;
+    if (bucketIndex < 0 || bucketIndex >= weeksBack) continue;
+
+    const title = row.purchase.program.title;
+    const bucket = buckets[bucketIndex];
+    bucket[title] = ((bucket[title] as number) ?? 0) + 1;
+  }
+
+  return buckets;
+}
+
