@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ChevronRight } from "lucide-react";
-import { getUserPurchasePrograms } from "@/lib/programs";
+import { getUserPurchasePrograms } from "@/lib/data/purchases";
 import MyProgramCard from "@/components/MyProgramCard";
 import { auth } from "@/lib/auth";
 

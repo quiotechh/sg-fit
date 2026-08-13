@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle, Shield } from "lucide-react"
 import { categoryConfigs } from "@/data/programs"
-import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs } from "@/lib/programs"
+import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs } from "@/lib/data/programs"
 import ProgramCard from "@/components/ProgramCard"
 import AddToCartButton from "@/components/AddToCartButton"
 

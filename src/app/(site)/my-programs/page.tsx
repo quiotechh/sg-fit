@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ArrowRight, Dumbbell, Utensils } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { getUserPurchasePrograms } from "@/lib/programs";
+import { getUserPurchasePrograms } from "@/lib/data/purchases";
 
 export const metadata = {
   title: "My Programs — SG Fit",

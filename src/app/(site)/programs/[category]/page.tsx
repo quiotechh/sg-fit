@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { categoryConfigs, getAllCategories } from "@/data/programs"
-import { getProgramsByCategory } from "@/lib/programs"
+import { getProgramsByCategory } from "@/lib/data/programs"
 import PageHero from "@/components/PageHero"
 import ProgramCard from "@/components/ProgramCard"
 

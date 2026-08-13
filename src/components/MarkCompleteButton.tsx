@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { CheckCircle, RotateCcw } from "lucide-react";
-import { markDayComplete, unmarkDayComplete } from "@/lib/actions";
+import { markDayComplete, unmarkDayComplete } from "@/lib/actions/day-progress";
 import confetti from "canvas-confetti";
 
 interface Props {
