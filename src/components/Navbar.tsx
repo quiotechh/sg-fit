@@ -250,6 +250,13 @@ function ProfileDropdown({
           Dashboard
         </DropdownMenuItem>
 
+        <DropdownMenuItem
+          onSelect={() => router.push("/measurements")}
+          className={itemCls}
+        >
+          Measurements
+        </DropdownMenuItem>
+
         {/* My Programs — inline accordion */}
         <DropdownMenuItem
           onSelect={(e) => {
@@ -539,6 +546,13 @@ export default function Navbar() {
                       className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href="/measurements"
+                      onClick={() => setMobileOpen(false)}
+                      className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
+                    >
+                      Measurements
                     </Link>
                     <MobileAccordion
                       label="My Programs"

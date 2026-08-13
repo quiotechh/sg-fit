@@ -10,10 +10,10 @@ import {
   Clock,
   Info,
 } from "lucide-react";
-import { getProgressCounts, getPurchasedDayTemplate } from "@/lib/programs";
+import { getProgressCounts, isDayCompleted } from "@/lib/data/progress";
+import { getPurchasedDayTemplate } from "@/lib/data/day-templates";
 import type { SectionType, WorkoutSection } from "@/data/dayPlans";
 import { auth } from "@/lib/auth";
-import { isDayCompleted } from "@/lib/programs";
 import MarkCompleteButton from "@/components/MarkCompleteButton";
 
 interface Props {

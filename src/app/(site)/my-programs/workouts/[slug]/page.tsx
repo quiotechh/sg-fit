@@ -2,11 +2,9 @@ import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react";
-import {
-  getPurchasedProgram,
-  getProgramWeeksGrouped,
-  getCompletedDayIds,
-} from "@/lib/programs";
+import { getPurchasedProgram } from "@/lib/data/purchases";
+import { getProgramWeeksGrouped } from "@/lib/data/day-templates";
+import { getCompletedDayIds, findNextIncompleteDay } from "@/lib/data/progress";
 import { auth } from "@/lib/auth";
 
 interface Props {
@@ -20,20 +18,6 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const program = await getPurchasedProgram(session.user.id, "workouts", slug);
   return { title: program ? `${program.title} — My Programs` : "My Program" };
-}
-
-function findNextIncompleteDay(
-  weeks: { weekNumber: number; days: { id: string; dayNumber: number }[] }[],
-  completedDayIds: Set<string>,
-) {
-  for (const week of weeks) {
-    for (const day of week.days) {
-      if (!completedDayIds.has(day.id)) {
-        return { weekNumber: week.weekNumber, dayNumber: day.dayNumber };
-      }
-    }
-  }
-  return null;
 }
 
 export default async function MyProgramDetailPage({ params }: Props) {
