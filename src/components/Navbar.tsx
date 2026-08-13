@@ -27,7 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCart } from "@/store/cartStore"
+import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
 
 // ── Toggle this to preview logged-in UI states ────────────────────────
@@ -243,13 +243,20 @@ function ProfileDropdown({
           </div>
         </div>
 
+        <DropdownMenuItem
+          onSelect={() => router.push("/dashboard")}
+          className={`${itemCls} pt-4`}
+        >
+          Dashboard
+        </DropdownMenuItem>
+
         {/* My Programs — inline accordion */}
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();
             setMyProgramsOpen((v) => !v);
           }}
-          className={`${itemCls} pt-4`}
+          className={itemCls}
         >
           My Programs
           <ChevronDown
@@ -526,6 +533,13 @@ export default function Navbar() {
                     <p className="py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 [font-family:var(--font-barlow)]">
                       My Account
                     </p>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileOpen(false)}
+                      className="block border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide text-zinc-800 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
+                    >
+                      Dashboard
+                    </Link>
                     <MobileAccordion
                       label="My Programs"
                       items={myProgramItems}
