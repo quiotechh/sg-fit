@@ -9,7 +9,6 @@ import {
   Tag,
   ArrowRight,
   Shield,
-  Mail,
 } from "lucide-react";
 import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
@@ -29,8 +28,6 @@ export default function CartSidebar() {
     setCouponInput,
     applyCoupon,
     removeCoupon,
-    email,
-    setEmail,
     totalItems,
     subtotal,
     discountAmount,
@@ -243,21 +240,6 @@ export default function CartSidebar() {
                   )}
                 </>
               )}
-            </div>
-
-            {/* Email */}
-            <div className="flex flex-col gap-2">
-              <label className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500 [font-family:var(--font-barlow)]">
-                <Mail className="size-3" />
-                Email for receipt
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="border-2 border-zinc-200 focus:border-zinc-950 rounded-xl px-4 py-2.5 text-sm font-semibold text-zinc-950 placeholder:text-zinc-300 [font-family:var(--font-barlow)] outline-none transition-colors"
-              />
             </div>
 
             {/* Order summary */}

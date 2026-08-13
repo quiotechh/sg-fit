@@ -2,13 +2,32 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { verifyWebhookSignature, verifyTransaction } from "@/lib/paystack"
 import { calculateDiscount } from "@/lib/coupons"
+import { logEvent } from "@/lib/auditLog"
 
 export async function POST(request: Request) {
   const rawBody = await request.text()
   const signature = request.headers.get("x-paystack-signature")
 
+  let reference: string | undefined
+  try {
+    reference = JSON.parse(rawBody)?.data?.reference
+  } catch {
+    // ignore — reference stays undefined if body isn't valid JSON
+  }
+
+  await logEvent({
+    event: "webhook.received",
+    success: true,
+    reference,
+  })
+
   if (!verifyWebhookSignature(rawBody, signature)) {
     console.error("Paystack webhook: signature mismatch")
+    await logEvent({
+      event: "webhook.signature_invalid",
+      success: false,
+      reference,
+    })
     return new NextResponse("invalid", { status: 400 })
   }
 
@@ -18,12 +37,16 @@ export async function POST(request: Request) {
     return new NextResponse("OK")
   }
 
-  const { reference } = event.data
-
   // Defense-in-depth — webhook payload par pura bharosa nahi, Paystack se dobara verify karo
-  const verified = await verifyTransaction(reference)
+  const verified = await verifyTransaction(reference!)
   if (verified.data.status !== "success") {
     console.error("Paystack webhook: not verified as success", reference)
+    await logEvent({
+      event: "webhook.verify_failed",
+      success: false,
+      reference,
+      metadata: { status: verified.data.status },
+    })
     return new NextResponse("OK")
   }
 
@@ -31,9 +54,16 @@ export async function POST(request: Request) {
   const userId = metadata?.userId
   const programIds = metadata?.programIds ?? []
   const couponCode = metadata?.couponCode ?? null
+  const userEmail = verified.data.customer.email
 
   if (!userId || programIds.length === 0) {
     console.error("Paystack webhook: missing metadata", reference)
+    await logEvent({
+      userEmail,
+      event: "webhook.missing_metadata",
+      success: false,
+      reference,
+    })
     return new NextResponse("OK")
   }
 
@@ -45,6 +75,14 @@ export async function POST(request: Request) {
   const amountPaidRands = verified.data.amount / 100
   if (Math.abs(expectedTotal - amountPaidRands) > 0.5) {
     console.error("Paystack webhook: amount mismatch", { expectedTotal, amountPaidRands })
+    await logEvent({
+      userId,
+      userEmail,
+      event: "webhook.amount_mismatch",
+      success: false,
+      reference,
+      metadata: { expectedTotal, amountPaidRands },
+    })
     return new NextResponse("OK")
   }
 
@@ -67,6 +105,19 @@ export async function POST(request: Request) {
 
   await prisma.cartItem.deleteMany({
     where: { userId, programId: { in: programIds } },
+  })
+
+  await logEvent({
+    userId,
+    userEmail,
+    event: "purchase.created",
+    success: true,
+    reference,
+    metadata: {
+      programTitles: programs.map((p) => p.title),
+      amountPaid: amountPaidRands,
+      couponCode,
+    },
   })
 
   return new NextResponse("OK")
