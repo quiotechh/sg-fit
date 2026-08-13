@@ -337,6 +337,13 @@ export default function Navbar() {
   }, [pathname, refetchSession]);
 
   async function handleSignOut() {
+    // Log while the session is still valid — signOut() destroys it.
+    await fetch("/api/auth-log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "auth.signout" }),
+    });
+
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {

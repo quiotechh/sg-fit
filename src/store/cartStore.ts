@@ -145,7 +145,6 @@ export const useCart = create<CartStore>()(
       partialize: (state) => ({
         items: state.items,
         appliedCoupon: state.appliedCoupon,
-        email: state.email,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
