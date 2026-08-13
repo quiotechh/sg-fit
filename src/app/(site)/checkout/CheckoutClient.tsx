@@ -1,14 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, Shield, Tag, Mail, Loader2 } from "lucide-react"
 import { useCart } from "@/store/cartStore"
+import { authClient } from "@/lib/auth-client"
 
 export default function CheckoutClient() {
   const { items, appliedCoupon, email, setEmail, subtotal, discountAmount, total } = useCart()
+  const { data: session } = authClient.useSession()
   const [processing, setProcessing] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (!email && session?.user.email) {
+      setEmail(session.user.email)
+    }
+  }, [email, session, setEmail])
 
   async function handlePay() {
     setProcessing(true)
@@ -17,7 +25,7 @@ export default function CheckoutClient() {
       const res = await fetch("/api/checkout/paystack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ couponCode: appliedCoupon?.code ?? null }),
+        body: JSON.stringify({ couponCode: appliedCoupon?.code ?? null, email }),
       })
       if (!res.ok) {
         const data = await res.json()

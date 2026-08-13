@@ -6,6 +6,7 @@ const PAYSTACK_BASE_URL = "https://api.paystack.co"
 interface InitializeTransactionParams {
   email: string
   amount: number // smallest currency unit — cents for ZAR
+  reference?: string
   callback_url?: string
   metadata?: Record<string, unknown>
 }

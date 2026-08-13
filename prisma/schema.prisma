@@ -95,6 +95,25 @@ model Purchase {
   @@map("purchase")
 }
 
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userEmail String?
+  event     String
+  success   Boolean
+  ipAddress String?
+  userAgent String?
+  reference String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([event])
+  @@index([createdAt])
+  @@index([reference])
+}
+
+
 model CartItem {
   id        String   @id @default(cuid())
   userId    String
