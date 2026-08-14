@@ -19,7 +19,29 @@ export async function addBodyMetric(data: unknown) {
   const { path, ...metrics } = parsed.data;
   const fieldsToLog = Object.keys(metrics) as (keyof typeof metrics)[];
 
+  // Same calendar day → merge into that one row, don't fragment into
+  // multiple rows just because entries were logged at different times.
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  );
+  const startOfTomorrow = new Date(startOfToday);
+  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+  const todayEntry = await prisma.bodyMetric.findFirst({
+    where: {
+      userId: session.user.id,
+      recordedAt: { gte: startOfToday, lt: startOfTomorrow },
+    },
+  });
+
   for (const field of fieldsToLog) {
+    // Editing a field already logged today is a same-day correction,
+    // not a fresh log — skip the cooldown check for it.
+    if (todayEntry && todayEntry[field] !== null) continue;
+
     const lastEntryForField = await prisma.bodyMetric.findFirst({
       where: { userId: session.user.id, [field]: { not: null } },
       orderBy: { recordedAt: "desc" },
@@ -40,9 +62,16 @@ export async function addBodyMetric(data: unknown) {
     }
   }
 
-  await prisma.bodyMetric.create({
-    data: { userId: session.user.id, ...metrics },
-  });
+  if (todayEntry) {
+    await prisma.bodyMetric.update({
+      where: { id: todayEntry.id },
+      data: { ...metrics },
+    });
+  } else {
+    await prisma.bodyMetric.create({
+      data: { userId: session.user.id, ...metrics },
+    });
+  }
 
   revalidatePath(path);
 }
