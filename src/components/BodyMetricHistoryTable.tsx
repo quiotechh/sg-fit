@@ -6,7 +6,7 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface Entry {
   id: string;
@@ -46,9 +46,9 @@ export default function BodyMetricHistoryTable({ entries }: Props) {
     <Table className="[font-family:var(--font-barlow)]">
       <TableHeader>
         <TableRow className="border-zinc-800 hover:bg-transparent">
-          <TableHead className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+          {/* <TableHead className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
             Photo
-          </TableHead>
+          </TableHead> */}
           <TableHead className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
             Date
           </TableHead>
@@ -65,7 +65,7 @@ export default function BodyMetricHistoryTable({ entries }: Props) {
       <TableBody>
         {entries.map((entry) => (
           <TableRow key={entry.id} className="border-zinc-800 hover:bg-white/5">
-            <TableCell>
+            {/* <TableCell>
               {entry.photoUrl ? (
                 <div className="relative w-10 h-10 rounded-full overflow-hidden">
                   <Image
@@ -79,7 +79,7 @@ export default function BodyMetricHistoryTable({ entries }: Props) {
               ) : (
                 <span className="text-zinc-600">—</span>
               )}
-            </TableCell>
+            </TableCell> */}
             <TableCell className="font-bold text-[#F0CC72]">
               {new Date(entry.recordedAt).toLocaleDateString("en-IN", {
                 day: "numeric",
