@@ -40,14 +40,14 @@ export default function WeightTrendChart({ data }: Props) {
 
   return (
     <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+      <LineChart data={chartData} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
         <CartesianGrid vertical={false} stroke="#2c2c2a" />
         <XAxis dataKey="date" tick={{ fontSize: 10, fontWeight: 700, fill: "#898781" }} axisLine={false} tickLine={false} />
         <YAxis
           tick={{ fontSize: 10, fontWeight: 700, fill: "#898781" }}
           axisLine={false}
           tickLine={false}
-          width={24}
+          width={36}
           domain={["dataMin - 2", "dataMax + 2"]}
         />
         <Tooltip

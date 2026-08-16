@@ -9,6 +9,7 @@ const measurementFields = [
   "thighsIn",
 ] as const;
 
+// dashboard function
 export async function getLatestMeasurements(userId: string) {
   const entries = await prisma.bodyMetric.findMany({
     where: { userId },
@@ -26,7 +27,7 @@ export async function getLatestMeasurements(userId: string) {
 
   const latest: Record<
     (typeof measurementFields)[number],
-    { value: number; recordedAt: Date } | null
+    { value: number; recordedAt: Date; delta: number | null } | null
   > = {
     weightKg: null,
     waistIn: null,
@@ -37,14 +38,22 @@ export async function getLatestMeasurements(userId: string) {
   };
 
   for (const field of measurementFields) {
-    const entry = entries.find((e) => e[field] !== null);
-    if (entry) {
-      latest[field] = { value: entry[field]!, recordedAt: entry.recordedAt };
+    const matches = entries.filter((e) => e[field] !== null);
+    if (matches.length > 0) {
+      const current = matches[0];
+      const previous = matches[1];
+      const delta = previous ? current[field]! - previous[field]! : null;
+      latest[field] = {
+        value: current[field]!,
+        recordedAt: current.recordedAt,
+        delta,
+      };
     }
   }
 
   return latest;
 }
+
 export function getAllBodyMetrics(userId: string) {
   return prisma.bodyMetric.findMany({
     where: { userId },
@@ -59,7 +68,17 @@ export function getLatestBodyMetric(userId: string) {
   });
 }
 
+// dashboard function
+export function getLatestPhoto(userId: string) {
+  return prisma.bodyMetric.findFirst({
+    where: { userId, photoUrl: { not: null } },
+    orderBy: { recordedAt: "desc" },
+    select: { photoUrl: true, recordedAt: true },
+  });
+}
+
 // for graph - give history for N number of weeks back, default 12 weeks
+// Also used by dashboard
 export function getBodyMetricHistory(userId: string, weeksBack = 12) {
   const rangeStart = new Date();
   rangeStart.setDate(rangeStart.getDate() - weeksBack * 7);
