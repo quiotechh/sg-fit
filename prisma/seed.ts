@@ -73,6 +73,39 @@ async function main() {
     },
   })
 
+  await prisma.program.upsert({
+    where: { slug: "sgfit-nutrition-guide" },
+    update: {},
+    create: {
+      slug: "sgfit-nutrition-guide",
+      category: "nutrition",
+      title: "SGFIT Nutrition Guide",
+      subtitle: "Eat Well. Feel Good. Live Better.",
+      description:
+        "A practical guide to enjoying food, building balanced meals and creating a healthier lifestyle without making food your enemy — by Sharon Gambu. No rigid diets, no banned foods, just a simple formula for eating well and sustaining it long-term.",
+      price: 29,
+      duration: "Lifetime Access",
+      level: "All Levels",
+      totalWeeks: 0,
+      fileKey: "nutrition/sgfit-nutrition-guide.pdf",
+      tags: ["Nutrition", "Meal Plans", "Digital Guide"],
+      includes: [
+        "Build-your-own-plate formula (protein, carbs, veg, fruit/fats)",
+        "7-day meal inspiration plan",
+        "Healthier swaps for your favourite foods",
+        "SG.FIT kitchen recipes",
+        "Full grocery list template",
+        "Delivered instantly to your email as a PDF",
+      ],
+      highlights: [
+        "No rigid dieting — a flexible formula you adapt to your own goals",
+        "Simple, familiar recipes using ingredients you already know",
+        "Written from real lived experience, not generic meal-plan templates",
+      ],
+      bgClass: "from-zinc-700 to-zinc-950",
+    },
+  })
+
   const programsBySlug: Record<string, { id: string }> = {
     "6-week-shred": program1,
     "hiit-ignite": program2,

@@ -113,7 +113,6 @@ model AuditLog {
   @@index([reference])
 }
 
-
 model CartItem {
   id        String   @id @default(cuid())
   userId    String
@@ -148,6 +147,7 @@ model Program {
   dayTemplates  DayTemplate[]
   cartItems     CartItem[]
   purchases     Purchase[]
+  fileKey       String?
 
   @@index([category])
   @@map("program")
