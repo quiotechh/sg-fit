@@ -13,18 +13,23 @@ datasource db {
 }
 
 model User {
-  id            String       @id
-  name          String
-  email         String
-  emailVerified Boolean      @default(false)
-  image         String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  purchases     Purchase[]
-  cartItems     CartItem[]
-  bodyMetrics   BodyMetric[]
+  id                    String         @id
+  name                  String
+  email                 String
+  emailVerified         Boolean        @default(false)
+  image                 String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  sessions              Session[]
+  accounts              Account[]
+  purchases             Purchase[]
+  cartItems             CartItem[]
+  bodyMetrics           BodyMetric[]
+  posts                 Post[]
+  comments              Comment[]
+  likes                 Like[]
+  notificationsReceived Notification[] @relation("NotificationsReceived")
+  notificationsSent     Notification[] @relation("NotificationsSent")
 
   @@unique([email])
   @@map("user")
@@ -197,4 +202,67 @@ model BodyMetric {
 
   @@index([userId])
   @@map("body_metric")
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+}
+
+model Post {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body         String
+  imageUrl     String?
+  likeCount    Int       @default(0)
+  commentCount Int       @default(0)
+  createdAt    DateTime  @default(now())
+  likes        Like[]
+  comments     Comment[]
+
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@map("post")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
+  @@map("comment")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+  @@map("like")
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  recipientId String
+  recipient   User             @relation("NotificationsReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  actorId     String
+  actor       User             @relation("NotificationsSent", fields: [actorId], references: [id], onDelete: Cascade)
+  type        NotificationType
+  postId      String?
+  read        Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+
+  @@index([recipientId, read, createdAt])
+  @@map("notification")
 }

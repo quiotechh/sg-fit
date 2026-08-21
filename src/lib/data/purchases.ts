@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getProgramBySlug } from "@/lib/data/programs";
 
+// Also used by dashboard
 export async function getUserPurchasePrograms(
   userId: string,
   category: string,

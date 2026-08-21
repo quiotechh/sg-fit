@@ -44,48 +44,50 @@ export async function getProgressCounts(
   return { totalDays, completedCount };
 }
 
-export async function getWeeklyActivity(
+function toLocalDateKey(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+// dashboard function
+export async function getActivityHeatmapData(
   userId: string,
-  weeksBack: number = 8,
+  daysBack: number = 56,
 ) {
   const now = new Date();
   const rangeStart = new Date(now);
-  rangeStart.setDate(rangeStart.getDate() - weeksBack * 7);
+  rangeStart.setDate(rangeStart.getDate() - daysBack);
 
+  // Same underlying query as before — only the aggregation below changed
+  // from week-buckets-per-program to a simple day-level count (for the
+  // heatmap), so per-program breakdown (title) isn't needed anymore.
   const rows = await prisma.dayProgress.findMany({
     where: {
       purchase: { userId, program: { category: "workouts" } },
       completedAt: { gte: rangeStart },
     },
-    select: {
-      completedAt: true,
-      purchase: { select: { program: { select: { title: true } } } },
-    },
+    select: { completedAt: true },
   });
 
-  const buckets: Record<string, string | number>[] = Array.from(
-    { length: weeksBack },
-    (_, i) => ({
-      label: i === weeksBack - 1 ? "This week" : `${weeksBack - 1 - i}w ago`,
-    }),
-  );
-
+  const counts = new Map<string, number>();
   for (const row of rows) {
-    const daysAgo = Math.floor(
-      (now.getTime() - row.completedAt.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    const weeksAgo = Math.floor(daysAgo / 7);
-    const bucketIndex = weeksBack - 1 - weeksAgo;
-    if (bucketIndex < 0 || bucketIndex >= weeksBack) continue;
-
-    const title = row.purchase.program.title;
-    const bucket = buckets[bucketIndex];
-    bucket[title] = ((bucket[title] as number) ?? 0) + 1;
+    // Local date key, not toISOString() — UTC conversion silently shifts
+    // the date by a day for timezones ahead of UTC.
+    const dateKey = toLocalDateKey(row.completedAt);
+    counts.set(dateKey, (counts.get(dateKey) ?? 0) + 1);
   }
 
-  return buckets;
+  const days: { date: string; count: number }[] = [];
+  for (let i = daysBack - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateKey = toLocalDateKey(d);
+    days.push({ date: dateKey, count: counts.get(dateKey) ?? 0 });
+  }
+
+  return days;
 }
 
+// dashboard function
 export async function getMostRecentProgramProgress(userId: string) {
   const purchase = await prisma.purchase.findFirst({
     where: { userId, program: { category: "workouts" } },

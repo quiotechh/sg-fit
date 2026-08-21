@@ -29,7 +29,7 @@ export default async function MeasurementsPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-zinc-50">
-      <section className="max-w-5xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">
+      <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">
         <div className="flex flex-wrap items-center gap-1.5 text-zinc-400 text-xs font-bold uppercase tracking-wide [font-family:var(--font-barlow)] mb-8">
           <Link href="/dashboard" className="hover:text-zinc-950 transition-colors">Dashboard</Link>
           <ChevronRight className="size-3 shrink-0" />
