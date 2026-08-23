@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Home, PlusCircle, Bell, User } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import Sidebar from "@/components/communtiy/Sidebar";
+import Sidebar from "@/components/communtiy/CommunitySidebar";
 import PostCard from "@/components/communtiy/Postcard";
 import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
 import CommentsModal from "@/components/communtiy/CommentsModal";
