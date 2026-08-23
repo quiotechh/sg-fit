@@ -8,8 +8,10 @@ type NotificationPayload = {
   createdAt: Date;
 };
 
-const bus = new EventEmitter();
-bus.setMaxListeners(0); // unlimited listeners — one per connected user
+const globalForBus = globalThis as unknown as { notificationBus?: EventEmitter };
+const bus = globalForBus.notificationBus ?? new EventEmitter();
+bus.setMaxListeners(0);  // unlimited listeners — one per connected user
+if (process.env.NODE_ENV !== "production") globalForBus.notificationBus = bus;
 
 export function publishNotification(
   recipientId: string,

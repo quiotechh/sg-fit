@@ -1,24 +1,24 @@
 "use client";
 
-import { Post } from "@/types/community";
-
-const goldGradient = "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)";
-
-const avatarStyles: Record<string, string> = {
-  "av-sg": goldGradient,
-  "av-2": "linear-gradient(135deg, #6c8ebf, #a8c4e0)",
-  "av-3": "linear-gradient(135deg, #7cb87c, #b8d8b8)",
-  "av-4": "linear-gradient(135deg, #bf6c8e, #e0a8c4)",
-  "av-5": "linear-gradient(135deg, #8e6cbf, #c4a8e0)",
-  "av-1": goldGradient,
-};
+import { Heart, MessageCircle } from "lucide-react";
+import { FeedPost } from "@/types/community";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import CommunityAvatar from "./CommunityAvatar";
+import RelativeTime from "./RelativeTime";
 
 type Props = {
-  post: Post;
+  post: FeedPost;
   onLike: (id: string) => void;
-  onComment: (post: Post) => void;
+  onComment: (postId: string) => void;
   animDelay?: number;
 };
+
+/* ── purana comment block waisa hi rakhna, upar hai already ── */
 
 export default function PostCard({
   post,
@@ -26,176 +26,107 @@ export default function PostCard({
   onComment,
   animDelay = 0,
 }: Props) {
+  const isFounder = post.user.role === "FOUNDER";
+
   return (
-    <article
-      className={`rounded-[20px] p-5.5 mb-4.5 border transition-all duration-200 ${
-        post.isSharonPost
-          ? "border-[rgba(201,149,58,0.25)] hover:border-[rgba(201,149,58,0.4)]"
+    <Card
+      className={`mb-4.5 gap-3.5 rounded-[20px] ring-0 border transition-all duration-200 [--card-spacing:--spacing(5.5)] ${
+        isFounder
+          ? "border-[rgba(201,149,58,0.25)] hover:border-[rgba(201,149,58,0.4)] bg-[linear-gradient(135deg,#0a0a0a_0%,#1a1510_100%)]"
           : "bg-white border-transparent hover:border-[#eeece8] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] hover:-translate-y-0.5"
       }`}
       style={{
-        background: post.isSharonPost
-          ? "linear-gradient(135deg, #0a0a0a 0%, #1a1510 100%)"
-          : undefined,
         animation: `fadeUp 0.4s ease ${animDelay}s forwards`,
         opacity: 0,
       }}
     >
-      {/* Sharon label */}
-      {post.isSharonPost && (
-        <div
-          className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] mb-3.5 [font-family:var(--font-barlow)]"
-          style={{
-            background: goldGradient,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          ★ Sharon Gambu · Host
-        </div>
-      )}
-
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-3.5">
-        <div
-          className="w-10.5 h-10.5 rounded-full flex items-center justify-center text-[15px] font-black shrink-0 [font-family:var(--font-barlow)]"
-          style={{
-            background: avatarStyles[post.avatarClass] || goldGradient,
-            color: "#0a0a0a",
-          }}
-        >
-          {post.initials}
-        </div>
-        <div className="flex-1">
-          <div
-            className="text-[14px] font-bold flex items-center gap-1.5 [font-family:var(--font-barlow)]"
-            style={{
-              color: post.isSharonPost ? "rgba(255,255,255,0.95)" : "#0a0a0a",
-            }}
-          >
-            {post.author}
-            {post.isSharonPost && (
-              <span
-                className="text-[9px] font-black uppercase tracking-[0.12em] [font-family:var(--font-barlow)]"
-                style={{
-                  background: goldGradient,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Founder
-              </span>
-            )}
+      <CardHeader className="gap-0">
+        {isFounder && (
+          <div className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] mb-3.5 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)] bg-clip-text text-transparent">
+            ★ {post.user.name} · Host
           </div>
-          <div
-            className="text-[11px] font-medium mt-0.5 [font-family:var(--font-barlow)]"
-            style={{
-              color: post.isSharonPost ? "rgba(255,255,255,0.3)" : "#9e9a90",
-            }}
-          >
-            {post.time}
+        )}
+
+        <div className="flex items-center gap-3">
+          <CommunityAvatar
+            userId={post.user.id}
+            name={post.user.name}
+            image={post.user.image}
+            className="size-10.5 text-[15px]"
+          />
+          <div className="flex-1">
+            <div
+              className={`text-[14px] font-bold flex items-center gap-1.5 [font-family:var(--font-barlow)] ${
+                isFounder ? "text-white/95" : "text-[#0a0a0a]"
+              }`}
+            >
+              {post.user.name}
+              {isFounder && (
+                <span className="text-[9px] font-black uppercase tracking-[0.12em] [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)] bg-clip-text text-transparent">
+                  Founder
+                </span>
+              )}
+            </div>
+            <RelativeTime
+              date={post.createdAt}
+              className={`text-[11px] font-medium mt-0.5 [font-family:var(--font-barlow)] ${isFounder ? "text-white/30" : "text-[#9e9a90]"}`}
+            />
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Body */}
-      <p
-        className="text-[14px] leading-[1.65] font-medium mb-3.5 [font-family:var(--font-barlow)]"
-        style={{
-          color: post.isSharonPost ? "rgba(255,255,255,0.8)" : "#2a2a2a",
-        }}
-      >
-        {post.body}
-      </p>
-
-      {/* Image placeholder */}
-      {post.hasImage && (
-        <div
-          className="w-full h-70 rounded-[14px] flex items-center justify-center mb-3.5 text-[#9e9a90] text-[16px] [font-family:var(--font-cormorant)] tracking-wider"
-          style={{ background: "linear-gradient(135deg, #ede6d6, #d4d0c8)" }}
+      <CardContent>
+        <p
+          className={`text-[14px] leading-[1.65] font-medium [font-family:var(--font-barlow)] ${isFounder ? "text-white/80" : "text-[#2a2a2a]"}`}
         >
-          {post.imagePlaceholder}
-        </div>
-      )}
+          {post.body}
+        </p>
 
-      {/* Actions */}
-      <div
-        className="flex items-center gap-1.5 pt-3 border-t [font-family:var(--font-barlow)]"
-        style={{
-          borderColor: post.isSharonPost ? "rgba(255,255,255,0.08)" : "#f5f0e8",
-        }}
+        {post.imageUrl && (
+          <img // WILL CHANGE THIS WITH IMAGE TAG AND ALLOW R2 URL IN CONFIG
+            src={post.imageUrl}
+            alt=""
+            className="w-full max-h-100 object-cover rounded-[14px] mt-3.5"
+          />
+        )}
+      </CardContent>
+
+      <CardFooter
+        className={`bg-transparent gap-1.5 [font-family:var(--font-barlow)] ${isFounder ? "border-white/8" : "border-[#f5f0e8]"}`}
       >
-        {/* Like */}
         <button
           onClick={() => onLike(post.id)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border-none text-[12px] font-semibold transition-all duration-200 cursor-pointer [font-family:var(--font-barlow)]"
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            isFounder ? "hover:bg-white/7" : "hover:bg-[#f5f0e8]"
+          }`}
           style={{
-            background: "transparent",
-            color: post.liked
+            color: post.likedByMe
               ? "#e0574a"
-              : post.isSharonPost
+              : isFounder
                 ? "rgba(255,255,255,0.4)"
                 : "#9e9a90",
           }}
-          onMouseEnter={(e) => {
-            if (!post.liked)
-              (e.currentTarget as HTMLButtonElement).style.background =
-                post.isSharonPost ? "rgba(255,255,255,0.07)" : "#f5f0e8";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "transparent";
-          }}
         >
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 24 24"
-            fill={post.liked ? "#e0574a" : "none"}
-            stroke={post.liked ? "#e0574a" : "currentColor"}
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-          {post.likes}
+          <Heart
+            className="size-4.25"
+            strokeWidth={2.2}
+            fill={post.likedByMe ? "#e0574a" : "none"}
+            stroke={post.likedByMe ? "#e0574a" : "currentColor"}
+          />
+          {post.likeCount}
         </button>
 
-        {/* Comment */}
         <button
-          onClick={() => onComment(post)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border-none text-[12px] font-semibold transition-all duration-200 cursor-pointer [font-family:var(--font-barlow)]"
-          style={{
-            background: "transparent",
-            color: post.isSharonPost ? "rgba(255,255,255,0.4)" : "#9e9a90",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              post.isSharonPost ? "rgba(255,255,255,0.07)" : "#f5f0e8";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "transparent";
-          }}
+          onClick={() => onComment(post.id)}
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] text-[12px] font-semibold transition-all duration-200 cursor-pointer ${
+            isFounder ? "hover:bg-white/7" : "hover:bg-[#f5f0e8]"
+          }`}
+          style={{ color: isFounder ? "rgba(255,255,255,0.4)" : "#9e9a90" }}
         >
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-          {post.comments}
+          <MessageCircle className="size-4.25" strokeWidth={2.2} />
+          {post.commentCount}
         </button>
-      </div>
-    </article>
+      </CardFooter>
+    </Card>
   );
 }
