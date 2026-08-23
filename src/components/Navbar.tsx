@@ -31,10 +31,6 @@ import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
 import { getInitials } from "@/lib/utils";
 
-// ── Toggle this to preview logged-in UI states ────────────────────────
-const hasMembership = true;
-// ─────────────────────────────────────────────────────────────────────
-
 const programsItems = [
   { label: "Workout Programs", href: "/programs/workouts" },
   { label: "Nutrition Guides", href: "/programs/nutrition" },
@@ -156,16 +152,18 @@ const itemCls =
 function ProfileDropdown({
   iconCls,
   onSignOut,
+  hasMembership,
 }: {
   iconCls: string;
   onSignOut: () => void;
+  hasMembership: boolean;
 }) {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const [imageError, setImageError] = useState(false);
   const router = useRouter();
   const [myProgramsOpen, setMyProgramsOpen] = useState(false);
-  const communityHref = hasMembership ? "/community-dashboard" : "/membership";
+  const communityHref = hasMembership ? "/community-dashboard" : "/community/checkout";
 
   return (
     <DropdownMenu onOpenChange={() => setMyProgramsOpen(false)}>
@@ -297,6 +295,16 @@ function ProfileDropdown({
           )}
         </DropdownMenuItem>
 
+        {hasMembership && (
+          <DropdownMenuItem
+            onSelect={() => router.push("/community/manage")}
+            className={`${itemCls} text-zinc-500`}
+          >
+            Manage Membership
+            <ChevronRight className="size-3.5 text-zinc-300 shrink-0" />
+          </DropdownMenuItem>
+        )}
+
         <DropdownMenuItem
           onSelect={() => router.push("/help")}
           className={`${itemCls} text-zinc-700 mb-1`}
@@ -325,12 +333,23 @@ export default function Navbar() {
   const { data: session, refetch: refetchSession } = authClient.useSession();
   const isLoggedIn = !!session;
   const transparent = pathname === "/about" || pathname === "/contact";
+  const [hasMembership, setHasMembership] = useState(false);
 
   // Official Next.js pattern for detecting navigation (including back/forward)
   // in a persistent layout component: https://nextjs.org/docs/app/api-reference/functions/use-router#router-events
   useEffect(() => {
     refetchSession();
   }, [pathname, refetchSession]);
+
+  useEffect(() => {
+    // Signing out does a full page reload (see handleSignOut), so the default
+    // `false` initial state already covers the logged-out case — no reset needed here.
+    if (!isLoggedIn) return;
+    fetch("/api/community/membership-status")
+      .then((res) => res.json())
+      .then((data) => setHasMembership(data.hasMembership))
+      .catch(() => setHasMembership(false));
+  }, [isLoggedIn]);
 
   async function handleSignOut() {
     // Log while the session is still valid — signOut() destroys it.
@@ -396,11 +415,9 @@ export default function Navbar() {
             <Link href="/shop" className={navLinkCls}>
               Shop
             </Link>
-            {isLoggedIn && (
-              <Link href="/community" className={navLinkCls}>
-                Community
-              </Link>
-            )}
+            <Link href="/community" className={navLinkCls}>
+              Community
+            </Link>
             <DesktopDropdown
               label="More"
               items={moreItems}
@@ -424,7 +441,7 @@ export default function Navbar() {
             </button>
 
             {isLoggedIn ? (
-              <ProfileDropdown iconCls={iconCls} onSignOut={handleSignOut} />
+              <ProfileDropdown iconCls={iconCls} onSignOut={handleSignOut} hasMembership={hasMembership} />
             ) : (
               <>
                 <Link href="/login" aria-label="Account" className={iconCls}>
@@ -550,7 +567,7 @@ export default function Navbar() {
                     />
                     <Link
                       href={
-                        hasMembership ? "/community-dashboard" : "/membership"
+                        hasMembership ? "/community-dashboard" : "/community/checkout"
                       }
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center justify-between border-b border-zinc-100 py-4 text-base font-bold uppercase tracking-wide transition-colors [font-family:var(--font-barlow)] ${
@@ -566,6 +583,15 @@ export default function Navbar() {
                         <Lock className="size-4 text-zinc-400" />
                       )}
                     </Link>
+                    {hasMembership && (
+                      <Link
+                        href="/community/manage"
+                        onClick={() => setMobileOpen(false)}
+                        className="block border-b border-zinc-100 py-4 text-sm font-bold uppercase tracking-wide text-zinc-500 hover:text-zinc-950 transition-colors [font-family:var(--font-barlow)]"
+                      >
+                        Manage Membership
+                      </Link>
+                    )}
                     <Link
                       href="/help"
                       onClick={() => setMobileOpen(false)}
@@ -608,6 +634,7 @@ export default function Navbar() {
               <ProfileDropdown
                 iconCls={mobileIconCls}
                 onSignOut={handleSignOut}
+                hasMembership={hasMembership}
               />
             ) : (
               <Link

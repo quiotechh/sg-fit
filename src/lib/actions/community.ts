@@ -12,6 +12,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { publishNotification } from "@/lib/NotificationBus";
+import { hasActiveCommunitySubscription } from "@/lib/data/subscriptions";
 import {
   getComments as getCommentsData,
   getNotifications,
@@ -21,6 +22,7 @@ import {
 export async function createPost(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
 
   const parsed = createPostSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
@@ -33,6 +35,7 @@ export async function createPost(data: unknown) {
 export async function deletePost(postId: string, path: string) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
 
   // deleteMany, not delete — scoped to userId so you can only delete your own post,
   // no separate ownership check query needed
@@ -45,6 +48,7 @@ export async function deletePost(postId: string, path: string) {
 export async function toggleLike(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
 
   const parsed = toggleLikeSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
@@ -104,6 +108,7 @@ export async function toggleLike(data: unknown) {
 export async function addComment(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
 
   const parsed = addCommentSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
@@ -150,6 +155,7 @@ export async function addComment(data: unknown) {
 export async function deleteComment(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
 
   const parsed = deleteCommentSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);

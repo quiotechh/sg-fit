@@ -37,6 +37,8 @@ export const config = {
     "/help",
     "/login",
     "/signup",
-    "/checkout/:path*"
+    "/checkout/:path*",
+    "/community/checkout/:path*",
+    "/community/manage/:path*"
   ],
 }

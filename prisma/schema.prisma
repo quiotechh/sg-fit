@@ -29,6 +29,7 @@ model User {
   sessions              Session[]
   accounts              Account[]
   purchases             Purchase[]
+  subscriptions         Subscription[]
   cartItems             CartItem[]
   bodyMetrics           BodyMetric[]
   posts                 Post[]
@@ -104,6 +105,24 @@ model Purchase {
   @@unique([userId, programId])
   @@index([userId])
   @@map("purchase")
+}
+
+model Subscription {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planCode         String
+  subscriptionCode String?   @unique
+  customerCode     String?
+  emailToken       String?
+  status           String    @default("active")
+  currentPeriodEnd DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([userId, planCode])
+  @@index([userId])
+  @@map("subscription")
 }
 
 model AuditLog {
