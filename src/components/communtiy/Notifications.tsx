@@ -1,28 +1,20 @@
 "use client";
 
-import { Notification } from "@/types/community";
+import { AppNotification } from "@/types/community";
+import { Card } from "@/components/ui/card";
+import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
+import RelativeTime from "@/components/communtiy/RelativeTime";
 
-const goldGradient = "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)";
-
-const avatarStyles: Record<string, string> = {
-  "av-sg": goldGradient,
-  "av-2": "linear-gradient(135deg, #6c8ebf, #a8c4e0)",
-  "av-3": "linear-gradient(135deg, #7cb87c, #b8d8b8)",
-  "av-4": "linear-gradient(135deg, #bf6c8e, #e0a8c4)",
-  "av-5": "linear-gradient(135deg, #8e6cbf, #c4a8e0)",
-  "av-1": goldGradient,
-};
-
-type Props = { notifications: Notification[] };
+type Props = { notifications: AppNotification[] };
 
 export default function NotificationsView({ notifications }: Props) {
-  const unread = notifications.filter((n) => n.unread);
-  const read = notifications.filter((n) => !n.unread);
+  const unread = notifications.filter((n) => !n.read);
+  const read = notifications.filter((n) => n.read);
 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-[26px] font-bold text-[#0a0a0a] [font-family:var(--font-cormorant)]">
+        <h2 className="text-[22px] font-black uppercase tracking-tight text-[#0a0a0a] [font-family:var(--font-barlow)]">
           Notifications
         </h2>
         <p className="text-[12px] text-[#9e9a90] font-medium mt-0.5 tracking-[0.03em] [font-family:var(--font-barlow)]">
@@ -55,51 +47,50 @@ export default function NotificationsView({ notifications }: Props) {
   );
 }
 
-function NotifCard({ notif }: { notif: Notification }) {
+/* purana comment block waisa hi rehne dena, upar hai already */
+
+function NotifCard({ notif }: { notif: AppNotification }) {
+  const isUnread = !notif.read;
+  const actionText =
+    notif.type === "LIKE" ? "liked your post" : "commented on your post";
+
   return (
-    <div
-      className="flex items-center gap-3.5 px-4.5 py-4 rounded-[16px] mb-2.5 border transition-all duration-200 cursor-pointer hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-      style={{
-        background: notif.unread ? "rgba(201,149,58,0.03)" : "white",
-        borderColor: notif.unread ? "rgba(201,149,58,0.2)" : "transparent",
-      }}
+    <Card
+      className={`flex-row items-center gap-3.5 px-4.5 py-4 mb-2.5 rounded-[16px] border transition-all duration-200 cursor-pointer hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] ${
+        isUnread
+          ? "bg-[rgba(201,149,58,0.03)] border-[rgba(201,149,58,0.2)]"
+          : "bg-white border-transparent"
+      }`}
     >
-      {/* Avatar */}
       <div className="relative shrink-0">
-        <div
-          className="w-11 h-11 rounded-full flex items-center justify-center text-[15px] font-black text-[#0a0a0a] [font-family:var(--font-barlow)]"
-          style={{
-            background: avatarStyles[notif.avatarClass] || goldGradient,
-          }}
-        >
-          {notif.actorInitials}
-        </div>
+        <CommunityAvatar
+          userId={notif.actor.id}
+          name={notif.actor.name}
+          image={notif.actor.image}
+          className="size-11 text-[15px]"
+        />
         <div
           className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-full flex items-center justify-center text-[9px] border-2 border-white"
-          style={{ background: notif.type === "like" ? "#e0574a" : "#4a90d9" }}
+          style={{ background: notif.type === "LIKE" ? "#e0574a" : "#4a90d9" }}
         >
-          {notif.type === "like" ? "❤" : "💬"}
+          {notif.type === "LIKE" ? "❤" : "💬"}
         </div>
       </div>
 
-      {/* Text */}
       <div className="flex-1 min-w-0">
         <p className="text-[13px] font-semibold text-[#0a0a0a] leading-[1.45] [font-family:var(--font-barlow)]">
-          <strong className="font-black">{notif.actorName}</strong>{" "}
-          {notif.text.replace(notif.actorName, "").trim()}
+          <strong className="font-black">{notif.actor.name}</strong>{" "}
+          {actionText}
         </p>
-        <p className="text-[11px] text-[#9e9a90] mt-0.5 font-medium [font-family:var(--font-barlow)]">
-          {notif.time}
-        </p>
+        <RelativeTime
+          date={notif.createdAt}
+          className="text-[11px] text-[#9e9a90] mt-0.5 font-medium [font-family:var(--font-barlow)] block"
+        />
       </div>
 
-      {/* Unread dot */}
-      {notif.unread && (
-        <div
-          className="w-2 h-2 rounded-full shrink-0"
-          style={{ background: "#C9953A" }}
-        />
+      {isUnread && (
+        <div className="w-2 h-2 rounded-full shrink-0 bg-[#C9953A]" />
       )}
-    </div>
+    </Card>
   );
 }

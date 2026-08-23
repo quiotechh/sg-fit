@@ -1,31 +1,44 @@
 "use client";
 
+import { Home, PlusCircle, Bell, User } from "lucide-react";
 import { View } from "@/types/community";
+import { communityGoldGradient } from "@/lib/community-ui";
+import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
+import {
+  Sidebar as SidebarPrimitive,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
 
-const goldGradient = "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)";
+const goldGradient = communityGoldGradient;
 
 type Props = {
   view: View;
   hasUnread: boolean;
+  currentUser: { id: string; name: string; image: string | null };
   onViewChange: (v: View) => void;
   onCreateClick: () => void;
 };
 
-const navBtn =
-  "flex items-center gap-3 px-3.5 py-3 rounded-[14px] transition-all duration-200 w-full cursor-pointer [font-family:var(--font-barlow)]";
-
 export default function Sidebar({
   view,
   hasUnread,
+  currentUser,
   onViewChange,
   onCreateClick,
 }: Props) {
   return (
-    <div className="fixed left-0 top-0 h-screen w-60 flex flex-col bg-white border-r border-[#eeece8] z-90">
-      {/* Logo */}
-      <div className="px-6 py-6 border-b border-[#eeece8]">
+    <SidebarPrimitive
+      collapsible="none"
+      className="hidden lg:flex fixed left-0 top-0 h-screen w-60 border-r border-[#eeece8] bg-white z-90"
+    >
+      <SidebarHeader className="px-6 py-6 border-b border-[#eeece8]">
         <div
-          className="text-[20px] font-black uppercase tracking-[0.14em] [font-family:var(--font-barlow)]"
+          className="text-[22px] font-black uppercase tracking-[0.1em] [font-family:var(--font-barlow)]"
           style={{
             background: goldGradient,
             WebkitBackgroundClip: "text",
@@ -33,133 +46,83 @@ export default function Sidebar({
             backgroundClip: "text",
           }}
         >
-          SG FIT
+          SGIANS
         </div>
-        <p className="text-[10px] text-[#9e9a90] font-medium uppercase tracking-widest mt-0.5 [font-family:var(--font-barlow)]">
+        <p className="text-[11px] text-[#9e9a90] font-medium uppercase tracking-widest mt-0.5 [font-family:var(--font-barlow)]">
           Community
         </p>
-      </div>
+      </SidebarHeader>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
-        <button
-          onClick={() => onViewChange("home")}
-          className={`${navBtn} ${
-            view === "home"
-              ? "bg-white text-[#0a0a0a] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-              : "text-[#9e9a90] hover:bg-[#f5f5f5]"
-          }`}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-          <span className="text-[14px] font-semibold">Home</span>
-        </button>
-
-        <button
-          onClick={onCreateClick}
-          className={`${navBtn} text-[#9e9a90] hover:bg-[#f5f5f5]`}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="16" />
-            <line x1="8" y1="12" x2="16" y2="12" />
-          </svg>
-          <span className="text-[14px] font-semibold">Create</span>
-        </button>
-
-        <button
-          onClick={() => onViewChange("notifications")}
-          className={`${navBtn} ${
-            view === "notifications"
-              ? "bg-white text-[#0a0a0a] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-              : "text-[#9e9a90] hover:bg-[#f5f5f5]"
-          }`}
-        >
-          <div className="relative">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+      <SidebarContent className="px-3 py-4">
+        <SidebarMenu className="gap-1">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={view === "home"}
+              onClick={() => onViewChange("home")}
+              className="h-auto px-3.5 py-3 rounded-[14px] [font-family:var(--font-barlow)] text-[15px] font-semibold text-[#9e9a90] data-[active=true]:bg-white data-[active=true]:text-[#0a0a0a] data-[active=true]:shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:bg-[#f5f5f5]"
             >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            {hasUnread && (
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-[1.5px] border-white bg-[#C9953A]" />
-            )}
-          </div>
-          <span className="text-[14px] font-semibold">Activity</span>
-        </button>
+              <Home className="size-5.5" strokeWidth={2.2} />
+              <span>Home</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
 
-        <button
-          onClick={() => onViewChange("profile")}
-          className={`${navBtn} ${
-            view === "profile"
-              ? "bg-white text-[#0a0a0a] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-              : "text-[#9e9a90] hover:bg-[#f5f5f5]"
-          }`}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <span className="text-[14px] font-semibold">Profile</span>
-        </button>
-      </nav>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={onCreateClick}
+              className="h-auto px-3.5 py-3 rounded-[14px] [font-family:var(--font-barlow)] text-[15px] font-semibold text-[#9e9a90] hover:bg-[#f5f5f5]"
+            >
+              <PlusCircle className="size-5.5" strokeWidth={2.2} />
+              <span>Create</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
 
-      {/* User */}
-      <div className="px-4 py-4 border-t border-[#eeece8]">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={view === "notifications"}
+              onClick={() => onViewChange("notifications")}
+              className="h-auto px-3.5 py-3 rounded-[14px] [font-family:var(--font-barlow)] text-[15px] font-semibold text-[#9e9a90] data-[active=true]:bg-white data-[active=true]:text-[#0a0a0a] data-[active=true]:shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:bg-[#f5f5f5]"
+            >
+              <div className="relative">
+                <Bell className="size-5.5" strokeWidth={2.2} />
+                {hasUnread && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-[1.5px] border-white bg-[#C9953A]" />
+                )}
+              </div>
+              <span>Activity</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={view === "profile"}
+              onClick={() => onViewChange("profile")}
+              className="h-auto px-3.5 py-3 rounded-[14px] [font-family:var(--font-barlow)] text-[15px] font-semibold text-[#9e9a90] data-[active=true]:bg-white data-[active=true]:text-[#0a0a0a] data-[active=true]:shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:bg-[#f5f5f5]"
+            >
+              <User className="size-5.5" strokeWidth={2.2} />
+              <span>Profile</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarContent>
+
+      <SidebarFooter className="px-4 py-4 border-t border-[#eeece8]">
         <div className="flex items-center gap-3 px-2">
-          <div
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-black text-[#0a0a0a] shrink-0 [font-family:var(--font-barlow)]"
-            style={{ background: goldGradient }}
-          >
-            YO
-          </div>
+          <CommunityAvatar
+            userId={currentUser.id}
+            name={currentUser.name}
+            image={currentUser.image}
+            className="size-9 text-[14px]"
+          />
           <div>
-            <div className="text-[13px] font-bold text-[#0a0a0a] [font-family:var(--font-barlow)]">
-              Your Name
+            <div className="text-[14px] font-bold text-[#0a0a0a] [font-family:var(--font-barlow)]">
+              {currentUser.name}
             </div>
-            <div className="text-[11px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)]">
+            <div className="text-[12px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)]">
               Member
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </SidebarFooter>
+    </SidebarPrimitive>
   );
 }

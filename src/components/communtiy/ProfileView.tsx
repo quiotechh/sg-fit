@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Post } from "@/types/community";
+import { Heart, MessageCircle } from "lucide-react";
+import { ProfilePost } from "@/types/community";
+import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
+import RelativeTime from "@/components/communtiy/RelativeTime";
 import {
   Dialog,
   DialogContent,
@@ -9,16 +12,19 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
+type CurrentUser = { id: string; name: string; image: string | null };
+
 type Props = {
-  posts: Post[];
+  posts: ProfilePost[];
+  currentUser: CurrentUser;
   onDelete: (id: string) => void;
 };
 
-export default function ProfileView({ posts, onDelete }: Props) {
-  const [selected, setSelected] = useState<Post | null>(null);
+export default function ProfileView({ posts, currentUser, onDelete }: Props) {
+  const [selected, setSelected] = useState<ProfilePost | null>(null);
 
-  const totalLikes = posts.reduce((sum, p) => sum + p.likes, 0);
-  const totalComments = posts.reduce((sum, p) => sum + p.comments, 0);
+  const totalLikes = posts.reduce((sum, p) => sum + p.likeCount, 0);
+  const totalComments = posts.reduce((sum, p) => sum + p.commentCount, 0);
 
   const handleDelete = () => {
     if (!selected) return;
@@ -30,11 +36,14 @@ export default function ProfileView({ posts, onDelete }: Props) {
     <div>
       {/* Profile header */}
       <div className="flex flex-col items-center pt-6 pb-8 border-b border-[#eeece8]">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center text-[26px] font-black text-[#0a0a0a] mb-4 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">
-          YO
-        </div>
+        <CommunityAvatar
+          userId={currentUser.id}
+          name={currentUser.name}
+          image={currentUser.image}
+          className="size-20 text-[26px] mb-4"
+        />
         <h2 className="text-[20px] font-black text-[#0a0a0a] [font-family:var(--font-barlow)] mb-1">
-          Your Name
+          {currentUser.name}
         </h2>
         <p className="text-[12px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)] mb-6">
           SGian · Member
@@ -75,18 +84,10 @@ export default function ProfileView({ posts, onDelete }: Props) {
       {posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="w-16 h-16 rounded-full bg-[#f8f7f5] flex items-center justify-center mb-4">
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#d4d0c8"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
+            <MessageCircle
+              className="size-7 text-[#d4d0c8]"
+              strokeWidth={1.8}
+            />
           </div>
           <p className="text-[14px] font-bold text-[#9e9a90] [font-family:var(--font-barlow)]">
             No posts yet
@@ -107,15 +108,13 @@ export default function ProfileView({ posts, onDelete }: Props) {
                 opacity: 0,
               }}
             >
-              {post.hasImage ? (
-                /* Image placeholder */
-                <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#ede6d6,#d4d0c8)]">
-                  <span className="text-[#9e9a90] text-[13px] [font-family:var(--font-cormorant)] tracking-wider px-3 text-center">
-                    {post.imagePlaceholder}
-                  </span>
-                </div>
+              {post.imageUrl ? (
+                <img
+                  src={post.imageUrl}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
               ) : (
-                /* Text post */
                 <div className="absolute inset-0 flex flex-col p-3.5">
                   <p className="flex-1 text-[12px] leading-[1.55] font-medium text-[#2a2a2a] [font-family:var(--font-barlow)] line-clamp-5 overflow-hidden">
                     {post.body}
@@ -123,41 +122,17 @@ export default function ProfileView({ posts, onDelete }: Props) {
                 </div>
               )}
 
-              {/* Stats bar */}
               <div className="absolute bottom-0 inset-x-0 flex items-center gap-3 px-3.5 py-2.5 bg-white/90 border-t border-[#eeece8]">
                 <span className="flex items-center gap-1 text-[11px] font-semibold text-[#9e9a90] [font-family:var(--font-barlow)]">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill={post.liked ? "#e0574a" : "none"}
-                    stroke={post.liked ? "#e0574a" : "#9e9a90"}
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                  {post.likes}
+                  <Heart className="size-3" strokeWidth={2.2} />
+                  {post.likeCount}
                 </span>
                 <span className="flex items-center gap-1 text-[11px] font-semibold text-[#9e9a90] [font-family:var(--font-barlow)]">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#9e9a90"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                  {post.comments}
+                  <MessageCircle className="size-3" strokeWidth={2.2} />
+                  {post.commentCount}
                 </span>
               </div>
 
-              {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/3 transition-all duration-200 pointer-events-none" />
             </button>
           ))}
@@ -170,7 +145,6 @@ export default function ProfileView({ posts, onDelete }: Props) {
           showCloseButton={false}
           className="max-w-120 lg:max-w-135 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
         >
-          {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#eeece8]">
             <DialogTitle className="text-[15px] font-black uppercase tracking-[0.08em] text-[#0a0a0a] [font-family:var(--font-barlow)]">
               Your Post
@@ -180,73 +154,51 @@ export default function ProfileView({ posts, onDelete }: Props) {
             </DialogClose>
           </div>
 
-          {/* Post content */}
           {selected && (
             <div className="px-6 py-5">
-              {/* Author row */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-black text-[#0a0a0a] shrink-0 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">
-                  YO
-                </div>
+                <CommunityAvatar
+                  userId={currentUser.id}
+                  name={currentUser.name}
+                  image={currentUser.image}
+                  className="size-10 text-[14px]"
+                />
                 <div>
                   <p className="text-[14px] font-bold text-[#0a0a0a] [font-family:var(--font-barlow)]">
-                    Your Name
+                    {currentUser.name}
                   </p>
-                  <p className="text-[11px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)]">
-                    {selected.time}
-                  </p>
+                  <RelativeTime
+                    date={selected.createdAt}
+                    className="text-[11px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)] block"
+                  />
                 </div>
               </div>
 
-              {/* Body */}
               <p className="text-[14px] leading-[1.65] font-medium text-[#2a2a2a] [font-family:var(--font-barlow)] mb-4">
                 {selected.body}
               </p>
 
-              {/* Image placeholder */}
-              {selected.hasImage && (
-                <div className="w-full h-50 rounded-[14px] flex items-center justify-center mb-4 text-[#9e9a90] text-[15px] [font-family:var(--font-cormorant)] tracking-wider bg-[linear-gradient(135deg,#ede6d6,#d4d0c8)]">
-                  {selected.imagePlaceholder}
-                </div>
+              {selected.imageUrl && (
+                <img
+                  src={selected.imageUrl}
+                  alt=""
+                  className="w-full max-h-50 object-cover rounded-[14px] mb-4"
+                />
               )}
 
-              {/* Stats */}
               <div className="flex items-center gap-4 pt-3 border-t border-[#eeece8]">
                 <span className="flex items-center gap-1.5 text-[12px] font-semibold text-[#9e9a90] [font-family:var(--font-barlow)]">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill={selected.liked ? "#e0574a" : "none"}
-                    stroke={selected.liked ? "#e0574a" : "#9e9a90"}
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                  {selected.likes} likes
+                  <Heart className="size-3.5" strokeWidth={2.2} />
+                  {selected.likeCount} likes
                 </span>
                 <span className="flex items-center gap-1.5 text-[12px] font-semibold text-[#9e9a90] [font-family:var(--font-barlow)]">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#9e9a90"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                  {selected.comments} comments
+                  <MessageCircle className="size-3.5" strokeWidth={2.2} />
+                  {selected.commentCount} comments
                 </span>
               </div>
             </div>
           )}
 
-          {/* Footer */}
           <div className="flex items-center justify-between px-6 pb-6 pt-3 border-t border-[#eeece8]">
             <DialogClose className="px-5 py-2.5 rounded-[12px] border border-[#eeece8] bg-transparent text-[12px] font-bold text-[#9e9a90] uppercase tracking-[0.08em] cursor-pointer hover:border-[#d4d0c8] hover:text-[#6e6b63] transition-all duration-200 [font-family:var(--font-barlow)]">
               Close

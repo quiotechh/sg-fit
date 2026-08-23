@@ -7,14 +7,23 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import CommunityAvatar from "./CommunityAvatar";
+
+type CurrentUser = { id: string; name: string; image: string | null };
 
 type Props = {
   open: boolean;
+  currentUser: CurrentUser;
   onClose: () => void;
   onSubmit: (text: string) => void;
 };
 
-export default function CreatePostModal({ open, onClose, onSubmit }: Props) {
+export default function CreatePostModal({
+  open,
+  currentUser,
+  onClose,
+  onSubmit,
+}: Props) {
   const [text, setText] = useState("");
 
   const handleClose = () => {
@@ -45,10 +54,14 @@ export default function CreatePostModal({ open, onClose, onSubmit }: Props) {
         </div>
 
         {/* Body */}
+        {/* Body */}
         <div className="px-6 py-5 flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-black text-[#0a0a0a] shrink-0 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">
-            YO
-          </div>
+          <CommunityAvatar
+            userId={currentUser.id}
+            name={currentUser.name}
+            image={currentUser.image}
+            className="size-10 text-[14px] shrink-0"
+          />
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -64,7 +77,11 @@ export default function CreatePostModal({ open, onClose, onSubmit }: Props) {
 
         {/* Footer */}
         <div className="flex items-center justify-between px-6 pb-6 pt-3 border-t border-[#eeece8]">
-          <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] bg-transparent text-[12px] font-semibold text-[#9e9a90] cursor-pointer uppercase tracking-[0.04em] transition-all duration-200 hover:border-[#C9953A] hover:text-[#C9953A] [font-family:var(--font-barlow)]">
+          <button
+            disabled
+            title="Photo uploads coming soon"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] bg-transparent text-[12px] font-semibold text-[#d4d0c8] uppercase tracking-[0.04em] [font-family:var(--font-barlow)] cursor-not-allowed"
+          >
             <svg
               width="14"
               height="14"
