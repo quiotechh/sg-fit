@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
+import { getInitials } from "@/lib/utils";
 
 // ── Toggle this to preview logged-in UI states ────────────────────────
 const hasMembership = true;
@@ -151,18 +152,6 @@ function MobileAccordion({
 
 const itemCls =
   "rounded-none px-6 py-2.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer flex items-center justify-between text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 hover:text-[#C9953A] focus:text-[#C9953A]";
-
-// Fallback avatar for users without a profile image (e.g. email/password
-// signups — Google logins get `image` set automatically by Better Auth).
-function getInitials(name?: string | null) {
-  if (!name) return "?";
-  const parts = name.trim().split(/\s+/);
-  const initials =
-    parts.length > 1
-      ? `${parts[0][0]}${parts[parts.length - 1][0]}`
-      : parts[0].slice(0, 2);
-  return initials.toUpperCase();
-}
 
 function ProfileDropdown({
   iconCls,

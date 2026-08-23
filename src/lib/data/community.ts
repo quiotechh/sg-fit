@@ -4,6 +4,7 @@ const AUTHOR_SELECT = {
   id: true,
   name: true,
   image: true,
+  role: true
 } as const;
 
 export async function getFeed({

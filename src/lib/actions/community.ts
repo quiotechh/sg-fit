@@ -12,6 +12,11 @@ import {
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { publishNotification } from "@/lib/NotificationBus";
+import {
+  getComments as getCommentsData,
+  getNotifications,
+  getUnreadNotificationCount,
+} from "@/lib/data/community";
 
 export async function createPost(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -176,4 +181,25 @@ export async function markNotificationsRead(path: string) {
     data: { read: true },
   });
   revalidatePath(path);
+}
+
+// Read-only — called from the client on each SSE push so only notification
+// state refetches, instead of router.refresh() re-running the whole page
+// (feed + profile posts included) for a change that's notifications-only.
+export async function getNotificationsData() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+
+  const [notifications, unreadCount] = await Promise.all([
+    getNotifications({ userId: session.user.id }),
+    getUnreadNotificationCount(session.user.id),
+  ]);
+
+  return { notifications, unreadCount };
+}
+
+// Read-only bridge — CommentsModal is a Client Component and can't call the
+// plain (non "use server") getComments from data/community.ts directly.
+export async function getComments(postId: string, cursor?: string) {
+  return getCommentsData({ postId, cursor });
 }
