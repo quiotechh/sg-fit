@@ -38,7 +38,7 @@ export default function Sidebar({
     >
       <SidebarHeader className="px-6 py-6 border-b border-[#eeece8]">
         <div
-          className="text-[22px] font-black uppercase tracking-[0.1em] [font-family:var(--font-barlow)]"
+          className="text-[22px] font-black uppercase tracking-widest [font-family:var(--font-barlow)]"
           style={{
             background: goldGradient,
             WebkitBackgroundClip: "text",
