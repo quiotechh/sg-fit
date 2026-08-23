@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { verifyWebhookSignature, verifyTransaction } from "@/lib/paystack"
 import { calculateDiscount } from "@/lib/coupons"
 import { logEvent } from "@/lib/auditLog"
+import { transporter } from "@/lib/mailer"
 
 export async function POST(request: Request) {
   const rawBody = await request.text()
@@ -120,5 +121,65 @@ export async function POST(request: Request) {
     },
   })
 
+  // Digital-download items (nutrition PDFs etc.) don't unlock in-app — they're
+  // delivered by email, linking to our own protected page, never a raw file URL.
+  const digitalPrograms = programs.filter((p) => p.fileKey)
+  if (digitalPrograms.length > 0) {
+    await sendDigitalDeliveryEmail({ userId, userEmail, reference: reference!, programs: digitalPrograms })
+  }
+
   return new NextResponse("OK")
+}
+
+async function sendDigitalDeliveryEmail({
+  userId,
+  userEmail,
+  reference,
+  programs,
+}: {
+  userId: string
+  userEmail: string
+  reference: string
+  programs: { title: string }[]
+}) {
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
+  const trackedLink = `${siteUrl}/api/email-click?dest=${encodeURIComponent("/my-programs/nutrition")}&ref=${reference}`
+  const titleList = programs.map((p) => `- ${p.title}`).join("\n")
+
+  try {
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: userEmail,
+      subject: programs.length === 1 ? `Your ${programs[0].title} is ready — SG Fit` : "Your Nutrition Guides are ready — SG Fit",
+      text: `Thanks for your purchase! Your PDF guide is ready:\n\n${titleList}\n\nDownload it here: ${trackedLink}\n\nDon't see this email in your inbox? Check your Spam/Junk folder.\n\nYou can also come back anytime and download it again from My Programs → Nutrition Guides on the site.\n\n— SG Fit`,
+    })
+
+    await logEvent({
+      userId,
+      userEmail,
+      event: "email.pdf_sent",
+      success: true,
+      reference,
+      metadata: {
+        message: `PDF delivery email sent successfully to ${userEmail} for: ${programs.map((p) => p.title).join(", ")}.`,
+        to: userEmail,
+        programTitles: programs.map((p) => p.title),
+      },
+    })
+  } catch (err) {
+    console.error("Failed to send PDF delivery email:", err)
+    await logEvent({
+      userId,
+      userEmail,
+      event: "email.pdf_send_failed",
+      success: false,
+      reference,
+      metadata: {
+        message: `Failed to send PDF delivery email to ${userEmail} for: ${programs.map((p) => p.title).join(", ")}. This customer purchased successfully but has NOT received their download email — needs manual follow-up.`,
+        to: userEmail,
+        programTitles: programs.map((p) => p.title),
+        error: String(err),
+      },
+    })
+  }
 }

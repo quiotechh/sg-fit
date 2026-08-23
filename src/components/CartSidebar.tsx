@@ -8,7 +8,6 @@ import {
   Trash2,
   Tag,
   ArrowRight,
-  Shield,
 } from "lucide-react";
 import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
@@ -291,14 +290,6 @@ export default function CartSidebar() {
               {session ? `Checkout — $${total.toFixed(2)}` : "Sign In to Checkout"}
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
-
-            {/* Guarantee */}
-            <div className="flex items-center justify-center gap-1.5 text-zinc-400">
-              <Shield className="size-3.5 shrink-0" />
-              <p className="text-[11px] font-medium [font-family:var(--font-barlow)]">
-                14-day money-back guarantee
-              </p>
-            </div>
           </div>
         )}
       </div>

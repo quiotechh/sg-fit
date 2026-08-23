@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ChevronRight, Clock, Zap, Users, CheckCircle, Shield } from "lucide-react"
+import { ChevronRight, Clock, Zap, Users, CheckCircle, Mail } from "lucide-react"
 import { categoryConfigs } from "@/data/programs"
 import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs } from "@/lib/data/programs"
 import ProgramCard from "@/components/ProgramCard"
@@ -163,11 +163,23 @@ export default async function ProgramDetailPage({ params }: Props) {
               {/* Add to Cart */}
               <div className="flex flex-col gap-3">
                 <AddToCartButton program={program} />
-                <div className="flex items-center gap-2.5 px-1">
-                  <Shield className="size-4 text-zinc-400 shrink-0" />
-                  <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] leading-relaxed">
-                    14-day money-back guarantee. Not happy? Full refund, no questions asked.
-                  </p>
+                <div className="flex items-start gap-2.5 px-1">
+                  {program.fileKey ? (
+                    <>
+                      <Mail className="size-4 text-zinc-400 shrink-0 mt-0.5" />
+                      <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] leading-relaxed">
+                        Delivered instantly as a PDF to your email after payment —{" "}
+                        <strong className="text-zinc-600">check your spam/junk folder</strong> if it doesn&apos;t arrive in a few minutes. Also available anytime under My Programs → Nutrition Guides.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="size-4 text-zinc-400 shrink-0 mt-0.5" />
+                      <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] leading-relaxed">
+                        Unlocks instantly in My Programs after payment.
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
 

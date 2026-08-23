@@ -11,7 +11,7 @@ export const metadata = {
 
 const quickLinks = [
   { label: "FAQ",             subtitle: "Common questions answered",  href: "/support/faq",            icon: FileText   },
-  { label: "Refund Policy",   subtitle: "Our 14-day guarantee",       href: "/support/refund-policy",   icon: RotateCcw  },
+  { label: "Refund Policy",   subtitle: "How refunds work",           href: "/support/refund-policy",   icon: RotateCcw  },
   { label: "Terms of Use",    subtitle: "Legal stuff",                href: "/support/terms",           icon: ShieldCheck },
 ]
 

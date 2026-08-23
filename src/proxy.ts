@@ -20,7 +20,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (session && isAuthPage) {
-    const response = NextResponse.redirect(new URL("/my-programs", request.url))
+    const response = NextResponse.redirect(new URL("/dashboard", request.url))
     response.headers.set("Cache-Control", "no-store")
     return response
   }
