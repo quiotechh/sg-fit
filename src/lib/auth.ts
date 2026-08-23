@@ -3,16 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { prisma } from "@/lib/prisma";
 import { logEvent } from "@/lib/auditLog";
-
-import nodemailer from "nodemailer";
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+import { transporter } from "@/lib/mailer";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

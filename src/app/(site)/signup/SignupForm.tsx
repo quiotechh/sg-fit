@@ -20,7 +20,7 @@ export default function SignupForm() {
   async function handleGoogleSignup() {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/my-programs",
+      callbackURL: "/dashboard",
     })
   }
 
@@ -34,7 +34,7 @@ export default function SignupForm() {
           setLoading(true)
         },
         onSuccess: () => {
-          router.push("/my-programs")
+          router.push("/dashboard")
         },
         onError: (ctx) => {
           setError(ctx.error.message)

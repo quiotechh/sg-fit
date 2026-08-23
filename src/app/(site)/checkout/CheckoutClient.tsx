@@ -86,6 +86,11 @@ export default function CheckoutClient() {
                 <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] mt-0.5">
                   {item.level} &nbsp;·&nbsp; {item.duration}
                 </p>
+                <p className="text-[11px] font-bold [font-family:var(--font-barlow)] mt-1" style={{ color: "#B8841F" }}>
+                  {item.category === "nutrition"
+                    ? `Will be emailed to ${email || "you"} after payment (check spam/junk too) — also in My Programs`
+                    : "Unlocks in My Programs after payment"}
+                </p>
               </div>
               <span className="text-sm font-black text-zinc-950 [font-family:var(--font-barlow)]">
                 ${item.price}
