@@ -82,7 +82,7 @@ export default async function MeasurementsPage() {
             </CardContent>
           </Card>
 
-          <PhotoUploadCard />
+          <PhotoUploadCard path = "/measurements" />
         </div>
 
         <Card className="rounded-2xl bg-zinc-950 border-0 shadow-lg shadow-zinc-900/10 mt-6 sm:mt-8">

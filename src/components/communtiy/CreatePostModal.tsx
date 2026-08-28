@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import CommunityAvatar from "./CommunityAvatar";
+import { uploadImage } from "@/lib/uploadImage";
 
 type CurrentUser = { id: string; name: string; image: string | null };
 
@@ -15,7 +16,7 @@ type Props = {
   open: boolean;
   currentUser: CurrentUser;
   onClose: () => void;
-  onSubmit: (text: string) => void;
+  onSubmit: (text: string, imageKey?: string) => void | Promise<void>;
 };
 
 export default function CreatePostModal({
@@ -25,16 +26,38 @@ export default function CreatePostModal({
   onSubmit,
 }: Props) {
   const [text, setText] = useState("");
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClose = () => {
     setText("");
+    setPhotoFile(null);
+    setError(null);
     onClose();
   };
 
-  const handleSubmit = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setPhotoFile(file);
+  };
+
+  const handleSubmit = async () => {
     if (!text.trim()) return;
-    onSubmit(text.trim());
-    handleClose();
+    setError(null);
+    setIsSubmitting(true);
+    try {
+      const imageKey = photoFile
+        ? await uploadImage(photoFile, "community-post")
+        : undefined;
+      await onSubmit(text.trim(), imageKey);
+      handleClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,7 +76,6 @@ export default function CreatePostModal({
           </DialogClose>
         </div>
 
-        {/* Body */}
         {/* Body */}
         <div className="px-6 py-5 flex items-start gap-3.5">
           <CommunityAvatar
@@ -75,12 +97,25 @@ export default function CreatePostModal({
           />
         </div>
 
+        {error && (
+          <p className="px-6 text-xs font-semibold text-red-500 [font-family:var(--font-barlow)] -mt-2 mb-2">
+            {error}
+          </p>
+        )}
+
         {/* Footer */}
         <div className="flex items-center justify-between px-6 pb-6 pt-3 border-t border-[#eeece8]">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,.heic,.heif"
+            onChange={handleFileChange}
+            className="hidden"
+          />
           <button
-            disabled
-            title="Photo uploads coming soon"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] bg-transparent text-[12px] font-semibold text-[#d4d0c8] uppercase tracking-[0.04em] [font-family:var(--font-barlow)] cursor-not-allowed"
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] bg-transparent text-[12px] font-semibold uppercase tracking-[0.04em] [font-family:var(--font-barlow)] cursor-pointer text-[#6e6b63] hover:border-[#C9953A] transition-all duration-200"
           >
             <svg
               width="14"
@@ -94,13 +129,14 @@ export default function CreatePostModal({
               <circle cx="8.5" cy="8.5" r="1.5" />
               <polyline points="21 15 16 10 5 21" />
             </svg>
-            Add Photo
+            {photoFile ? "Photo Added" : "Add Photo"}
           </button>
           <button
             onClick={handleSubmit}
-            className="px-6 py-2.5 rounded-[12px] border-none text-[12px] font-black text-[#0a0a0a] uppercase tracking-widest cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(201,149,58,0.3)] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(201,149,58,0.4)] active:scale-[0.97] [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]"
+            disabled={isSubmitting}
+            className="px-6 py-2.5 rounded-[12px] border-none text-[12px] font-black text-[#0a0a0a] uppercase tracking-widest cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(201,149,58,0.3)] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(201,149,58,0.4)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]"
           >
-            Post
+            {isSubmitting ? "Posting..." : "Post"}
           </button>
         </div>
       </DialogContent>

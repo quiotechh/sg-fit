@@ -222,7 +222,7 @@ model BodyMetric {
   hipsIn     Float?
   armsIn     Float?
   thighsIn   Float?
-  photoUrl   String?
+  photoKey   String?
   recordedAt DateTime @default(now())
 
   @@index([userId])
@@ -239,7 +239,7 @@ model Post {
   userId       String
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   body         String
-  imageUrl     String?
+  imageKey     String?
   likeCount    Int       @default(0)
   commentCount Int       @default(0)
   createdAt    DateTime  @default(now())

@@ -10,6 +10,7 @@ import {
   Store,
   Users,
   ChevronDown,
+  Video,
 } from "lucide-react";
 import {
   Sidebar,
@@ -113,6 +114,16 @@ export default function MemberSidebar() {
                 ))}
               </SidebarMenuSub>
             )}
+          </SidebarMenuItem>
+
+          {/* Workout Library */}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={pathname === "/workout-library"} className={menuBtnCls}>
+              <Link href="/workout-library" className="flex items-center gap-3">
+                <Video className="size-4.5" strokeWidth={2} />
+                <span className={labelCls}>Workout Library</span>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
 
           {/* Measurements */}
