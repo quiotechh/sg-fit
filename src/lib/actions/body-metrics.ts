@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { bodyMetricSchema } from "@/lib/validation/body-metrics";
+import { deleteObject } from "../r2";
 
 export async function addBodyMetric(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -16,7 +17,12 @@ export async function addBodyMetric(data: unknown) {
     throw new Error(parsed.error.issues[0].message);
   }
 
-  const { path, ...metrics } = parsed.data;
+  const { path, photoKey, ...metrics } = parsed.data;
+
+  if (photoKey && !photoKey.startsWith(`progress-photos/${session.user.id}/`)) {
+    throw new Error("Invalid photo.");
+  }
+
   const fieldsToLog = Object.keys(metrics) as (keyof typeof metrics)[];
 
   // Same calendar day → merge into that one row, don't fragment into
@@ -63,13 +69,22 @@ export async function addBodyMetric(data: unknown) {
   }
 
   if (todayEntry) {
+    if (photoKey && todayEntry.photoKey && todayEntry.photoKey !== photoKey) {
+      await deleteObject(todayEntry.photoKey).catch((err) => {
+        console.error("failed to delete R2 object:", todayEntry.photoKey, err);
+      });
+    }
     await prisma.bodyMetric.update({
       where: { id: todayEntry.id },
-      data: { ...metrics },
+      data: { ...metrics, ...(photoKey ? { photoKey } : {}) },
     });
   } else {
     await prisma.bodyMetric.create({
-      data: { userId: session.user.id, ...metrics },
+      data: {
+        userId: session.user.id,
+        ...metrics,
+        ...(photoKey ? { photoKey } : {}),
+      },
     });
   }
 

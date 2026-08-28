@@ -8,6 +8,7 @@ export const bodyMetricSchema = z
     hipsIn: z.number().min(5).max(100).optional(),
     armsIn: z.number().min(5).max(100).optional(),
     thighsIn: z.number().min(5).max(100).optional(),
+    photoKey: z.string().optional(),
     path: z.string(),
   })
   .refine(
@@ -17,7 +18,8 @@ export const bodyMetricSchema = z
       data.chestIn ||
       data.hipsIn ||
       data.armsIn ||
-      data.thighsIn,
+      data.thighsIn ||
+      data.photoKey,
     {
       message: "At least one measurement is required.",
     },

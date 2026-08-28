@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getSignedViewUrl } from "@/lib/r2";
 
 const measurementFields = [
   "weightKg",
@@ -54,11 +55,18 @@ export async function getLatestMeasurements(userId: string) {
   return latest;
 }
 
-export function getAllBodyMetrics(userId: string) {
-  return prisma.bodyMetric.findMany({
+export async function getAllBodyMetrics(userId: string) {
+  const entries = await prisma.bodyMetric.findMany({
     where: { userId },
     orderBy: { recordedAt: "desc" },
   });
+
+  return Promise.all(
+    entries.map(async ({ photoKey, ...rest }) => ({
+      ...rest,
+      photoUrl: photoKey ? await getSignedViewUrl(photoKey) : null,
+    })),
+  );
 }
 
 export function getLatestBodyMetric(userId: string) {
@@ -69,12 +77,15 @@ export function getLatestBodyMetric(userId: string) {
 }
 
 // dashboard function
-export function getLatestPhoto(userId: string) {
-  return prisma.bodyMetric.findFirst({
-    where: { userId, photoUrl: { not: null } },
+export async function getLatestPhoto(userId: string) {
+  const entry = await prisma.bodyMetric.findFirst({
+    where: { userId, photoKey: { not: null } },
     orderBy: { recordedAt: "desc" },
-    select: { photoUrl: true, recordedAt: true },
+    select: { photoKey: true, recordedAt: true },
   });
+
+  if (!entry?.photoKey) return null;
+  return { photoUrl: await getSignedViewUrl(entry.photoKey), recordedAt: entry.recordedAt };
 }
 
 // for graph - give history for N number of weeks back, default 12 weeks

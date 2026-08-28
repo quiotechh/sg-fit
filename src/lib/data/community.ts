@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getSignedViewUrl } from "@/lib/r2";
 
 const AUTHOR_SELECT = {
   id: true,
@@ -32,21 +33,33 @@ export async function getFeed({
   });
   const likedPostIds = new Set(myLikes.map((l) => l.postId));
 
-  return {
-    posts: page.map((post) => ({
+  const resolvedPosts = await Promise.all(
+    page.map(async ({ imageKey, ...post }) => ({
       ...post,
+      imageUrl: imageKey ? await getSignedViewUrl(imageKey) : null,
       likedByMe: likedPostIds.has(post.id),
     })),
+  );
+
+  return {
+    posts: resolvedPosts,
     nextCursor: hasMore ? page[page.length - 1].id : null,
   };
 }
 
-export function getUserPosts(userId: string) {
-  return prisma.post.findMany({
+export async function getUserPosts(userId: string) {
+  const posts = await prisma.post.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
     include: { user: { select: AUTHOR_SELECT } },
   });
+
+  return Promise.all(
+    posts.map(async ({ imageKey, ...post }) => ({
+      ...post,
+      imageUrl: imageKey ? await getSignedViewUrl(imageKey) : null,
+    })),
+  );
 }
 
 export async function getComments({

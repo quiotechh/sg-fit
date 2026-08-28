@@ -18,16 +18,26 @@ import {
   getNotifications,
   getUnreadNotificationCount,
 } from "@/lib/data/community";
+import { deleteObject } from "../r2";
 
 export async function createPost(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
-  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
 
   const parsed = createPostSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
 
   const { path, ...post } = parsed.data;
+
+  if (
+    post.imageKey &&
+    !post.imageKey.startsWith(`community-posts/${session.user.id}/`)
+  ) {
+    throw new Error("Invalid image.");
+  }
+
   await prisma.post.create({ data: { userId: session.user.id, ...post } });
   revalidatePath(path);
 }
@@ -35,20 +45,35 @@ export async function createPost(data: unknown) {
 export async function deletePost(postId: string, path: string) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
-  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
+
+  const post = await prisma.post.findFirst({
+    where: { id: postId, userId: session.user.id },
+    select: { imageKey: true },
+  });
 
   // deleteMany, not delete — scoped to userId so you can only delete your own post,
   // no separate ownership check query needed
   await prisma.post.deleteMany({
     where: { id: postId, userId: session.user.id },
   });
+
+  // Post is already gone from the DB either way — R2 cleanup failing shouldn't
+  // surface as an error to the user, it's just a storage-cost leak if it fails.
+  if (post?.imageKey) {
+    await deleteObject(post.imageKey).catch((err) => {
+      console.error("Failed to delete R2 object:", post.imageKey, err);
+    });
+  }
   revalidatePath(path);
 }
 
 export async function toggleLike(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
-  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
 
   const parsed = toggleLikeSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
@@ -108,7 +133,8 @@ export async function toggleLike(data: unknown) {
 export async function addComment(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
-  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
 
   const parsed = addCommentSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);
@@ -155,7 +181,8 @@ export async function addComment(data: unknown) {
 export async function deleteComment(data: unknown) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
-  if (!(await hasActiveCommunitySubscription(session.user.id))) redirect("/community/checkout");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
 
   const parsed = deleteCommentSchema.safeParse(data);
   if (!parsed.success) throw new Error(parsed.error.issues[0].message);

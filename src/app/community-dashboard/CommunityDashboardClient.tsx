@@ -101,8 +101,8 @@ export default function CommunityDashboardClient({
     toggleLikeAction({ postId, path: PATH });
   };
 
-  const handleCreatePost = async (body: string) => {
-    await createPost({ body, path: PATH });
+  const handleCreatePost = async (body: string, imageKey?: string) => {
+    await createPost({ body, imageKey, path: PATH });
     router.refresh();
   };
 
