@@ -7,32 +7,28 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 interface LibraryVideo {
   id: string;
   title: string;
-  duration: string; // "0:33"
-  videoUrl: string | null; // null until real videos are uploaded
+  duration: number; // seconds
+  videoUrl: string;
 }
 
-// TEMP mock data — swap for a real fetch once the video model + R2 keys exist
-const mockVideos: LibraryVideo[] = [
-  { id: "1", title: "Jumping Jacks", duration: "0:30", videoUrl: null },
-  { id: "2", title: "Arm Circles", duration: "0:15", videoUrl: null },
-  { id: "3", title: "Bodyweight Squat", duration: "0:33", videoUrl: null },
-  { id: "4", title: "Push-Up", duration: "0:30", videoUrl: null },
-  { id: "5", title: "Dumbbell Row", duration: "1:00", videoUrl: null },
-  { id: "6", title: "Reverse Lunge", duration: "0:33", videoUrl: null },
-  { id: "7", title: "Mountain Climbers", duration: "0:30", videoUrl: null },
-  { id: "8", title: "Burpees", duration: "0:15", videoUrl: null },
-  { id: "9", title: "Standing Quad Stretch", duration: "0:30", videoUrl: null },
-  { id: "10", title: "Child's Pose", duration: "1:00", videoUrl: null },
-];
+interface Props {
+  videos: LibraryVideo[];
+}
 
-export default function WorkoutLibraryClient() {
+function formatDuration(totalSeconds: number) {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+export default function WorkoutLibraryClient({ videos }: Props) {
   const [query, setQuery] = useState("");
   const [activeVideo, setActiveVideo] = useState<LibraryVideo | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return mockVideos.filter((v) => v.title.toLowerCase().includes(q));
-  }, [query]);
+    return videos.filter((v) => v.title.toLowerCase().includes(q));
+  }, [videos, query]);
 
   return (
     <>
@@ -61,7 +57,7 @@ export default function WorkoutLibraryClient() {
                   <Play className="size-5 text-white fill-white ml-0.5" />
                 </div>
                 <span className="absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-bold text-white [font-family:var(--font-barlow)]">
-                  {video.duration}
+                  {formatDuration(video.duration)}
                 </span>
               </div>
               <div className="px-4 py-3.5">
@@ -75,10 +71,10 @@ export default function WorkoutLibraryClient() {
       ) : (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <p className="text-xs font-black uppercase tracking-[0.28em] mb-3 [font-family:var(--font-barlow)] text-zinc-400">
-            No Results
+            {videos.length === 0 ? "No Videos Yet" : "No Results"}
           </p>
           <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
-            No exercises match your search.
+            {videos.length === 0 ? "The library is empty for now." : "No exercises match your search."}
           </h2>
         </div>
       )}
@@ -101,19 +97,14 @@ export default function WorkoutLibraryClient() {
               {activeVideo?.title}
             </p>
             <div className="flex items-center justify-center">
-              {activeVideo?.videoUrl ? (
+              {activeVideo && (
                 <video
+                  key={activeVideo.id}
                   src={activeVideo.videoUrl}
                   controls
                   autoPlay
                   className="max-h-[75vh] max-w-full rounded-lg"
                 />
-              ) : (
-                <div className="aspect-video w-full max-w-2xl mx-auto bg-zinc-900 rounded-lg flex items-center justify-center">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 [font-family:var(--font-barlow)]">
-                    Video coming soon
-                  </p>
-                </div>
               )}
             </div>
           </div>

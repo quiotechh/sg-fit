@@ -291,3 +291,14 @@ model Notification {
   @@index([recipientId, read, createdAt])
   @@map("notification")
 }
+
+model WorkoutVideo {
+  id        String   @id @default(cuid())
+  title     String
+  videoKey  String
+  duration  Int
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("workout_video")
+}
