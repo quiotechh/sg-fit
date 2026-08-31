@@ -204,7 +204,7 @@ export default function CommunityPage() {
                 Join SGians — $29/mo
               </Link>
               <p className="text-xs font-semibold text-zinc-600 [font-family:var(--font-barlow)]">
-                Secure payment via Stripe. Auto-renews monthly.
+                Secure payment via Paystack. Auto-renews monthly.
               </p>
             </div>
 
