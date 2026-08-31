@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { getWorkoutVideos } from "@/lib/data/workout-videos";
 import WorkoutLibraryClient from "@/components/WorkoutLibraryClient";
 
 export const metadata = {
@@ -12,6 +13,8 @@ export const metadata = {
 export default async function WorkoutLibraryPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+
+  const videos = await getWorkoutVideos();
 
   return (
     <main className="flex flex-col min-h-screen bg-zinc-50">
@@ -43,7 +46,7 @@ export default async function WorkoutLibraryPage() {
           </p>
         </div>
 
-        <WorkoutLibraryClient />
+        <WorkoutLibraryClient videos={videos} />
       </section>
     </main>
   );
