@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Home, PlusCircle, Bell, User } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/communtiy/CommunitySidebar";
@@ -132,6 +133,23 @@ export default function CommunityDashboardClient({
     );
   };
 
+  async function handleSignOut() {
+    // Log while the session is still valid — signOut() destroys it.
+    await fetch("/api/auth-log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "auth.signout" }),
+    });
+
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = "/";
+        },
+      },
+    });
+  }
+
   return (
     <>
       <SidebarProvider className="contents">
@@ -142,6 +160,7 @@ export default function CommunityDashboardClient({
             currentUser={currentUser}
             onViewChange={handleViewChange}
             onCreateClick={() => setCreateOpen(true)}
+            onSignOut={handleSignOut}
           />
 
           <div className="flex-1 flex flex-col lg:ml-60">
@@ -185,11 +204,14 @@ export default function CommunityDashboardClient({
                     <span className="absolute top-2 right-2.25 w-1.75 h-1.75 rounded-full border-2 border-white bg-[#C9953A]" />
                   )}
                 </Button>
+                {/* Not clickable on purpose — the account menu (sign out,
+                    back to SG Fit) lives in the sidebar footer, bottom-left.
+                    This is just a "you're logged in as" indicator. */}
                 <CommunityAvatar
                   userId={currentUser.id}
                   name={currentUser.name}
                   image={currentUser.image}
-                  className="size-10 cursor-pointer border-2 border-transparent hover:border-[#C9953A] transition-all duration-200"
+                  className="size-10"
                 />
               </div>
             </div>
@@ -225,6 +247,7 @@ export default function CommunityDashboardClient({
                     posts={userPosts}
                     currentUser={currentUser}
                     onDelete={handleDeletePost}
+                    onSignOut={handleSignOut}
                   />
                 )}
               </div>

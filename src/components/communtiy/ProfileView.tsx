@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { Heart, MessageCircle, ArrowLeft, LogOut } from "lucide-react";
 import { ProfilePost } from "@/types/community";
 import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
 import RelativeTime from "@/components/communtiy/RelativeTime";
@@ -18,9 +19,10 @@ type Props = {
   posts: ProfilePost[];
   currentUser: CurrentUser;
   onDelete: (id: string) => void;
+  onSignOut: () => void;
 };
 
-export default function ProfileView({ posts, currentUser, onDelete }: Props) {
+export default function ProfileView({ posts, currentUser, onDelete, onSignOut }: Props) {
   const [selected, setSelected] = useState<ProfilePost | null>(null);
 
   const totalLikes = posts.reduce((sum, p) => sum + p.likeCount, 0);
@@ -77,6 +79,25 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
               Comments
             </span>
           </div>
+        </div>
+
+        {/* Account actions */}
+        <div className="flex items-center gap-2 mt-6">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] text-[12px] font-semibold uppercase tracking-[0.04em] [font-family:var(--font-barlow)] text-[#6e6b63] hover:border-[#C9953A] hover:text-[#0a0a0a] transition-all duration-200"
+          >
+            <ArrowLeft className="size-3.5" strokeWidth={2.2} />
+            Back to SG Fit
+          </Link>
+          <button
+            type="button"
+            onClick={onSignOut}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-[#eeece8] text-[12px] font-semibold uppercase tracking-[0.04em] [font-family:var(--font-barlow)] text-red-500 hover:border-red-300 hover:bg-red-50 transition-all duration-200"
+          >
+            <LogOut className="size-3.5" strokeWidth={2.2} />
+            Sign Out
+          </button>
         </div>
       </div>
 
@@ -143,7 +164,11 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
       <Dialog open={!!selected} onOpenChange={(v) => !v && setSelected(null)}>
         <DialogContent
           showCloseButton={false}
-          className="max-w-120 lg:max-w-135 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
+          // max-w-120 was unscoped, so it overrode the dialog's default
+          // calc(100%-2rem) mobile inset entirely (same Tailwind property —
+          // last one wins), making the box touch both screen edges on mobile.
+          // sm: scopes the bigger width to larger screens only.
+          className="sm:max-w-120 lg:max-w-135 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
         >
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#eeece8]">
             <DialogTitle className="text-[15px] font-black uppercase tracking-[0.08em] text-[#0a0a0a] [font-family:var(--font-barlow)]">
@@ -182,7 +207,11 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
                 <img
                   src={selected.imageUrl}
                   alt=""
-                  className="w-full max-h-50 object-cover rounded-[14px] mb-4"
+                  // Kept small on purpose — this is a compact preview dialog,
+                  // not the full feed view. Header + text + stats + Close/Delete
+                  // buttons all need to fit on one small mobile screen alongside
+                  // this image without scrolling.
+                  className="w-full max-h-40 object-contain bg-[#f8f7f5] rounded-[14px] mb-4"
                 />
               )}
 
