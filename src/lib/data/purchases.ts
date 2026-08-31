@@ -14,6 +14,16 @@ export async function getUserPurchasePrograms(
   return purchases.map((p) => p.program);
 }
 
+// Entitlement check — used to gate access to category-wide features
+// (e.g. the Workout Library requires at least one "workouts" purchase).
+export async function hasPurchasedCategory(userId: string, category: string) {
+  const purchase = await prisma.purchase.findFirst({
+    where: { userId, program: { category } },
+    select: { id: true },
+  });
+  return purchase !== null;
+}
+
 export function getPurchase(userId: string, programId: string) {
   return prisma.purchase.findUnique({
     where: { userId_programId: { userId, programId } },

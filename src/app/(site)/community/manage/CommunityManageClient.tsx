@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Loader2, CheckCircle, AlertTriangle } from "lucide-react"
+import { ArrowRight, Loader2, CheckCircle, AlertTriangle, XCircle } from "lucide-react"
 
 export default function CommunityManageClient({
   status: initialStatus,
@@ -22,6 +22,7 @@ export default function CommunityManageClient({
     year: "numeric",
   })
   const isCancelled = status === "non-renewing" || status === "disabled"
+  const paymentFailed = status === "attention"
 
   async function handleCancel() {
     setProcessing(true)
@@ -70,15 +71,21 @@ export default function CommunityManageClient({
             </div>
             <span
               className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full [font-family:var(--font-barlow)] ${
-                isCancelled ? "bg-zinc-100 text-zinc-500" : "bg-emerald-50 text-emerald-600"
+                paymentFailed
+                  ? "bg-red-50 text-red-600"
+                  : isCancelled
+                    ? "bg-zinc-100 text-zinc-500"
+                    : "bg-emerald-50 text-emerald-600"
               }`}
             >
-              {isCancelled ? "Ending" : "Active"}
+              {paymentFailed ? "Payment Failed" : isCancelled ? "Ending" : "Active"}
             </span>
           </div>
           <div className="flex items-center gap-2.5 px-5 py-3">
             <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)]">
-              {isCancelled ? (
+              {paymentFailed ? (
+                <>Your last renewal charge failed. Access continues until <span className="font-semibold text-zinc-600">{renewalDate}</span> — resubscribe before then to keep it.</>
+              ) : isCancelled ? (
                 <>Your access ends on <span className="font-semibold text-zinc-600">{renewalDate}</span> — no further charges.</>
               ) : (
                 <>Renews automatically on <span className="font-semibold text-zinc-600">{renewalDate}</span>.</>
@@ -93,7 +100,23 @@ export default function CommunityManageClient({
           </div>
         )}
 
-        {isCancelled ? (
+        {paymentFailed ? (
+          <div className="flex flex-col gap-4 border border-red-200 bg-red-50 rounded-xl px-5 py-5">
+            <div className="flex items-start gap-3">
+              <XCircle className="size-4 text-red-500 shrink-0 mt-0.5" />
+              <p className="text-sm font-semibold text-red-700 [font-family:var(--font-barlow)]">
+                Your card was declined on renewal. Resubscribe before {renewalDate} to avoid losing access.
+              </p>
+            </div>
+            <Link
+              href="/community/checkout"
+              className="inline-flex items-center justify-center gap-2 bg-red-600 text-white text-xs font-black uppercase tracking-widest px-6 py-3 rounded-lg hover:bg-red-700 active:scale-95 transition-all [font-family:var(--font-barlow)]"
+            >
+              Update Payment
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+        ) : isCancelled ? (
           <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 rounded-xl px-5 py-4">
             <CheckCircle className="size-4 text-zinc-400 shrink-0" />
             <p className="text-sm font-medium text-zinc-500 [font-family:var(--font-barlow)]">

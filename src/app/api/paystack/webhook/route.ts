@@ -28,11 +28,10 @@ export async function POST(request: Request) {
     // ignore — reference stays undefined if body isn't valid JSON
   }
 
-  await logEvent({
-    event: "webhook.received",
-    success: true,
-    reference,
-  })
+  // Cheap server-log trace (not a DB row) — enough to confirm during debugging
+  // that Paystack is actually reaching this endpoint at all, without bloating
+  // the audit log with a row for every ping.
+  console.log("Paystack webhook received:", reference ?? "(no reference)")
 
   if (!verifyWebhookSignature(rawBody, signature)) {
     console.error("Paystack webhook: signature mismatch")
@@ -58,6 +57,17 @@ export async function POST(request: Request) {
     case "invoice.payment_failed":
       return handleInvoicePaymentFailed(event.data)
     default:
+      // An event type we don't have a specific handler for — worth a DB trace
+      // since otherwise it vanishes completely with no record anywhere.
+      await logEvent({
+        event: "webhook.unhandled_event",
+        success: true,
+        reference,
+        metadata: {
+          message: `Received a Paystack webhook event type we don't handle: "${event.event}". Not necessarily a problem, but worth checking if it should be handled.`,
+          eventType: event.event,
+        },
+      })
       return new NextResponse("OK")
   }
 }
@@ -172,18 +182,68 @@ async function sendDigitalDeliveryEmail({
   userId: string
   userEmail: string
   reference: string
-  programs: { title: string }[]
+  programs: { title: string; slug: string }[]
 }) {
   const siteUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
-  const trackedLink = `${siteUrl}/api/email-click?dest=${encodeURIComponent("/my-programs/nutrition")}&ref=${reference}`
+  const trackedLink = (dest: string) => `${siteUrl}/api/email-click?dest=${encodeURIComponent(dest)}&ref=${reference}`
+  const myProgramsLink = trackedLink("/my-programs/nutrition")
+  // A single download can go straight to the file (matches a "Download PDF"
+  // button's label — one click, no detour). With multiple items there's no
+  // single file to point one button at, so it falls back to the browse page,
+  // and each item in the list below links to its own direct download instead.
+  const primaryLink = programs.length === 1 ? trackedLink(`/api/download/${programs[0].slug}`) : myProgramsLink
   const titleList = programs.map((p) => `- ${p.title}`).join("\n")
+  const guideWord = programs.length === 1 ? "guide" : "guides"
+
+  const gold = "#C9953A"
+  const html = `
+<div style="background:#f4f4f4;padding:32px 16px;font-family:Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #eeeeee;">
+    <tr>
+      <td style="background:#09090b;padding:24px;text-align:center;">
+        <span style="font-size:20px;font-weight:900;letter-spacing:4px;color:#ffffff;">SG<span style="color:${gold};">.</span>FIT</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:32px 28px 8px;">
+        <p style="margin:0 0 4px;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${gold};">Order Confirmed</p>
+        <h1 style="margin:0 0 16px;font-size:22px;font-weight:900;color:#09090b;">Your Nutrition ${guideWord === "guide" ? "Guide" : "Guides"} ${programs.length === 1 ? "Is" : "Are"} Ready 🎉</h1>
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#52525b;">Thanks for your purchase! Here's what you got:</p>
+        <ul style="margin:0 0 24px;padding-left:20px;font-size:14px;line-height:1.8;color:#09090b;font-weight:700;">
+          ${programs.map((p) => (programs.length === 1 ? `<li>${p.title}</li>` : `<li><a href="${trackedLink(`/api/download/${p.slug}`)}" style="color:#09090b;text-decoration:underline;">${p.title}</a></li>`)).join("")}
+        </ul>
+        <table role="presentation" width="100%" style="margin-bottom:16px;">
+          <tr>
+            <td align="center" style="background:${gold};border-radius:10px;">
+              <a href="${primaryLink}" style="display:block;padding:15px 24px;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#09090b;text-decoration:none;">Download PDF</a>
+            </td>
+          </tr>
+        </table>
+        <p style="margin:0 0 24px;font-size:13px;line-height:1.6;color:#71717a;text-align:center;">Or go to <a href="${myProgramsLink}" style="color:#09090b;font-weight:700;text-decoration:underline;">My Programs → Nutrition Guides</a> on the site anytime to download it again.</p>
+        <table role="presentation" width="100%" style="background:#fafaf9;border:1px solid #eeeeee;border-radius:8px;margin-bottom:24px;">
+          <tr>
+            <td style="padding:14px 16px;font-size:13px;line-height:1.5;color:#52525b;">
+              <strong style="color:#09090b;">Don't see this in your inbox?</strong> Check your Spam/Junk folder.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 28px 28px;">
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">— SG Fit</p>
+      </td>
+    </tr>
+  </table>
+</div>`.trim()
 
   try {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: userEmail,
       subject: programs.length === 1 ? `Your ${programs[0].title} is ready — SG Fit` : "Your Nutrition Guides are ready — SG Fit",
-      text: `Thanks for your purchase! Your PDF guide is ready:\n\n${titleList}\n\nDownload it here: ${trackedLink}\n\nDon't see this email in your inbox? Check your Spam/Junk folder.\n\nYou can also come back anytime and download it again from My Programs → Nutrition Guides on the site.\n\n— SG Fit`,
+      text: `Thanks for your purchase! Your PDF ${guideWord} ${programs.length === 1 ? "is" : "are"} ready:\n\n${titleList}\n\nDownload it here: ${primaryLink}\n\nOr go to My Programs → Nutrition Guides on the site anytime to download it again: ${myProgramsLink}\n\nDon't see this email in your inbox? Check your Spam/Junk folder.\n\n— SG Fit`,
+      html,
     })
 
     await logEvent({
@@ -244,9 +304,14 @@ async function handleSubscriptionCharge(
   const paidAt = data.paid_at ? new Date(data.paid_at) : new Date()
   const currentPeriodEnd = addOneMonth(paidAt)
 
-  const existing = await prisma.subscription.findUnique({
-    where: { userId_planCode: { userId: user.id, planCode } },
-  })
+  // NOT reliable to check "does a Subscription row already exist" — Paystack
+  // doesn't guarantee charge.success arrives before subscription.create, so on
+  // a first-ever payment the row can already exist by the time this runs (created
+  // by subscription.create moments earlier), which would wrongly look like a
+  // renewal. Our own reference prefix is a reliable signal instead: only the
+  // checkout WE initiate (first payment) ever gets a sgfit_sub_... reference —
+  // Paystack generates its own reference for every auto-billed renewal.
+  const isFirstPayment = reference.startsWith("sgfit_sub_")
 
   await prisma.subscription.upsert({
     where: { userId_planCode: { userId: user.id, planCode } },
@@ -267,13 +332,13 @@ async function handleSubscriptionCharge(
   await logEvent({
     userId: user.id,
     userEmail,
-    event: existing ? "subscription.renewed" : "subscription.activated",
+    event: isFirstPayment ? "subscription.activated" : "subscription.renewed",
     success: true,
     reference,
     metadata: {
-      message: existing
-        ? `${userEmail}'s monthly Community subscription renewed successfully. Access extended to ${currentPeriodEnd.toDateString()}.`
-        : `${userEmail} paid for their first Community subscription charge. Access granted until ${currentPeriodEnd.toDateString()} (an estimate — the subscription.create event will correct this to Paystack's exact date shortly).`,
+      message: isFirstPayment
+        ? `${userEmail} paid for their first Community subscription charge. Access granted until ${currentPeriodEnd.toDateString()} (an estimate — the subscription.create event will correct this to Paystack's exact date shortly).`
+        : `${userEmail}'s monthly Community subscription renewed successfully. Access extended to ${currentPeriodEnd.toDateString()}.`,
       currentPeriodEnd,
     },
   })
@@ -423,5 +488,46 @@ async function handleInvoicePaymentFailed(data: { subscription_code?: string; su
       message: `A renewal charge FAILED for this user's Community subscription. Paystack will NOT retry automatically — their access lapses on ${sub.currentPeriodEnd?.toDateString() ?? "the current period end"} unless they update their payment method and resubscribe.`,
     },
   })
+
+  await sendPaymentFailedEmail(sub.userId, sub.currentPeriodEnd)
+
   return new NextResponse("OK")
+}
+
+async function sendPaymentFailedEmail(userId: string, currentPeriodEnd: Date | null) {
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } })
+  if (!user) return
+
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
+  const deadline = currentPeriodEnd?.toDateString() ?? "your next billing date"
+
+  try {
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: user.email,
+      subject: "Your payment failed — update your card to keep your SGians access",
+      text: `Hi,\n\nWe tried to renew your SG Fit Community Membership, but the payment didn't go through.\n\nYour access continues until ${deadline} — after that, it will stop unless you resubscribe.\n\nUpdate your payment here: ${siteUrl}/community/checkout\n\nIf you need help, just reply to this email.\n\n— SG Fit`,
+    })
+    await logEvent({
+      userId,
+      userEmail: user.email,
+      event: "email.subscription_payment_failed_sent",
+      success: true,
+      metadata: {
+        message: `Payment-failed warning email sent to ${user.email}. They were told access continues until ${deadline}.`,
+      },
+    })
+  } catch (err) {
+    console.error("Failed to send payment-failed email:", err)
+    await logEvent({
+      userId,
+      userEmail: user.email,
+      event: "email.subscription_payment_failed_send_failed",
+      success: false,
+      metadata: {
+        message: `Failed to send the payment-failed warning email to ${user.email} — they have NOT been told their card failed. Needs manual follow-up.`,
+        error: String(err),
+      },
+    })
+  }
 }

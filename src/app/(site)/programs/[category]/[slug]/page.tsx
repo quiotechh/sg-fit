@@ -156,6 +156,19 @@ export default async function ProgramDetailPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
+                {category === "workouts" && (
+                  <div className="mt-4 flex items-start gap-3 rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                      style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+                    >
+                      <CheckCircle className="size-3 text-white" />
+                    </div>
+                    <span className="text-sm font-semibold text-zinc-700 [font-family:var(--font-barlow)]">
+                      Also unlocks the full Workout Video Library, included free with any workout plan.
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="h-px bg-zinc-100" />

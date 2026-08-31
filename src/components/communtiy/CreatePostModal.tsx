@@ -27,20 +27,33 @@ export default function CreatePostModal({
 }: Props) {
   const [text, setText] = useState("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClose = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setText("");
     setPhotoFile(null);
+    setPreviewUrl(null);
     setError(null);
     onClose();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setPhotoFile(file);
+    if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPhotoFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleRemovePhoto = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPhotoFile(null);
+    setPreviewUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = async () => {
@@ -64,7 +77,7 @@ export default function CreatePostModal({
     <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-140 lg:max-w-180 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
+        className="sm:max-w-140 lg:max-w-180 rounded-[24px] p-0 bg-white border-0 shadow-[0_24px_64px_rgba(0,0,0,0.12)] gap-0 overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#eeece8]">
@@ -96,6 +109,27 @@ export default function CreatePostModal({
             className="flex-1 border-none outline-none bg-[#f8f7f5] rounded-[14px] px-4 py-3 text-[14px] text-[#0a0a0a] font-medium resize-none transition-all duration-200 [font-family:var(--font-barlow)] placeholder:text-[#9e9a90] focus:bg-[#f5f5f5]"
           />
         </div>
+
+        {previewUrl && (
+          <div className="px-6 pb-2 -mt-1">
+            <div className="relative inline-block">
+              {/* eslint-disable-next-line @next/next/no-img-element -- local blob preview, not a remote/optimizable image */}
+              <img
+                src={previewUrl}
+                alt="Selected photo preview"
+                className="max-h-52 rounded-[14px] border border-[#eeece8] object-cover"
+              />
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                aria-label="Remove photo"
+                className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0a0a0a] text-white flex items-center justify-center text-xs hover:bg-[#2a2a2a] transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         {error && (
           <p className="px-6 text-xs font-semibold text-red-500 [font-family:var(--font-barlow)] -mt-2 mb-2">

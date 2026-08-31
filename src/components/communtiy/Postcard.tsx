@@ -86,7 +86,10 @@ export default function PostCard({
           <img // WILL CHANGE THIS WITH IMAGE TAG AND ALLOW R2 URL IN CONFIG
             src={post.imageUrl}
             alt=""
-            className="w-full max-h-100 object-cover rounded-[14px] mt-3.5"
+            // object-contain, not object-cover — never crop a member's photo.
+            // Matters especially for before/after comparisons where cropping
+            // cuts off the actual point of the post.
+            className="w-full max-h-100 object-contain bg-[#f8f7f5] rounded-[14px] mt-3.5"
           />
         )}
       </CardContent>

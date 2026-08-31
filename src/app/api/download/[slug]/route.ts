@@ -9,6 +9,10 @@ import { logEvent } from "@/lib/auditLog"
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const session = await auth.api.getSession({ headers: await headers() })
+  // Not request.url — behind ngrok (or any reverse proxy), the server sees the
+  // request as plain http://localhost:3000 internally, not the public domain
+  // the browser actually used. BETTER_AUTH_URL is the trusted public origin.
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
 
   if (!session) {
     await logEvent({
@@ -20,14 +24,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
         reason: "no_session",
       },
     })
-    const loginUrl = new URL("/login", request.url)
+    const loginUrl = new URL("/login", siteUrl)
     loginUrl.searchParams.set("redirect", `/api/download/${slug}`)
     return NextResponse.redirect(loginUrl)
   }
 
   const program = await prisma.program.findUnique({ where: { slug } })
   if (!program || !program.fileKey) {
-    return NextResponse.redirect(new URL("/not-found", request.url))
+    return NextResponse.redirect(new URL("/not-found", siteUrl))
   }
 
   const purchase = await getPurchase(session.user.id, program.id)

@@ -39,6 +39,7 @@ const browseProgramItems = [
 ];
 
 const moreItems = [
+  { label: "Home", href: "/" },
   {
     label: "Retreats",
     href: "https://retreat.sgfitwellness.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnyA-ePNCFew33_hiPIioPy_-eC8vkpJZ7SjEztRFKhGvGIf-wNKXs-ekQkiw_aem_crL-J5YoZxVVLmt6TI2wpQ",

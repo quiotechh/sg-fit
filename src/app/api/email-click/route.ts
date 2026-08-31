@@ -29,5 +29,9 @@ export async function GET(request: Request) {
     },
   })
 
-  return NextResponse.redirect(new URL(dest, request.url))
+  // Not request.url — behind ngrok (or any reverse proxy), the server sees the
+  // request as plain http://localhost:3000 internally, not the public domain
+  // the browser actually used. BETTER_AUTH_URL is the trusted public origin.
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
+  return NextResponse.redirect(new URL(dest, siteUrl))
 }

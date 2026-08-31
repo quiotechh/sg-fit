@@ -244,6 +244,13 @@ function ProfileDropdown({
           Measurements
         </DropdownMenuItem>
 
+        <DropdownMenuItem
+          onSelect={() => router.push("/workout-library")}
+          className={itemCls}
+        >
+          Workout Library
+        </DropdownMenuItem>
+
         {/* My Programs — inline accordion */}
         <DropdownMenuItem
           onSelect={(e) => {
