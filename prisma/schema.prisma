@@ -292,13 +292,20 @@ model Notification {
   @@map("notification")
 }
 
+enum WorkoutCategory {
+  GYM
+  CHAIR
+  HOME
+}
+
 model WorkoutVideo {
-  id        String   @id @default(cuid())
+  id        String          @id @default(cuid())
   title     String
   videoKey  String
   duration  Int
-  createdAt DateTime @default(now())
+  category  WorkoutCategory
+  createdAt DateTime        @default(now())
 
-  @@index([createdAt])
+  @@index([category, createdAt])
   @@map("workout_video")
 }

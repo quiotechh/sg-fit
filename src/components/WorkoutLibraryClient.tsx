@@ -1,19 +1,28 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, Play, X } from "lucide-react";
+import { Search, Play, X, Dumbbell, Armchair, Home } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+
+type WorkoutCategory = "GYM" | "CHAIR" | "HOME";
 
 interface LibraryVideo {
   id: string;
   title: string;
   duration: number; // seconds
   videoUrl: string;
+  category: WorkoutCategory;
 }
 
 interface Props {
   videos: LibraryVideo[];
 }
+
+const categoryMeta: Record<WorkoutCategory, { label: string; icon: React.ElementType }> = {
+  GYM: { label: "Gym Workouts", icon: Dumbbell },
+  CHAIR: { label: "Chair Workouts", icon: Armchair },
+  HOME: { label: "Home Workouts", icon: Home },
+};
 
 function formatDuration(totalSeconds: number) {
   const m = Math.floor(totalSeconds / 60);
@@ -21,26 +30,60 @@ function formatDuration(totalSeconds: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+const filterBtnCls = (active: boolean) =>
+  `inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide [font-family:var(--font-barlow)] transition-colors duration-200 shrink-0 ${
+    active
+      ? "bg-zinc-950 text-white"
+      : "bg-zinc-100 text-zinc-500 hover:text-zinc-950 hover:bg-zinc-200"
+  }`;
+
 export default function WorkoutLibraryClient({ videos }: Props) {
   const [query, setQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<WorkoutCategory | "all">("all");
   const [activeVideo, setActiveVideo] = useState<LibraryVideo | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return videos.filter((v) => v.title.toLowerCase().includes(q));
-  }, [videos, query]);
+    return videos.filter((v) => {
+      const matchesCategory = activeCategory === "all" || v.category === activeCategory;
+      const matchesQuery = v.title.toLowerCase().includes(q);
+      return matchesCategory && matchesQuery;
+    });
+  }, [videos, query, activeCategory]);
 
   return (
     <>
-      {/* Search */}
-      <div className="relative max-w-md mb-8 sm:mb-10">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search exercises..."
-          className="w-full rounded-lg border border-zinc-200 bg-white pl-11 pr-4 py-3 text-sm font-medium text-zinc-950 placeholder:text-zinc-400 [font-family:var(--font-barlow)] focus:outline-none focus:ring-2 focus:ring-[#C9953A]/30 focus:border-[#C9953A] transition-colors"
-        />
+      {/* Search + filters */}
+      <div className="flex flex-col gap-5 mb-8 sm:mb-10">
+        <div className="relative max-w-md">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search exercises..."
+            className="w-full rounded-lg border border-zinc-200 bg-white pl-11 pr-4 py-3 text-sm font-medium text-zinc-950 placeholder:text-zinc-400 [font-family:var(--font-barlow)] focus:outline-none focus:ring-2 focus:ring-[#C9953A]/30 focus:border-[#C9953A] transition-colors"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+          <button className={filterBtnCls(activeCategory === "all")} onClick={() => setActiveCategory("all")}>
+            All
+          </button>
+          {(Object.keys(categoryMeta) as WorkoutCategory[]).map((cat) => {
+            const meta = categoryMeta[cat];
+            const Icon = meta.icon;
+            return (
+              <button
+                key={cat}
+                className={filterBtnCls(activeCategory === cat)}
+                onClick={() => setActiveCategory(cat)}
+              >
+                <Icon className="size-3.5" />
+                {meta.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grid */}
