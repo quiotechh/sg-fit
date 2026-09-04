@@ -3,7 +3,11 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { getBodyMetricHistory, getLatestMeasurements, getAllBodyMetrics } from "@/lib/data/body-metrics";
+import {
+  getBodyMetricHistory,
+  getLatestMeasurements,
+  getAllBodyMetrics,
+} from "@/lib/data/body-metrics";
 import WeightTrendChart from "@/components/WeightTrendChart";
 import LatestMeasurementsCard from "@/components/LatestMeasurementsCard";
 import BodyMetricForm from "@/components/BodyMetricForm";
@@ -17,7 +21,8 @@ export const metadata = {
 };
 
 const cardCls = "rounded-2xl border border-zinc-100 bg-white shadow-sm ring-0";
-const cardTitleCls = "text-xs font-black uppercase tracking-widest text-zinc-950 [font-family:var(--font-barlow)]";
+const cardTitleCls =
+  "text-xs font-black uppercase tracking-widest text-zinc-950 [font-family:var(--font-barlow)]";
 
 export default async function MeasurementsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -31,7 +36,12 @@ export default async function MeasurementsPage() {
     <main className="flex flex-col min-h-screen bg-zinc-50">
       <section className="max-w-7xl mx-auto w-full px-4 sm:px-10 xl:px-16 py-10 sm:py-16 xl:py-20">
         <div className="flex flex-wrap items-center gap-1.5 text-zinc-400 text-xs font-bold uppercase tracking-wide [font-family:var(--font-barlow)] mb-8">
-          <Link href="/dashboard" className="hover:text-zinc-950 transition-colors">Dashboard</Link>
+          <Link
+            href="/dashboard"
+            className="hover:text-zinc-950 transition-colors"
+          >
+            Dashboard
+          </Link>
           <ChevronRight className="size-3 shrink-0" />
           <span className="text-zinc-950">Measurements</span>
         </div>
@@ -55,7 +65,9 @@ export default async function MeasurementsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           <Card className="rounded-2xl bg-zinc-950 border-0 shadow-lg shadow-zinc-900/10">
             <CardHeader>
-              <CardTitle className={`${cardTitleCls} text-white`}>Weight Trend</CardTitle>
+              <CardTitle className={`${cardTitleCls} text-white`}>
+                Weight Trend
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <WeightTrendChart data={weightHistory} />
@@ -64,7 +76,9 @@ export default async function MeasurementsPage() {
 
           <Card className="rounded-2xl bg-zinc-950 border-0 shadow-lg shadow-zinc-900/10">
             <CardHeader>
-              <CardTitle className={`${cardTitleCls} text-white`}>Latest Measurements</CardTitle>
+              <CardTitle className={`${cardTitleCls} text-white`}>
+                Latest Measurements
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <LatestMeasurementsCard measurements={latestMeasurements} />
@@ -82,12 +96,14 @@ export default async function MeasurementsPage() {
             </CardContent>
           </Card>
 
-          <PhotoUploadCard path = "/measurements" />
+          <PhotoUploadCard path="/measurements" />
         </div>
 
         <Card className="rounded-2xl bg-zinc-950 border-0 shadow-lg shadow-zinc-900/10 mt-6 sm:mt-8">
           <CardHeader>
-            <CardTitle className={`${cardTitleCls} text-white`}>History</CardTitle>
+            <CardTitle className={`${cardTitleCls} text-white`}>
+              History
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <BodyMetricHistoryTable entries={allMetrics} />
@@ -96,10 +112,12 @@ export default async function MeasurementsPage() {
 
         <Card className="rounded-2xl bg-zinc-950 border-0 shadow-lg shadow-zinc-900/10 mt-6 sm:mt-8">
           <CardHeader>
-            <CardTitle className={`${cardTitleCls} text-white`}>Progress Photos</CardTitle>
+            <CardTitle className={`${cardTitleCls} text-white`}>
+              Progress Photos
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ProgressPhotoGallery entries={allMetrics} />
+            <ProgressPhotoGallery entries={allMetrics} path="/measurements" />
           </CardContent>
         </Card>
       </section>

@@ -55,6 +55,34 @@ export const auth = betterAuth({
           ipAddress,
           userAgent,
         });
+
+        // Logging back in during the 30-day grace period undoes a pending
+        // account deletion — no separate "cancel" button needed. Queried
+        // fresh from the DB rather than trusting newSession.user, since
+        // Better Auth's internal session object doesn't reliably carry
+        // custom User fields at this point in the request lifecycle.
+        const dbUser = await prisma.user.findUnique({
+          where: { id: newSession.user.id },
+          select: { deletionRequestedAt: true },
+        });
+
+        if (dbUser?.deletionRequestedAt) {
+          await prisma.user.update({
+            where: { id: newSession.user.id },
+            data: { deletionRequestedAt: null },
+          });
+          await logEvent({
+            userId: newSession.user.id,
+            userEmail: newSession.user.email,
+            event: "account.deletion_cancelled",
+            success: true,
+            ipAddress,
+            userAgent,
+            metadata: {
+              message: `${newSession.user.email} logged back in during their 30-day deletion grace period — deletion cancelled.`,
+            },
+          });
+        }
       }
 
       if (ctx.path === "/sign-up/email" && newSession) {
