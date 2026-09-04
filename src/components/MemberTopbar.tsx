@@ -1,21 +1,26 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
 import { getInitials } from "@/lib/utils";
+import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 
 export default function MemberTopbar() {
   const { totalItems, openCart } = useCart();
   const { data: session } = authClient.useSession();
   const user = session?.user;
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   async function handleSignOut() {
     await fetch("/api/auth-log", {
@@ -72,15 +77,30 @@ export default function MemberTopbar() {
             sideOffset={12}
             className="w-56 p-0 rounded-xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
           >
+            <DropdownMenuItem asChild className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:bg-zinc-50 focus:bg-zinc-50">
+              <Link href="/forgot-password">Reset Password</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={handleSignOut}
               className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:text-red-500 hover:bg-zinc-50 focus:bg-zinc-50 focus:text-red-500"
             >
               Sign Out
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault();
+                setDeleteOpen(true);
+              }}
+              className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-red-500 hover:bg-red-50 focus:bg-red-50 focus:text-red-500"
+            >
+              Delete Account
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <DeleteAccountDialog open={deleteOpen} onOpenChange={setDeleteOpen} />
     </div>
   );
 }

@@ -90,3 +90,27 @@ export async function addBodyMetric(data: unknown) {
 
   revalidatePath(path);
 }
+
+export async function deleteProgressPhoto(entryId: string, path: string) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+
+  const entry = await prisma.bodyMetric.findFirst({
+    where: { id: entryId, userId: session.user.id },
+    select: { photoKey: true },
+  });
+  if (!entry?.photoKey) return;
+
+  await prisma.bodyMetric.update({
+    where: { id: entryId },
+    data: { photoKey: null },
+  });
+
+  // Row already updated either way — R2 cleanup failing shouldn't block the user,
+  // it's just a storage-cost leak if it fails.
+  await deleteObject(entry.photoKey).catch((err) => {
+    console.error("Failed to delete R2 object:", entry.photoKey, err);
+  });
+
+  revalidatePath(path);
+}
