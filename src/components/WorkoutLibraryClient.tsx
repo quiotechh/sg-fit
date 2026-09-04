@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, Play, X, Dumbbell, Armchair, Home } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 type WorkoutCategory = "GYM" | "CHAIR" | "HOME";
 
@@ -95,9 +95,22 @@ export default function WorkoutLibraryClient({ videos }: Props) {
               onClick={() => setActiveVideo(video)}
               className="group flex flex-col rounded-2xl border border-zinc-100 bg-white shadow-sm overflow-hidden text-left hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
             >
-              <div className="relative aspect-video bg-zinc-950 flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:bg-[#C9953A] transition-colors duration-200">
-                  <Play className="size-5 text-white fill-white ml-0.5" />
+              {/* preload="metadata" pulls the video's first frame as a free thumbnail —
+                  fine at this library size. Past ~100 videos, switch to a stored
+                  thumbnailKey (R2 "thumbnails/" folder) instead, since every card
+                  loading real video data to render a preview stops being cheap. */}
+              <div className="relative aspect-video bg-zinc-950 overflow-hidden">
+                <video
+                  src={video.videoUrl}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors duration-200">
+                  <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:bg-[#C9953A] transition-colors duration-200">
+                    <Play className="size-5 text-white fill-white ml-0.5" />
+                  </div>
                 </div>
                 <span className="absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-bold text-white [font-family:var(--font-barlow)]">
                   {formatDuration(video.duration)}
@@ -136,9 +149,9 @@ export default function WorkoutLibraryClient({ videos }: Props) {
           </button>
 
           <div className="w-full max-w-5xl px-4 sm:px-8">
-            <p className="text-center text-sm sm:text-base font-black uppercase tracking-widest text-white mb-4 sm:mb-6 [font-family:var(--font-barlow)]">
+            <DialogTitle className="text-center text-sm sm:text-base font-black uppercase tracking-widest text-white mb-4 sm:mb-6 [font-family:var(--font-barlow)]">
               {activeVideo?.title}
-            </p>
+            </DialogTitle>
             <div className="flex items-center justify-center">
               {activeVideo && (
                 <video
