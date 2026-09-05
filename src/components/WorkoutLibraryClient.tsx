@@ -158,6 +158,8 @@ export default function WorkoutLibraryClient({ videos }: Props) {
                   key={activeVideo.id}
                   src={activeVideo.videoUrl}
                   controls
+                  controlsList="nodownload"
+                  onContextMenu={(e) => e.preventDefault()}
                   autoPlay
                   className="max-h-[75vh] max-w-full rounded-lg"
                 />

@@ -43,9 +43,9 @@ export default function DeleteAccountDialog({ open, onOpenChange }: Props) {
 
         <div className="flex flex-col gap-4 mt-2">
           <p className="text-sm text-zinc-500 [font-family:var(--font-barlow)]">
-            Your subscription will be cancelled and you&apos;ll be signed out immediately.
-            Your account and data will be permanently deleted in 30 days.
-            Logging back in before then cancels the deletion.
+            Your subscription will be cancelled and you&apos;ll be signed out
+            immediately. Your account and data will be permanently deleted in 30
+            days. Logging back in before then cancels the deletion.
           </p>
 
           <div className="flex flex-col gap-1.5">
@@ -60,7 +60,9 @@ export default function DeleteAccountDialog({ open, onOpenChange }: Props) {
           </div>
 
           {error && (
-            <p className="text-xs font-semibold text-red-500 [font-family:var(--font-barlow)]">{error}</p>
+            <p className="text-xs font-semibold text-red-500 [font-family:var(--font-barlow)]">
+              {error}
+            </p>
           )}
 
           <div className="flex gap-3">
