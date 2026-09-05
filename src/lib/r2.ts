@@ -23,11 +23,22 @@ const UPLOAD_URL_EXPIRY_SECONDS = 120;
 // download disposition, and a longer expiry than the PDF download URL.
 const VIEW_URL_EXPIRY_SECONDS = 600
 
-export async function getSignedUploadUrl(fileKey: string, contentType: string) {
+// Pinning ContentLength (when provided) locks the presigned URL to that exact
+// byte count — the actual PUT request's Content-Length must match it exactly
+// or R2 rejects it as a signature mismatch. This is how we cap upload size:
+// the caller already knows the real size (post-compression) before asking
+// for the URL, so a client can't request a "small" URL and then PUT a
+// bigger file through it.
+export async function getSignedUploadUrl(
+  fileKey: string,
+  contentType: string,
+  contentLength?: number,
+) {
   const command = new PutObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME!,
     Key: fileKey,
     ContentType: contentType,
+    ...(contentLength !== undefined ? { ContentLength: contentLength } : {}),
   });
 
   return getSignedUrl(r2Client, command, {

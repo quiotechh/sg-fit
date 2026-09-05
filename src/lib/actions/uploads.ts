@@ -13,7 +13,7 @@ export async function getUploadUrl(data: unknown){
 
   const parsed = getUploadUrlSchema.safeParse(data);
   if(!parsed.success) throw new Error(parsed.error.issues[0].message);
-  const {context} = parsed.data;
+  const {context, fileSize} = parsed.data;
 
   if(context === "community-post" && !(await hasActiveCommunitySubscription(session.user.id))){
     redirect("/community/checkout");
@@ -22,7 +22,7 @@ export async function getUploadUrl(data: unknown){
   const prefix = context === "progress-photo" ? "progress-photos" : "community-posts";
   const key = `${prefix}/${session.user.id}/${crypto.randomUUID()}.webp`;
 
-  const uploadUrl = await getSignedUploadUrl(key, "image/webp");
+  const uploadUrl = await getSignedUploadUrl(key, "image/webp", fileSize);
 
   return { uploadUrl, key };
 }

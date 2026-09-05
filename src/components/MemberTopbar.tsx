@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -59,11 +60,12 @@ export default function MemberTopbar() {
           <DropdownMenuTrigger asChild>
             <button aria-label="My profile" className="focus:outline-none">
               {user?.image ? (
-                <img
+                <Image
                   src={user.image}
                   alt={user.name ?? "Profile"}
+                  width={32}
+                  height={32}
                   className="size-8 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="size-8 rounded-full flex items-center justify-center text-[10px] font-black text-zinc-950 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">
@@ -77,7 +79,10 @@ export default function MemberTopbar() {
             sideOffset={12}
             className="w-56 p-0 rounded-xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
           >
-            <DropdownMenuItem asChild className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:bg-zinc-50 focus:bg-zinc-50">
+            <DropdownMenuItem
+              asChild
+              className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:bg-zinc-50 focus:bg-zinc-50"
+            >
               <Link href="/forgot-password">Reset Password</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
