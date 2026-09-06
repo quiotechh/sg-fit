@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Home, PlusCircle, Bell, User } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+import { Home, PlusCircle, Bell, User, ArrowLeft } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/communtiy/CommunitySidebar";
@@ -133,23 +133,6 @@ export default function CommunityDashboardClient({
     );
   };
 
-  async function handleSignOut() {
-    // Log while the session is still valid — signOut() destroys it.
-    await fetch("/api/auth-log", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ event: "auth.signout" }),
-    });
-
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = "/";
-        },
-      },
-    });
-  }
-
   return (
     <>
       <SidebarProvider className="contents">
@@ -160,7 +143,6 @@ export default function CommunityDashboardClient({
             currentUser={currentUser}
             onViewChange={handleViewChange}
             onCreateClick={() => setCreateOpen(true)}
-            onSignOut={handleSignOut}
           />
 
           <div className="flex-1 flex flex-col lg:ml-60">
@@ -169,17 +151,30 @@ export default function CommunityDashboardClient({
               <div className="text-[18px] font-black uppercase tracking-[0.14em] [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)] bg-clip-text text-transparent">
                 SG FIT
               </div>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handleViewChange("notifications")}
-                className="relative size-9.5 rounded-[12px] border-[#eeece8] hover:border-[#C9953A]"
-              >
-                <Bell className="size-4.5 text-[#6e6b63]" strokeWidth={2.2} />
-                {hasUnread && (
-                  <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full border-[1.5px] border-white bg-[#C9953A]" />
-                )}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="icon"
+                  title="Back to Dashboard"
+                  className="size-9.5 rounded-[12px] border-[#eeece8] hover:border-[#C9953A]"
+                >
+                  <Link href="/dashboard">
+                    <ArrowLeft className="size-4.5 text-[#6e6b63]" strokeWidth={2.2} />
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleViewChange("notifications")}
+                  className="relative size-9.5 rounded-[12px] border-[#eeece8] hover:border-[#C9953A]"
+                >
+                  <Bell className="size-4.5 text-[#6e6b63]" strokeWidth={2.2} />
+                  {hasUnread && (
+                    <span className="absolute top-1.5 right-1.5 w-2.25 h-2.25 rounded-full border-2 border-white bg-[#C9953A]" />
+                  )}
+                </Button>
+              </div>
             </div>
 
             {/* Desktop Topbar */}
@@ -194,6 +189,17 @@ export default function CommunityDashboardClient({
               </div>
               <div className="flex items-center gap-3">
                 <Button
+                  asChild
+                  variant="outline"
+                  size="icon"
+                  title="Back to Dashboard"
+                  className="size-10 rounded-[12px] border-[#eeece8] shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:border-[#C9953A]"
+                >
+                  <Link href="/dashboard">
+                    <ArrowLeft className="size-4.5 text-[#6e6b63]" strokeWidth={2.2} />
+                  </Link>
+                </Button>
+                <Button
                   variant="outline"
                   size="icon"
                   onClick={() => handleViewChange("notifications")}
@@ -201,12 +207,10 @@ export default function CommunityDashboardClient({
                 >
                   <Bell className="size-4.5 text-[#6e6b63]" strokeWidth={2.2} />
                   {hasUnread && (
-                    <span className="absolute top-2 right-2.25 w-1.75 h-1.75 rounded-full border-2 border-white bg-[#C9953A]" />
+                    <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-[#C9953A]" />
                   )}
                 </Button>
-                {/* Not clickable on purpose — the account menu (sign out,
-                    back to SG Fit) lives in the sidebar footer, bottom-left.
-                    This is just a "you're logged in as" indicator. */}
+                {/* Not clickable — just a "you're logged in as" indicator. */}
                 <CommunityAvatar
                   userId={currentUser.id}
                   name={currentUser.name}
@@ -247,7 +251,6 @@ export default function CommunityDashboardClient({
                     posts={userPosts}
                     currentUser={currentUser}
                     onDelete={handleDeletePost}
-                    onSignOut={handleSignOut}
                   />
                 )}
               </div>
