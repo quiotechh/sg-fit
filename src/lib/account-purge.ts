@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { deleteObject } from "@/lib/r2";
 import { logEvent } from "@/lib/auditLog";
+import { disableSubscription } from "@/lib/paystack";
 
 // Only ever called from src/app/api/cron/purge-deleted-accounts (a secret-protected
 // route). Deliberately kept out of src/lib/actions/ — anything exported from a
@@ -36,6 +37,25 @@ export async function purgeUserData(userId: string) {
         .catch((err) => console.error("Failed to decrement likeCount:", l.postId, err)),
     ),
   ]);
+
+  // Safety net — requestAccountDeletion tries to cancel on Paystack too, but
+  // skips it if the subscription.create webhook hadn't synced subscriptionCode/
+  // emailToken yet (or if that attempt failed). By now, 30 days later, the webhook
+  // has long since landed, so this is our last chance to cancel before the local
+  // Subscription record (and the ability to look up subscriptionCode) disappears
+  // for good — otherwise Paystack keeps billing a card tied to a deleted account.
+  const activeSubs = await prisma.subscription.findMany({
+    where: { userId, subscriptionCode: { not: null }, emailToken: { not: null } },
+  });
+  await Promise.all(
+    activeSubs
+      .filter((s) => s.currentPeriodEnd && s.currentPeriodEnd > new Date())
+      .map((s) =>
+        disableSubscription(s.subscriptionCode!, s.emailToken!).catch((err) =>
+          console.error("Failed to cancel subscription during purge:", s.id, err),
+        ),
+      ),
+  );
 
   await prisma.$transaction([
     prisma.post.deleteMany({ where: { userId } }),

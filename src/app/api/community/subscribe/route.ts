@@ -7,6 +7,10 @@ import { initializeTransaction } from "@/lib/paystack"
 import { logEvent } from "@/lib/auditLog"
 
 const COMMUNITY_PLAN_CODE = process.env.PAYSTACK_COMMUNITY_PLAN_CODE!
+// Paystack now requires `amount` even when `plan` is passed — it used to charge
+// the plan's own amount automatically, but rejects the request with "Invalid
+// Amount Sent" without this. Keep in sync with the plan's configured price.
+const COMMUNITY_PLAN_AMOUNT = Number(process.env.PAYSTACK_COMMUNITY_PLAN_AMOUNT!)
 
 export async function POST() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -42,6 +46,7 @@ export async function POST() {
   try {
     const result = await initializeTransaction({
       email: session.user.email,
+      amount: COMMUNITY_PLAN_AMOUNT,
       plan: COMMUNITY_PLAN_CODE,
       reference,
       callback_url: `${siteUrl}/community/checkout/success`,

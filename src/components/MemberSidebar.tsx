@@ -11,6 +11,7 @@ import {
   Users,
   ChevronDown,
   Video,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -191,6 +192,18 @@ export default function MemberSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
+          {/* Manage Membership — only for active subscribers */}
+          {hasMembership && (
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname === "/community/manage"} className={menuBtnCls}>
+                <Link href="/community/manage" className="flex items-center gap-3">
+                  <Settings className="size-4.5" strokeWidth={2} />
+                  <span className={labelCls}>Manage Membership</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
 
           {/* More (dropdown) */}
           <SidebarMenuItem>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
@@ -22,6 +22,14 @@ export default function MemberTopbar() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [hasCredentialAccount, setHasCredentialAccount] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    authClient.listAccounts().then(({ data }) => {
+      setHasCredentialAccount(!!data?.some((a) => a.providerId === "credential"));
+    });
+  }, [user]);
 
   async function handleSignOut() {
     await fetch("/api/auth-log", {
@@ -79,12 +87,11 @@ export default function MemberTopbar() {
             sideOffset={12}
             className="w-56 p-0 rounded-xl border border-zinc-100 shadow-[0_16px_48px_rgba(0,0,0,0.10)] overflow-hidden"
           >
-            <DropdownMenuItem
-              asChild
-              className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:bg-zinc-50 focus:bg-zinc-50"
-            >
-              <Link href="/forgot-password">Reset Password</Link>
-            </DropdownMenuItem>
+            {hasCredentialAccount && (
+              <DropdownMenuItem asChild className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:bg-zinc-50 focus:bg-zinc-50">
+                <Link href="/forgot-password">Reset Password</Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onSelect={handleSignOut}
               className="rounded-none px-6 py-3.5 text-[13px] font-bold uppercase tracking-wider [font-family:var(--font-barlow)] cursor-pointer text-zinc-700 hover:text-red-500 hover:bg-zinc-50 focus:bg-zinc-50 focus:text-red-500"

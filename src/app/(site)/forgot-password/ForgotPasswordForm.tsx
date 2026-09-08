@@ -69,6 +69,10 @@ export default function ForgotPasswordForm() {
         </div>
       )}
 
+      <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] -mt-1">
+        Signed up with Google? There&apos;s no password to reset — just sign in with Google directly.
+      </p>
+
       <button
         type="submit"
         disabled={loading}
