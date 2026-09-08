@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -67,11 +68,12 @@ export default function MemberTopbar() {
           <DropdownMenuTrigger asChild>
             <button aria-label="My profile" className="focus:outline-none">
               {user?.image ? (
-                <img
+                <Image
                   src={user.image}
                   alt={user.name ?? "Profile"}
+                  width={32}
+                  height={32}
                   className="size-8 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="size-8 rounded-full flex items-center justify-center text-[10px] font-black text-zinc-950 [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]">

@@ -5,7 +5,7 @@ const PAYSTACK_BASE_URL = "https://api.paystack.co"
 
 interface InitializeTransactionParams {
   email: string
-  amount?: number // smallest currency unit — cents for ZAR. Omit when passing `plan` — Paystack charges the plan's amount.
+  amount?: number // smallest currency unit — cents for ZAR. Required even when passing `plan` (Paystack rejects the request with "Invalid Amount Sent" otherwise) — must match the plan's configured price.
   plan?: string // plan code — attaches this transaction to a subscription plan
   reference?: string
   callback_url?: string

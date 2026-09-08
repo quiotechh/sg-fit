@@ -14,24 +14,24 @@ export default function MyProgramCard({ program }: { program: Program }) {
       <div className={`relative w-full aspect-4/3 bg-linear-to-br ${program.bgClass} overflow-hidden`}>
         <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 ease-in-out bg-linear-to-br from-transparent to-black/20" />
 
-        {/* Purchased badge */}
-        <div className="absolute top-4 left-4">
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wide bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 rounded-full [font-family:var(--font-barlow)]">
+        {/* Purchased badge + tags — one flex row so tags wrap instead of
+            overlapping the badge when combined text length runs long. */}
+        <div className="absolute top-4 inset-x-4 flex items-start justify-between gap-2">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wide bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 rounded-full shrink-0 [font-family:var(--font-barlow)]">
             <CheckCircle className="size-3 shrink-0" />
             Purchased
           </span>
-        </div>
 
-        {/* Tags */}
-        <div className="absolute top-4 right-4 flex flex-wrap gap-1.5 justify-end">
-          {program.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[10px] font-black uppercase tracking-wide bg-white/10 backdrop-blur-sm text-white px-2.5 py-1 rounded-full [font-family:var(--font-barlow)]"
-            >
-              {tag}
-            </span>
-          ))}
+          <div className="flex flex-wrap gap-1.5 justify-end">
+            {program.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[10px] font-black uppercase tracking-wide bg-white/10 backdrop-blur-sm text-white px-2.5 py-1 rounded-full [font-family:var(--font-barlow)]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Level badge */}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Heart, MessageCircle } from "lucide-react";
 import { FeedPost } from "@/types/community";
 import {
@@ -83,14 +84,18 @@ export default function PostCard({
         </p>
 
         {post.imageUrl && (
-          <img // WILL CHANGE THIS WITH IMAGE TAG AND ALLOW R2 URL IN CONFIG
-            src={post.imageUrl}
-            alt=""
-            // object-contain, not object-cover — never crop a member's photo.
-            // Matters especially for before/after comparisons where cropping
-            // cuts off the actual point of the post.
-            className="w-full max-h-100 object-contain bg-[#f8f7f5] rounded-[14px] mt-3.5"
-          />
+          // object-contain, not object-cover — never crop a member's photo.
+          // Matters especially for before/after comparisons where cropping
+          // cuts off the actual point of the post.
+          <div className="relative w-full h-100 mt-3.5">
+            <Image
+              src={post.imageUrl}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, 600px"
+              className="object-contain bg-[#f8f7f5] rounded-[14px]"
+            />
+          </div>
         )}
       </CardContent>
 

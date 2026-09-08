@@ -173,11 +173,12 @@ function ProfileDropdown({
           className={`${iconCls} focus:outline-none`}
         >
           {user?.image ? (
-            <img
+            <Image
               src={user.image}
               alt={user.name ?? "Profile"}
+              width={32}
+              height={32}
               className="size-8 rounded-full object-cover"
-              referrerPolicy="no-referrer"
               onError={() => setImageError(true)}
             />
           ) : (
@@ -202,11 +203,12 @@ function ProfileDropdown({
         {/* User info header — name/email/avatar from the current session */}
         <div className="flex items-center gap-3 px-6 pt-5 pb-4 border-b border-zinc-100">
           {user?.image ? (
-            <img
+            <Image
               src={user.image}
               alt={user.name ?? "Profile"}
+              width={40}
+              height={40}
               className="size-10 rounded-full object-cover shrink-0"
-              referrerPolicy="no-referrer"
               onError={() => setImageError(true)}
             />
           ) : (

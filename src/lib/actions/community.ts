@@ -234,5 +234,10 @@ export async function getNotificationsData() {
 // Read-only bridge — CommentsModal is a Client Component and can't call the
 // plain (non "use server") getComments from data/community.ts directly.
 export async function getComments(postId: string, cursor?: string) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/login");
+  if (!(await hasActiveCommunitySubscription(session.user.id)))
+    redirect("/community/checkout");
+
   return getCommentsData({ postId, cursor });
 }

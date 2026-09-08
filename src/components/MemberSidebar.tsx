@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,6 +11,7 @@ import {
   Users,
   ChevronDown,
   Video,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,10 +24,6 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
-
-// Toggle this to preview logged-in membership states.
-// TODO: replace with a real subscription check once membership billing is built.
-const hasMembership = true;
 
 const myProgramItems = [
   { label: "Workout Programs", href: "/my-programs/workouts" },
@@ -59,8 +56,16 @@ export default function MemberSidebar() {
   const [myProgramsOpen, setMyProgramsOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [hasMembership, setHasMembership] = useState(false);
 
-  const communityHref = hasMembership ? "/community-dashboard" : "/community";
+  useEffect(() => {
+    fetch("/api/community/membership-status")
+      .then((res) => res.json())
+      .then((data) => setHasMembership(data.hasMembership))
+      .catch(() => setHasMembership(false));
+  }, []);
+
+  const communityHref = hasMembership ? "/community-dashboard" : "/community/checkout";
 
   return (
     <Sidebar collapsible="offcanvas" className="border-r border-zinc-100">
@@ -188,6 +193,18 @@ export default function MemberSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
+          {/* Manage Membership — only for active subscribers */}
+          {hasMembership && (
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathname === "/community/manage"} className={menuBtnCls}>
+                <Link href="/community/manage" className="flex items-center gap-3">
+                  <Settings className="size-4.5" strokeWidth={2} />
+                  <span className={labelCls}>Manage Membership</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+
           {/* More (dropdown) */}
           <SidebarMenuItem>
             <SidebarMenuButton onClick={() => setMoreOpen((v) => !v)} className={menuBtnCls}>
@@ -198,7 +215,11 @@ export default function MemberSidebar() {
               <SidebarMenuSub>
                 {moreItems.map((item) => (
                   <SidebarMenuSubItem key={item.href}>
-                    <SidebarMenuSubButton asChild>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={pathname === item.href}
+                      className="h-auto py-1.5 text-zinc-500 hover:text-zinc-950 hover:bg-transparent data-[active=true]:text-zinc-950 data-[active=true]:bg-transparent"
+                    >
                       <Link href={item.href} className="text-[10px] font-semibold uppercase tracking-normal [font-family:var(--font-barlow)]">
                         {item.label}
                       </Link>

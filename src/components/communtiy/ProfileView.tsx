@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Heart, MessageCircle } from "lucide-react";
 import { ProfilePost } from "@/types/community";
 import CommunityAvatar from "@/components/communtiy/CommunityAvatar";
@@ -109,10 +110,12 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
               }}
             >
               {post.imageUrl ? (
-                <img
+                <Image
                   src={post.imageUrl}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  className="object-cover"
                 />
               ) : (
                 <div className="absolute inset-0 flex flex-col p-3.5">
@@ -183,15 +186,19 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
               </p>
 
               {selected.imageUrl && (
-                <img
-                  src={selected.imageUrl}
-                  alt=""
-                  // Kept small on purpose — this is a compact preview dialog,
-                  // not the full feed view. Header + text + stats + Close/Delete
-                  // buttons all need to fit on one small mobile screen alongside
-                  // this image without scrolling.
-                  className="w-full max-h-40 object-contain bg-[#f8f7f5] rounded-[14px] mb-4"
-                />
+                // Kept small on purpose — this is a compact preview dialog,
+                // not the full feed view. Header + text + stats + Close/Delete
+                // buttons all need to fit on one small mobile screen alongside
+                // this image without scrolling.
+                <div className="relative w-full h-40 mb-4">
+                  <Image
+                    src={selected.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, 500px"
+                    className="object-contain bg-[#f8f7f5] rounded-[14px]"
+                  />
+                </div>
               )}
 
               <div className="flex items-center gap-4 pt-3 border-t border-[#eeece8]">

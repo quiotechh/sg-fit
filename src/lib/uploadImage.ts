@@ -42,7 +42,7 @@ export async function uploadImage(
   context: "progress-photo" | "community-post",
 ): Promise<string> {
   const compressed = await compressImage(file);
-  const { uploadUrl, key } = await getUploadUrl({ context });
+  const { uploadUrl, key } = await getUploadUrl({ context, fileSize: compressed.size });
 
   const res = await fetch(uploadUrl, {
     method: "PUT",
