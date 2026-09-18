@@ -36,6 +36,7 @@ export default function AboutSection() {
                 src="/sg-fit-about-2.jpg"
                 alt="Sharon Gambu"
                 fill
+                sizes="(max-width: 767px) 100vw, 50vw"
                 className="object-cover object-center"
                 priority
               />

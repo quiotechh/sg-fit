@@ -148,6 +148,13 @@
   to   { transform: translateY(0); opacity: 1; }
 }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d4d0c8; border-radius: 4px; }
+/* Scrollbar hidden visually — scrolling itself still works, just no
+   visible track/thumb (it was standing out over the dark hero photo). */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge/IE */
+  overscroll-behavior-y: none; /* disable the rubber-band bounce past the top/bottom */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Chromium Edge */
+}

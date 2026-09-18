@@ -24,21 +24,30 @@ const affiliateProducts = [
 export default function AffiliatesPage() {
   return (
     <div>
-      <section className="relative">
-        <div className="relative h-[52vh] overflow-hidden">
-          <Image
-            src="/sharon-about.jpeg"
-            alt="Fitness equipment and gym"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-        <div className="bg-white py-16"></div>
-        <div className="absolute inset-x-0 lg:top-[40vh] top-[43vh] flex justify-center px-6">
-          <div className="w-full max-w-md lg:max-w-xl rounded-2xl bg-gray-50 p-8 shadow-lg ring-1 ring-gray-200">
-            <h1 className="text-center text-2xl font-black [font-family:var(--font-barlow)] leading-none uppercase tracking-wider text-zinc-950 mb-4">
-              WELCOME TO{" "}
+      <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden -mt-19 xl:-mt-21">
+        <Image
+          src="/affiliate-page-hero-mobile.jpg"
+          alt="SG Fit affiliates"
+          fill
+          sizes="(max-width: 639px) 100vw, 0px"
+          className="object-cover sm:hidden"
+          priority
+        />
+        <Image
+          src="/affiliate-page.jpg"
+          alt="SG Fit affiliates"
+          fill
+          sizes="(min-width: 640px) 100vw, 0px"
+          className="hidden object-cover sm:block"
+          priority
+        />
+        <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
+
+        <div className="absolute inset-x-0 bottom-0 px-6 pb-14 sm:px-10 sm:pb-18 xl:px-16 xl:pb-15">
+          <div className="max-w-10xl">
+            <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-2xl sm:text-5xl xl:text-6xl mb-5">
+              <span className="text-white/80">Welcome to</span>
+              <br />
               <span
                 style={{
                   background:
@@ -47,10 +56,10 @@ export default function AffiliatesPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                MY SHOP{" "}
+                My Affiliates
               </span>
             </h1>
-            <p className="text-center text-sm sm:text-base font-bold text-zinc-600 leading-relaxed [font-family:var(--font-barlow)]">
+            <p className="text-white/60 text-sm sm:text-base xl:text-lg font-medium max-w-4xl mb-8 [font-family:var(--font-barlow)] leading-relaxed">
               Discover products I recommend from trusted partners. Browse the
               curated items below and shop directly through the affiliate links.
             </p>

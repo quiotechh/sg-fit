@@ -146,6 +146,29 @@ async function handleChargeSuccess(reference: string | undefined) {
     })
   )
 
+  // Auto-grant any bonus program (e.g. the Chair Program) in the same
+  // category — a free companion to any real purchase. Upsert makes this
+  // idempotent: buying a second qualifying program later, or the same one
+  // twice, never creates a duplicate bonus Purchase.
+  const categories = [...new Set(programs.map((p) => p.category))]
+  const bonusPrograms = await prisma.program.findMany({
+    where: { category: { in: categories }, isBonus: true },
+  })
+  await Promise.all(
+    bonusPrograms.map((bonus) =>
+      prisma.purchase.upsert({
+        where: { userId_programId: { userId, programId: bonus.id } },
+        update: {},
+        create: {
+          userId,
+          programId: bonus.id,
+          amountPaid: 0,
+          paymentId: reference,
+        },
+      })
+    )
+  )
+
   await prisma.cartItem.deleteMany({
     where: { userId, programId: { in: programIds } },
   })

@@ -137,6 +137,7 @@ export default function ShopSection() {
                 width={420}
                 height={520}
                 className="w-65 md:w-60 lg:w-95 xl:w-105 h-auto object-contain transition-opacity duration-500"
+                style={{ height: "auto" }}
                 priority
               />
             </div>

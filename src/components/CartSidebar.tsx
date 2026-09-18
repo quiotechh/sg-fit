@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   X,
   ShoppingCart,
@@ -12,6 +13,7 @@ import {
 import { useCart } from "@/store/cartStore";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { programImages } from "@/data/programImages";
 
 
 export default function CartSidebar() {
@@ -142,10 +144,22 @@ export default function CartSidebar() {
             <div className="px-5 sm:px-6 pt-4 pb-2 flex flex-col divide-y divide-zinc-100">
               {items.map((item) => (
                 <div key={item.slug} className="flex items-center gap-4 py-4">
-                  {/* Thumbnail — gradient placeholder, swap for real image later */}
-                  <div
-                    className={`w-15 h-15 rounded-xl shrink-0 bg-linear-to-br ${item.bgClass}`}
-                  />
+                  {/* Thumbnail */}
+                  {programImages[item.slug] ? (
+                    <div className="relative w-15 h-15 rounded-xl shrink-0 overflow-hidden bg-zinc-900">
+                      <Image
+                        src={programImages[item.slug]}
+                        alt={item.title}
+                        fill
+                        sizes="60px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-15 h-15 rounded-xl shrink-0 bg-linear-to-br ${item.bgClass}`}
+                    />
+                  )}
 
                   {/* Details */}
                   <div className="flex-1 min-w-0">
@@ -160,7 +174,7 @@ export default function CartSidebar() {
                   {/* Price + remove */}
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     <span className="text-sm font-black text-zinc-950 [font-family:var(--font-barlow)]">
-                      ${item.price}
+                      R{item.price}
                     </span>
                     <button
                       onClick={() => {
@@ -203,7 +217,7 @@ export default function CartSidebar() {
                     >
                       {appliedCoupon.type === "percent"
                         ? `−${appliedCoupon.discount}%`
-                        : `−$${appliedCoupon.discount}`}{" "}
+                        : `−R${appliedCoupon.discount}`}{" "}
                       applied
                     </span>
                   </div>
@@ -246,7 +260,7 @@ export default function CartSidebar() {
               <div className="flex items-center justify-between text-sm [font-family:var(--font-barlow)]">
                 <span className="font-semibold text-zinc-400">Subtotal</span>
                 <span className="font-black text-zinc-950">
-                  ${subtotal.toFixed(2)}
+                  R{subtotal.toFixed(2)}
                 </span>
               </div>
 
@@ -256,7 +270,7 @@ export default function CartSidebar() {
                     Discount ({appliedCoupon.code})
                   </span>
                   <span className="font-black" style={{ color: "#B8841F" }}>
-                    −${discountAmount.toFixed(2)}
+                    −R{discountAmount.toFixed(2)}
                   </span>
                 </div>
               )}
@@ -266,7 +280,7 @@ export default function CartSidebar() {
                   Total
                 </span>
                 <span className="text-xl font-black text-zinc-950 [font-family:var(--font-barlow)]">
-                  ${total.toFixed(2)}
+                  R{total.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -287,7 +301,7 @@ export default function CartSidebar() {
                   "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
               }}
             >
-              {session ? `Checkout — $${total.toFixed(2)}` : "Sign In to Checkout"}
+              {session ? `Checkout — R${total.toFixed(2)}` : "Sign In to Checkout"}
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>

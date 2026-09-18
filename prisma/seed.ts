@@ -1,75 +1,110 @@
 import { prisma } from "../src/lib/prisma"
 import { Prisma } from "../src/generated/prisma/client"
-import { weeklyPlans } from "../src/data/weeklyPlans"
-import { dayPlans } from "../src/data/dayPlans"
-
-const PROGRAM_SLUGS = ["6-week-shred", "hiit-ignite"] as const
+import { fourWeekShredShapeDays } from "../src/data/fourWeekShredShape"
+import { fourWeekHomeWorkoutDays } from "../src/data/fourWeekHomeWorkout"
+import { fourWeekChairProgramDays } from "../src/data/fourWeekChairProgram"
 
 async function main() {
-  const program1 = await prisma.program.upsert({
-    where: { slug: "6-week-shred" },
+  const program3 = await prisma.program.upsert({
+    where: { slug: "4-week-shred-shape" },
     update: {},
     create: {
-      slug: "6-week-shred",
+      slug: "4-week-shred-shape",
       category: "workouts",
-      title: "6-Week Shred",
-      subtitle: "Burn fat, build lean muscle",
+      title: "4-Week Shred & Shape",
+      subtitle: "Build strength, sculpt your shape, finish strong",
       description:
-        "A progressive 6-week cutting program combining heavy strength training with strategic cardio to torch body fat while preserving hard-earned muscle. Built for women who are serious about getting lean.",
-      price: 49,
-      originalPrice: 79,
-      duration: "6 Weeks",
+        "A structured 4-week progressive training program designed to build strength, improve fitness and support consistency. The program moves from foundation work into strength, sculpting and a final challenge week.",
+      price: 449,
+      duration: "4 Weeks",
       level: "Intermediate",
       sessions: "5x / week",
-      totalWeeks: 6,
-      tags: ["Fat Loss", "Strength", "HIIT"],
+      totalWeeks: 4,
+      tags: ["Strength", "Glutes & Quads", "Full Body"],
       includes: [
-        "6 weeks of progressive training",
-        "4 sessions per week",
-        "Push · Pull · Legs · HIIT days",
+        "20 structured workouts",
+        "5 sessions per week",
         "Warmup, Main, Finisher & Cooldown",
-        "Week-by-week coaching cues",
         "Sets, reps, rest & tempo for every exercise",
+        "Exercise demonstration videos from the SG.FIT filmed library",
+        "Week-by-week progression — Foundation → Strength → Sculpt → Finish Strong",
       ],
       highlights: [
-        "Combines strength & cardio strategically to maximise fat loss",
-        "Built around progressive overload — you get stronger every week",
-        "Designed to preserve muscle while in a calorie deficit",
+        "Progressive 4-week structure — moves from foundation work to a final challenge week",
+        "Glute & lower-body focused programming, balanced with upper body and core work",
+        "Every exercise includes filmed demonstrations, sets, reps, rest and tempo — nothing left to guess",
       ],
       bgClass: "from-zinc-700 to-zinc-950",
     },
   })
 
-  const program2 = await prisma.program.upsert({
-    where: { slug: "hiit-ignite" },
+  const program4 = await prisma.program.upsert({
+    where: { slug: "4-week-home-workout" },
     update: {},
     create: {
-      slug: "hiit-ignite",
+      slug: "4-week-home-workout",
       category: "workouts",
-      title: "HIIT Ignite",
-      subtitle: "4-week cardio & conditioning",
+      title: "4-Week Home Workout Program",
+      subtitle: "No equipment, full progression, straight from home",
       description:
-        "A high-intensity 4-week program built to skyrocket your cardio fitness, burn maximum calories, and improve your overall conditioning. No equipment needed — train anywhere.",
-      price: 39,
+        "A structured 4-week progressive home training program designed around the SG.FIT home exercise videos already filmed. The program progresses from foundation work into higher-volume sculpting, conditioning and a final challenge week.",
+      price: 449,
       duration: "4 Weeks",
       level: "All Levels",
       sessions: "5x / week",
       totalWeeks: 4,
-      tags: ["Cardio", "Fat Loss", "No Equipment"],
+      tags: ["Home Workout", "No Equipment", "Full Body"],
       includes: [
-        "4 weeks of progressive conditioning",
-        "4 sessions per week",
-        "HIIT · Cardio · Strength · Circuit days",
-        "Warmup, Main, Finisher & Cooldown",
-        "Week-by-week coaching cues",
-        "Sets, reps, rest & tempo for every exercise",
+        "20 structured workouts",
+        "5 sessions per week",
+        "Warmup, Main, Finisher & Cool-down",
+        "Sets, reps/time, rest, tempo & coaching notes",
+        "Exercise demonstrations from the SG.FIT filmed home library",
+        "Week-by-week progression — Foundation → Strength & Endurance → Sculpt → Finish Strong",
       ],
       highlights: [
-        "Zero equipment — train at home, hotel, or gym",
-        "Scales for complete beginners and advanced athletes",
-        "Maximises calorie burn in under 45 minutes per session",
+        "Zero equipment — every move uses just your bodyweight, train anywhere",
+        "Progressive 4-week structure — moves from foundation work to a final challenge week",
+        "Every exercise includes filmed demonstrations, sets, reps, rest and tempo — nothing left to guess",
       ],
-      bgClass: "from-zinc-600 to-zinc-900",
+      bgClass: "from-zinc-700 to-zinc-950",
+    },
+  })
+
+  // Bonus program — never purchased directly. Auto-granted (amountPaid: 0)
+  // to anyone who buys a real workout-category program — see
+  // handleChargeSuccess in the Paystack webhook.
+  const chairProgram = await prisma.program.upsert({
+    where: { slug: "4-week-chair-program" },
+    update: {},
+    create: {
+      slug: "4-week-chair-program",
+      category: "workouts",
+      title: "4-Week Chair Program",
+      subtitle: "Low-impact, seated & standing chair workouts",
+      description:
+        "A structured 4-week progressive training program built entirely around chair-based movements — seated and standing exercises that are gentle on the joints while still building strength and conditioning.",
+      price: 0,
+      duration: "4 Weeks",
+      level: "All Levels",
+      sessions: "5x / week",
+      totalWeeks: 4,
+      isBonus: true,
+      tags: ["Chair Workout", "Low Impact", "Full Body"],
+      includes: [
+        "20 structured workouts",
+        "5 sessions per week",
+        "Warm-up, main workout, finisher and cool-down",
+        "Sets, reps/time, rest, tempo and coaching notes",
+        "Exercise demonstrations from the SG.FIT filmed library",
+        "Included free with any workout program purchase",
+      ],
+      highlights: [
+        "Low-impact — seated and standing chair movements, easy on the joints",
+        "Progressive structure — builds from foundation work to a final challenge week",
+        "Every exercise includes filmed demonstrations, sets, reps, rest and tempo — nothing left to guess",
+      ],
+      bgClass: "from-zinc-700 to-zinc-950",
     },
   })
 
@@ -106,51 +141,94 @@ async function main() {
     },
   })
 
-  const programsBySlug: Record<string, { id: string }> = {
-    "6-week-shred": program1,
-    "hiit-ignite": program2,
+  // ── 4-Week Shred & Shape — real client content, 20 distinct days ───────
+  for (const day of fourWeekShredShapeDays) {
+    const sections = day.sections as unknown as Prisma.InputJsonValue
+
+    await prisma.dayTemplate.upsert({
+      where: {
+        programId_weekNumber_dayNumber: {
+          programId: program3.id,
+          weekNumber: day.weekNumber,
+          dayNumber: day.dayNumber,
+        },
+      },
+      update: {
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+      create: {
+        programId: program3.id,
+        weekNumber: day.weekNumber,
+        dayNumber: day.dayNumber,
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+    })
   }
 
-  // ── DayTemplate rows — one per (program, week, day) ────────────────────
-  for (const slug of PROGRAM_SLUGS) {
-    const programId = programsBySlug[slug].id
-    const weeks = weeklyPlans[slug]
+  // ── 4-Week Home Workout — real client content, 20 distinct days ────────
+  for (const day of fourWeekHomeWorkoutDays) {
+    const sections = day.sections as unknown as Prisma.InputJsonValue
 
-    for (let i = 0; i < weeks.length; i++) {
-      const weekNumber = i + 1
-      const days = weeks[i].days
+    await prisma.dayTemplate.upsert({
+      where: {
+        programId_weekNumber_dayNumber: {
+          programId: program4.id,
+          weekNumber: day.weekNumber,
+          dayNumber: day.dayNumber,
+        },
+      },
+      update: {
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+      create: {
+        programId: program4.id,
+        weekNumber: day.weekNumber,
+        dayNumber: day.dayNumber,
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+    })
+  }
 
-      for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
-        const dayNumber = dayIndex + 1
-        const dayMeta = days[dayIndex]
-        const plan = dayPlans[`${slug}-d${dayNumber}`]
-        if (!plan) continue
+  // ── 4-Week Chair Program — real client content, 20 distinct days ───────
+  for (const day of fourWeekChairProgramDays) {
+    const sections = day.sections as unknown as Prisma.InputJsonValue
 
-        const tip = plan.weekTips[weekNumber - 1] ?? plan.weekTips[0]
-        const sections = plan.sections as unknown as Prisma.InputJsonValue
-
-        await prisma.dayTemplate.upsert({
-          where: { programId_weekNumber_dayNumber: { programId, weekNumber, dayNumber } },
-          update: {
-            name: dayMeta.name,
-            focus: dayMeta.focus,
-            duration: dayMeta.duration,
-            tip,
-            sections,
-          },
-          create: {
-            programId,
-            weekNumber,
-            dayNumber,
-            name: dayMeta.name,
-            focus: dayMeta.focus,
-            duration: dayMeta.duration,
-            tip,
-            sections,
-          },
-        })
-      }
-    }
+    await prisma.dayTemplate.upsert({
+      where: {
+        programId_weekNumber_dayNumber: {
+          programId: chairProgram.id,
+          weekNumber: day.weekNumber,
+          dayNumber: day.dayNumber,
+        },
+      },
+      update: {
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+      create: {
+        programId: chairProgram.id,
+        weekNumber: day.weekNumber,
+        dayNumber: day.dayNumber,
+        name: day.name,
+        focus: day.focus,
+        duration: day.duration,
+        sections,
+      },
+    })
   }
 }
 

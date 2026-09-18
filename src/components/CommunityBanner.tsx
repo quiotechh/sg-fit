@@ -7,9 +7,10 @@ export default function CommunityBanner() {
       {/* Desktop / Tablet: full background image */}
       <div className="relative w-full bg-zinc-950 overflow-hidden hidden md:block md:min-h-[60vh] xl:min-h-screen">
         <Image
-          src="/sg-fit-community-banner-homepage.png"
+          src="/community-page.jpg"
           alt="SGians Community"
           fill
+          sizes="(min-width: 768px) 100vw, 0px"
           className="object-cover object-center"
           priority
         />
@@ -52,9 +53,10 @@ export default function CommunityBanner() {
       {/* Mobile: full background image */}
       <div className="relative w-full bg-zinc-950 overflow-hidden md:hidden min-h-[80vh] sm:min-h-screen">
         <Image
-          src="/sg-fit-community-banner-homepage.png"
+          src="/community-page.jpg"
           alt="SGians Community"
           fill
+          sizes="(max-width: 767px) 100vw, 0px"
           className="object-cover object-center"
           priority
         />

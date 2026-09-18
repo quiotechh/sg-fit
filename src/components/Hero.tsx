@@ -1,21 +1,31 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 
 export default function Hero() {
   return (
-    <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-white">
+    <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-white -mt-19 xl:-mt-21">
 
-      {/* Video — drop your file in /public/videos/hero.mp4 when ready */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover opacity-75"
-      >
-        {/* <source src="/videos/hero.mp4" type="video/mp4" /> */}
-      </video>
+      {/* Mobile hero */}
+      <Image
+        src="/sgfit-mobile-hero.jpg"
+        alt="SG Fit — build your body through action, discipline and consistency"
+        fill
+        priority
+        sizes="(max-width: 639px) 100vw, 0px"
+        className="object-cover sm:hidden"
+      />
+
+      {/* Desktop hero */}
+      <Image
+        src="/sgfit-desktop-hero.jpg"
+        alt="SG Fit — build your body through action, discipline and consistency"
+        fill
+        priority
+        sizes="(min-width: 640px) 100vw, 0px"
+        className="hidden object-cover sm:block"
+      />
 
       {/* Bottom gradient so text is always legible */}
       <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
@@ -24,7 +34,7 @@ export default function Hero() {
       <div className="absolute inset-x-0 bottom-0 px-6 pb-14 sm:px-10 sm:pb-18 xl:px-16 xl:pb-15">
         <div className="max-w-10xl">
 
-          <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl mb-5">
+          <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-2xl sm:text-5xl xl:text-6xl mb-5">
             <span
               style={{
                 background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
@@ -48,7 +58,7 @@ export default function Hero() {
 
           <Link
             href="/get-started"
-            className="inline-block bg-white text-zinc-950 text-sm sm:text-base font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
+            className="inline-block bg-white text-zinc-950 text-xs sm:text-base font-black uppercase tracking-widest px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
           >
             Start Your Journey
           </Link>

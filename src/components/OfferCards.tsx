@@ -9,7 +9,7 @@ const cards = [
     num: "01",
     label: "Programs",
     href: "/programs",
-    image: "/images/programs.jpg",
+    image: "/homepage-program-cover.jpg",
     back: {
       tagline: "Train with\npurpose",
       items: [
@@ -26,7 +26,7 @@ const cards = [
     num: "02",
     label: "Shop",
     href: "/shop",
-    image: "/images/shop.jpg",
+    image: "/home-shop-card.jpg",
     back: {
       tagline: "Gear up.\nLevel up.",
       items: [
@@ -43,7 +43,7 @@ const cards = [
     num: "03",
     label: "Community",
     href: "/community",
-    image: "/images/community.jpg",
+    image: "/home-community-cover.jpg",
     back: {
       tagline: "Stronger\ntogether",
       items: [
@@ -63,8 +63,9 @@ function CardFront({ card, padding }: { card: typeof cards[0], padding: string }
       className="w-full h-full bg-white bg-cover bg-center"
       style={{ backgroundImage: `url('${card.image}')` }}
     >
-      {/* gradient */}
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-black/10" />
+      {/* gradient — only darkens the bottom, where the label sits, so the
+          photo keeps its true color through the middle and top */}
+      <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/15 to-transparent" />
 
       {/* card number — top left */}
       <div className={`absolute top-0 left-0 ${padding}`}>
