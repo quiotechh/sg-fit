@@ -60,16 +60,24 @@ export default function ContactPage() {
     <main className="flex flex-col min-h-screen">
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative h-[60vh] md:h-[65vh] xl:h-[70vh] w-full overflow-hidden bg-zinc-950 -mt-19 xl:-mt-21">
+      <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-zinc-950 -mt-19 xl:-mt-21">
         <Image
-          src="/sg-fit-about-2.jpg"
+          src="/contact-page-hero-mobile.jpg"
           alt="Contact SG FIT"
           fill
-          className="object-cover object-[center_30%] opacity-40"
+          sizes="(max-width: 639px) 100vw, 0px"
+          className="object-cover object-[center_30%] sm:hidden"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-b from-zinc-950/60 via-zinc-950/30 to-zinc-950/90" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-zinc-950 to-transparent" />
+        <Image
+          src="/contact-us-page.jpg"
+          alt="Contact SG FIT"
+          fill
+          sizes="(min-width: 640px) 100vw, 0px"
+          className="hidden object-cover object-[center_30%] sm:block"
+          priority
+        />
+        <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-0 px-6 pb-14 sm:px-10 sm:pb-18 xl:px-16 xl:pb-16">
           <div className="max-w-7xl mx-auto">

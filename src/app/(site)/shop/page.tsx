@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ShopPage() {
   return (
-    <main className="relative min-h-[85vh] flex items-center justify-center bg-zinc-950 overflow-hidden">
+    <main className="relative min-h-[85vh] flex items-center justify-center bg-zinc-950 overflow-hidden -mt-19 xl:-mt-21 pt-19 xl:pt-21">
       <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-black/40" />
 
       <div className="relative z-10 text-center px-6 max-w-2xl">
@@ -28,10 +28,10 @@ export default function ShopPage() {
         </p>
 
         <Link
-          href="/dashboard"
+          href="/"
           className="inline-block bg-white text-zinc-950 text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
         >
-          Back to Dashboard
+          Back to Home
         </Link>
       </div>
     </main>

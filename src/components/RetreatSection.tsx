@@ -11,8 +11,8 @@ export default function RetreatBanner() {
           src="/retreat-banner.png"
           alt="SG FIT Luxury Retreat"
           fill
+          sizes="(min-width: 768px) 100vw, 0px"
           className="object-cover object-center"
-          quality={100}
           priority
         />
         <div className="absolute inset-0 bg-linear-to-r from-zinc-950/80 via-zinc-950/30 to-transparent" />
@@ -62,8 +62,8 @@ export default function RetreatBanner() {
           src="/retreat-banner.png"
           alt="SG FIT Luxury Retreat"
           fill
+          sizes="(max-width: 767px) 100vw, 0px"
           className="object-cover object-center"
-          quality={100}
           priority
         />
         <div className="absolute inset-0 bg-linear-to-r from-zinc-950/75 via-zinc-950/40 to-transparent" />

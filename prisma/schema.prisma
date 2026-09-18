@@ -176,6 +176,9 @@ model Program {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalWeeks    Int
+  // Free companion program auto-granted to anyone who buys a paid program in
+  // the same category — see handleChargeSuccess in the Paystack webhook.
+  isBonus       Boolean       @default(false)
   dayTemplates  DayTemplate[]
   cartItems     CartItem[]
   purchases     Purchase[]

@@ -38,7 +38,7 @@ export default function AddToCartButton({ program }: { program: Program }) {
       className="w-full inline-flex items-center justify-center gap-3 bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
     >
       <ShoppingCart className="size-4" />
-      {alreadyInCart ? "View in Cart" : `Add to Cart — $${program.price}`}
+      {alreadyInCart ? "View in Cart" : `Add to Cart — R${program.price}`}
     </button>
   )
 }

@@ -11,8 +11,8 @@ import {
   Info,
 } from "lucide-react";
 import { getProgressCounts, isDayCompleted } from "@/lib/data/progress";
-import { getPurchasedDayTemplate } from "@/lib/data/day-templates";
-import type { SectionType, WorkoutSection } from "@/data/dayPlans";
+import { getPurchasedDayTemplate, getWeekDays } from "@/lib/data/day-templates";
+import type { SectionType, WorkoutSection } from "@/data/workoutTypes";
 import { auth } from "@/lib/auth";
 import MarkCompleteButton from "@/components/MarkCompleteButton";
 
@@ -57,7 +57,11 @@ export default async function DayPage({ params }: Props) {
 
   const completed = await isDayCompleted(program.purchaseId, dayTemplate.id);
 
-  const { totalDays, completedCount } = await getProgressCounts(program.id, program.purchaseId);
+  const [{ totalDays, completedCount }, weekDays] = await Promise.all([
+    getProgressCounts(program.id, program.purchaseId),
+    getWeekDays(program.id, wk),
+  ]);
+  const daysInWeek = weekDays.length;
 
   const sections = dayTemplate.sections as unknown as WorkoutSection[];
   const tip = dayTemplate.tip;
@@ -130,12 +134,14 @@ export default async function DayPage({ params }: Props) {
       <section className="flex-1 px-4 sm:px-10 xl:px-16 py-8 sm:py-12">
         <div className="max-w-3xl mx-auto flex flex-col gap-8 sm:gap-10">
           {/* Coaching tip */}
-          <div className="flex gap-3 sm:gap-4 rounded-2xl bg-zinc-50 border border-zinc-100 px-4 sm:px-5 py-4 sm:py-5">
-            <Info className="size-4 text-[#C9953A] shrink-0 mt-0.5" />
-            <p className="text-sm font-semibold text-zinc-600 [font-family:var(--font-barlow)] leading-relaxed">
-              {tip}
-            </p>
-          </div>
+          {tip && (
+            <div className="flex gap-3 sm:gap-4 rounded-2xl bg-zinc-50 border border-zinc-100 px-4 sm:px-5 py-4 sm:py-5">
+              <Info className="size-4 text-[#C9953A] shrink-0 mt-0.5" />
+              <p className="text-sm font-semibold text-zinc-600 [font-family:var(--font-barlow)] leading-relaxed">
+                {tip}
+              </p>
+            </div>
+          )}
 
           {/* Workout sections */}
           {sections.map((section) => {
@@ -267,7 +273,7 @@ export default async function DayPage({ params }: Props) {
               ← Back to Program
             </Link>
 
-            {dy < 4 ? (
+            {dy < daysInWeek ? (
               <Link
                 href={`/my-programs/workouts/${slug}/week/${wk}/day/${dy + 1}`}
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-zinc-950 [font-family:var(--font-barlow)] hover:gap-3 transition-all duration-200"

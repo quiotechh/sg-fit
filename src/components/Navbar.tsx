@@ -64,8 +64,8 @@ function DesktopDropdown({
   transparent: boolean;
 }) {
   const triggerCls = transparent
-    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
-    : linkCls;
+    ? "text-lg font-bold uppercase tracking-wide text-white hover:text-white/80 transition-colors duration-200 [font-family:var(--font-barlow)] cursor-pointer"
+    : `${linkCls} cursor-pointer`;
 
   return (
     <div className="group relative">
@@ -340,8 +340,31 @@ export default function Navbar() {
   const { totalItems, openCart } = useCart();
   const pathname = usePathname();
   const { data: session, refetch: refetchSession } = authClient.useSession();
-  const isLoggedIn = !!session;
-  const transparent = pathname === "/about" || pathname === "/contact";
+  // useSession() has no server-side data (it only knows the session after
+  // mounting client-side), so the server always renders logged-out. Gating on
+  // `mounted` keeps the client's first render pass identical to the server's,
+  // then flips to the real auth state right after — avoids a hydration
+  // mismatch when a cached session resolves before/during hydration.
+  const [mounted, setMounted] = useState(false);
+  // Deliberate — React's own documented fix for hydration mismatches from
+  // client-only state (https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMounted(true), []);
+  const isLoggedIn = mounted && !!session;
+  // Only the /programs/[category] listing pages have a hero photo behind the
+  // navbar — individual /programs/[category]/[slug] product pages are plain
+  // white, so they're excluded here (transparent white-on-white was invisible).
+  const isProgramsCategoryPage =
+    pathname.startsWith("/programs/") &&
+    pathname.split("/").filter(Boolean).length === 2;
+  const transparent =
+    pathname === "/" ||
+    pathname === "/about" ||
+    pathname === "/contact" ||
+    pathname === "/community" ||
+    pathname === "/shop" ||
+    pathname === "/affiliates" ||
+    isProgramsCategoryPage;
   const [hasMembership, setHasMembership] = useState(false);
 
   // Official Next.js pattern for detecting navigation (including back/forward)
@@ -378,14 +401,14 @@ export default function Navbar() {
   }
 
   const navLinkCls = transparent
-    ? "text-lg font-bold uppercase tracking-wide text-white/90 hover:text-white transition-colors duration-200 [font-family:var(--font-barlow)]"
-    : linkCls;
+    ? "text-lg font-bold uppercase tracking-wide text-white hover:text-white/80 transition-colors duration-200 [font-family:var(--font-barlow)] cursor-pointer"
+    : `${linkCls} cursor-pointer`;
   const iconCls = transparent
-    ? "text-white/80 hover:text-white transition-colors duration-200 p-1"
-    : "text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1";
+    ? "text-white hover:text-white/80 transition-colors duration-200 p-1 cursor-pointer"
+    : "text-zinc-500 hover:text-zinc-950 transition-colors duration-200 p-1 cursor-pointer";
   const mobileIconCls = transparent
-    ? "text-white/80 hover:text-white transition-colors p-1"
-    : "text-zinc-700 hover:text-zinc-950 transition-colors p-1";
+    ? "text-white hover:text-white/80 transition-colors p-1 cursor-pointer"
+    : "text-zinc-700 hover:text-zinc-950 transition-colors p-1 cursor-pointer";
 
   return (
     <header className={`w-full ${transparent ? "bg-transparent" : "bg-white"}`}>
@@ -398,7 +421,7 @@ export default function Navbar() {
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ width: "90px", height: "110px", zIndex: 1 }}
+            style={{ width: "85px", height: "80px", zIndex: 1 }}
           />
 
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
@@ -409,6 +432,7 @@ export default function Navbar() {
                 width={128}
                 height={128}
                 className="h-32 w-auto drop-shadow-xl"
+                style={{ width: "auto" }}
                 priority
               />
             </Link>
@@ -481,7 +505,7 @@ export default function Navbar() {
 
           <div
             className="absolute rounded-full bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ width: "76px", height: "66px", zIndex: 1 }}
+            style={{ width: "64px", height: "54px", zIndex: 1 }}
           />
 
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
@@ -492,6 +516,7 @@ export default function Navbar() {
                 width={88}
                 height={88}
                 className="h-22 w-auto drop-shadow-lg"
+                style={{ width: "auto" }}
                 priority
               />
             </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Dumbbell, Salad, Trophy, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const features = [
@@ -88,11 +89,7 @@ export default function FeaturedPrograms() {
           <div className="relative order-1 md:order-2">
             {/* Main image */}
             <div className="relative w-full aspect-3/4 md:aspect-4/5 xl:aspect-3/4 rounded-3xl overflow-hidden bg-zinc-200">
-              {/*
-                Replace with:
-                <Image src="/images/programs-feature.jpg" alt="SG FIT Programs" fill className="object-cover object-top" />
-              */}
-              <div className="w-full h-full bg-linear-to-br from-zinc-200 to-zinc-300" />
+              <Image src="/home-program-section.jpg" alt="SG FIT Programs" fill sizes="(max-width: 767px) 100vw, 50vw" className="object-cover object-top" />
             </div>
 
             {/* Floating card — top left: active program */}

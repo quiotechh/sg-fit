@@ -16,6 +16,7 @@ export default function NotFound() {
           width={80}
           height={80}
           className="h-16 w-auto drop-shadow-xl"
+          style={{ width: "auto" }}
           priority
         />
       </Link>

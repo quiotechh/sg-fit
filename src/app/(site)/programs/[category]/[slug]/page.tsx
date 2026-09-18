@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle, Mail } from "lucide-react"
 import { categoryConfigs } from "@/data/programs"
-import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs } from "@/lib/data/programs"
+import { programImages } from "@/data/programImages"
+import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs, getBonusProgram } from "@/lib/data/programs"
 import ProgramCard from "@/components/ProgramCard"
 import AddToCartButton from "@/components/AddToCartButton"
 
@@ -29,7 +31,12 @@ export default async function ProgramDetailPage({ params }: Props) {
   if (!config) notFound()
 
   const program = await getProgramBySlug(category, slug)
-  if (!program) notFound()
+  // Bonus programs (e.g. the Chair Program) have no standalone marketing
+  // page — only reachable via the free grant on a real purchase.
+  if (!program || program.isBonus) notFound()
+
+  const bonusProgram = category === "workouts" ? await getBonusProgram(category) : null
+  const image = programImages[program.slug]
 
   const related = (await getProgramsByCategory(category))
     .filter((p) => p.slug !== slug)
@@ -54,21 +61,35 @@ export default async function ProgramDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 xl:gap-16 items-start">
 
             {/* ── LEFT: Visual panel ── */}
-            <div className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-linear-to-br ${program.bgClass} min-h-64 sm:min-h-105 lg:min-h-150 xl:min-h-170 flex flex-col justify-between p-6 sm:p-10 xl:p-14`}>
+            <div className={`relative rounded-2xl sm:rounded-3xl overflow-hidden ${image ? "bg-zinc-900" : `bg-linear-to-br ${program.bgClass}`} min-h-64 sm:min-h-105 lg:min-h-150 xl:min-h-170 flex flex-col justify-between p-6 sm:p-10 xl:p-14`}>
+
+              {image && (
+                <>
+                  <Image
+                    src={image}
+                    alt={program.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-b from-black/45 via-transparent to-transparent" />
+                </>
+              )}
 
               {/* Top: category + tags */}
-              <div className="flex flex-col gap-3">
+              <div className="relative flex flex-col gap-2 sm:gap-3">
                 <p
-                  className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
+                  className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
                   style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
                 >
                   {config.label}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {program.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-black uppercase tracking-widest text-white/50 border border-white/15 rounded-full px-3 py-1 [font-family:var(--font-barlow)]"
+                      className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-2 py-0.5 sm:px-3 sm:py-1 [font-family:var(--font-barlow)]"
                     >
                       {tag}
                     </span>
@@ -77,10 +98,10 @@ export default async function ProgramDetailPage({ params }: Props) {
               </div>
 
               {/* Bottom: large decorative title */}
-              <div>
+              <div className="relative">
                 <h2
-                  className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-5xl sm:text-6xl xl:text-7xl text-transparent select-none"
-                  style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.2)" }}
+                  className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-3xl sm:text-6xl xl:text-7xl text-transparent select-none"
+                  style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.7)" }}
                 >
                   {program.title}
                 </h2>
@@ -109,11 +130,11 @@ export default async function ProgramDetailPage({ params }: Props) {
               {/* Price */}
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl sm:text-5xl font-black text-zinc-950 [font-family:var(--font-barlow)]">
-                  ${program.price}
+                  R{program.price}
                 </span>
                 {program.originalPrice && (
                   <span className="text-xl font-semibold text-zinc-400 line-through [font-family:var(--font-barlow)]">
-                    ${program.originalPrice}
+                    R{program.originalPrice}
                   </span>
                 )}
                 <span className="text-xs font-bold text-zinc-400 [font-family:var(--font-barlow)]">one-time</span>
@@ -166,6 +187,19 @@ export default async function ProgramDetailPage({ params }: Props) {
                     </div>
                     <span className="text-sm font-semibold text-zinc-700 [font-family:var(--font-barlow)]">
                       Also unlocks the full Workout Video Library, included free with any workout plan.
+                    </span>
+                  </div>
+                )}
+                {bonusProgram && (
+                  <div className="mt-4 flex items-start gap-3 rounded-xl bg-zinc-50 border border-zinc-100 px-4 py-3">
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                      style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
+                    >
+                      <CheckCircle className="size-3 text-white" />
+                    </div>
+                    <span className="text-sm font-semibold text-zinc-700 [font-family:var(--font-barlow)]">
+                      Also includes the {bonusProgram.title}, free with any workout plan.
                     </span>
                   </div>
                 )}

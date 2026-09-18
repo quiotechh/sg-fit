@@ -1,9 +1,12 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { Program } from "@/generated/prisma/client"
+import { programImages } from "@/data/programImages"
 
 export default function ProgramCard({ program }: { program: Program }) {
   const href = `/programs/${program.category}/${program.slug}`
+  const image = programImages[program.slug]
 
   return (
     <Link
@@ -11,9 +14,17 @@ export default function ProgramCard({ program }: { program: Program }) {
       className="group flex flex-col border-2 border-zinc-200 hover:border-zinc-950 rounded-2xl overflow-hidden transition-colors duration-300 bg-white"
     >
       {/* Image / colour block */}
-      <div className={`relative w-full aspect-[4/3] bg-linear-to-br ${program.bgClass} overflow-hidden`}>
-        {/* Subtle scale on hover — image will replace the gradient later */}
-        <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 ease-in-out bg-linear-to-br from-transparent to-black/20" />
+      <div className={`relative w-full aspect-[4/3] ${image ? "bg-zinc-900" : `bg-linear-to-br ${program.bgClass}`} overflow-hidden`}>
+        {image && (
+          <Image
+            src={image}
+            alt={program.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+          />
+        )}
+        <div className={`absolute inset-0 ${image ? "" : "group-hover:scale-105 transition-transform duration-700 ease-in-out"} bg-linear-to-b ${image ? "from-black/45 via-transparent to-transparent" : "from-transparent to-black/20"}`} />
 
         {/* Tags — top left */}
         <div className="absolute top-4 left-4 flex flex-wrap gap-1.5">
@@ -63,11 +74,11 @@ export default function ProgramCard({ program }: { program: Program }) {
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-baseline gap-2">
             <span className="text-xl font-black text-zinc-950 [font-family:var(--font-barlow)]">
-              ${program.price}
+              R{program.price}
             </span>
             {program.originalPrice && (
               <span className="text-sm font-semibold text-zinc-400 line-through [font-family:var(--font-barlow)]">
-                ${program.originalPrice}
+                R{program.originalPrice}
               </span>
             )}
           </div>

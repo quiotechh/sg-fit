@@ -53,16 +53,16 @@ export default function CommunityPage() {
   return (
     <main className="bg-white min-h-screen">
       {/* ── HERO ── */}
-      <section className="relative w-full h-screen overflow-hidden">
+      <section className="relative w-full h-screen overflow-hidden -mt-19 xl:-mt-21">
         <Image
-          src="/community/sgfit-community-hero.jpg"
+          src="/community-page.jpg"
           alt="SGians Community"
           fill
-          className="object-cover object-top"
+          sizes="100vw"
+          className="object-cover object-center"
           priority
         />
-        {/* Gradient — matches hero.tsx */}
-        <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 xl:px-16 pb-16 sm:pb-24 xl:pb-28">
           <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl mb-5">

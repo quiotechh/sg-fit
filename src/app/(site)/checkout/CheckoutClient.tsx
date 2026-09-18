@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, Shield, Tag, Mail, Loader2 } from "lucide-react"
 import { useCart } from "@/store/cartStore"
 import { authClient } from "@/lib/auth-client"
+import { programImages } from "@/data/programImages"
 
 export default function CheckoutClient() {
   const { items, appliedCoupon, email, setEmail, subtotal, discountAmount, total } = useCart()
@@ -78,7 +80,19 @@ export default function CheckoutClient() {
         <div className="flex flex-col rounded-2xl border border-zinc-200 divide-y divide-zinc-100 overflow-hidden">
           {items.map((item) => (
             <div key={item.slug} className="flex items-center gap-4 px-5 py-4">
-              <div className={`w-14 h-14 rounded-xl shrink-0 bg-linear-to-br ${item.bgClass}`} />
+              {programImages[item.slug] ? (
+                <div className="relative w-14 h-14 rounded-xl shrink-0 overflow-hidden bg-zinc-900">
+                  <Image
+                    src={programImages[item.slug]}
+                    alt={item.title}
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className={`w-14 h-14 rounded-xl shrink-0 bg-linear-to-br ${item.bgClass}`} />
+              )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
                   {item.title}
@@ -93,7 +107,7 @@ export default function CheckoutClient() {
                 </p>
               </div>
               <span className="text-sm font-black text-zinc-950 [font-family:var(--font-barlow)]">
-                ${item.price}
+                R{item.price}
               </span>
             </div>
           ))}
@@ -124,17 +138,17 @@ export default function CheckoutClient() {
         <div className="flex flex-col gap-1.5 py-4 border-t border-zinc-100">
           <div className="flex items-center justify-between text-sm [font-family:var(--font-barlow)]">
             <span className="font-semibold text-zinc-400">Subtotal</span>
-            <span className="font-black text-zinc-950">${subtotal.toFixed(2)}</span>
+            <span className="font-black text-zinc-950">R{subtotal.toFixed(2)}</span>
           </div>
           {appliedCoupon && (
             <div className="flex items-center justify-between text-sm [font-family:var(--font-barlow)]">
               <span className="font-semibold text-zinc-400">Discount ({appliedCoupon.code})</span>
-              <span className="font-black" style={{ color: "#B8841F" }}>−${discountAmount.toFixed(2)}</span>
+              <span className="font-black" style={{ color: "#B8841F" }}>−R{discountAmount.toFixed(2)}</span>
             </div>
           )}
           <div className="flex items-center justify-between pt-2 mt-1 border-t border-zinc-100">
             <span className="text-base font-black uppercase tracking-wide text-zinc-950 [font-family:var(--font-barlow)]">Total</span>
-            <span className="text-2xl font-black text-zinc-950 [font-family:var(--font-barlow)]">${total.toFixed(2)}</span>
+            <span className="text-2xl font-black text-zinc-950 [font-family:var(--font-barlow)]">R{total.toFixed(2)}</span>
           </div>
         </div>
 
@@ -154,7 +168,7 @@ export default function CheckoutClient() {
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
-              Pay Now — ${total.toFixed(2)}
+              Pay Now — R{total.toFixed(2)}
               <ArrowRight className="size-4" />
             </>
           )}
