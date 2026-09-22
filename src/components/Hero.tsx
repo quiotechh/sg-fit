@@ -57,7 +57,7 @@ export default function Hero() {
           </p>
 
           <Link
-            href="/get-started"
+            href="/signup"
             className="inline-block bg-white text-zinc-950 text-xs sm:text-base font-black uppercase tracking-widest px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
           >
             Start Your Journey

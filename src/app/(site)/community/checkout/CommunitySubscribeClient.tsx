@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { COMMUNITY_PRICE_LABEL } from "@/lib/communityPricing"
+import CurrencyNote from "@/components/CurrencyNote"
 import { ArrowRight, Shield, Loader2, RefreshCcw } from "lucide-react"
 
 export default function CommunitySubscribeClient({ email }: { email: string }) {
@@ -59,7 +61,7 @@ export default function CommunitySubscribeClient({ email }: { email: string }) {
               </p>
             </div>
             <span className="text-sm font-black text-zinc-950 [font-family:var(--font-barlow)]">
-              R99 / mo
+              {COMMUNITY_PRICE_LABEL} / mo
             </span>
           </div>
           <div className="flex items-center gap-2.5 px-5 py-3">
@@ -86,7 +88,7 @@ export default function CommunitySubscribeClient({ email }: { email: string }) {
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
-              Subscribe — R99/mo
+              Subscribe — {COMMUNITY_PRICE_LABEL}/mo
               <ArrowRight className="size-4" />
             </>
           )}
@@ -98,6 +100,8 @@ export default function CommunitySubscribeClient({ email }: { email: string }) {
             Secure payment via Paystack
           </p>
         </div>
+
+        <CurrencyNote />
       </div>
     </main>
   )

@@ -1,18 +1,30 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, CheckCircle } from "lucide-react"
 import type { Program } from "@/generated/prisma/client"
+import { programImages } from "@/data/programImages"
 
 export default function MyProgramCard({ program }: { program: Program }) {
   const href = `/my-programs/workouts/${program.slug}`
+  const image = programImages[program.slug]
 
   return (
     <Link
       href={href}
       className="group flex flex-col border-2 border-zinc-200 hover:border-zinc-950 rounded-2xl overflow-hidden transition-colors duration-300 bg-white"
     >
-      {/* Visual panel */}
-      <div className={`relative w-full aspect-4/3 bg-linear-to-br ${program.bgClass} overflow-hidden`}>
-        <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-700 ease-in-out bg-linear-to-br from-transparent to-black/20" />
+      {/* Visual panel — same real-photo-with-gradient-fallback pattern as ProgramCard.tsx */}
+      <div className={`relative w-full aspect-4/3 ${image ? "bg-zinc-900" : `bg-linear-to-br ${program.bgClass}`} overflow-hidden`}>
+        {image && (
+          <Image
+            src={image}
+            alt={program.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+          />
+        )}
+        <div className={`absolute inset-0 ${image ? "" : "group-hover:scale-105 transition-transform duration-700 ease-in-out"} bg-linear-to-b ${image ? "from-black/45 via-transparent to-transparent" : "from-transparent to-black/20"}`} />
 
         {/* Purchased badge + tags — one flex row so tags wrap instead of
             overlapping the badge when combined text length runs long. */}

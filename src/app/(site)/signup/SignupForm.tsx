@@ -1,18 +1,20 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"
+import { Loader2, AlertCircle, Eye, EyeOff, MailCheck } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
+import ResendVerification from "@/components/ResendVerification"
+
+const VERIFY_CALLBACK = "/verify-email?next=%2Fdashboard"
 
 export default function SignupForm() {
-  const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [submittedEmail, setSubmittedEmail] = useState("")
 
   const inputClass =
     "w-full bg-zinc-50 border border-zinc-200 rounded-xl px-5 py-4 text-sm font-semibold text-zinc-950 placeholder:text-zinc-400 outline-none focus:border-zinc-950 focus:bg-white transition-all duration-200 [font-family:var(--font-barlow)]"
@@ -28,19 +30,57 @@ export default function SignupForm() {
     e.preventDefault()
     setError("")
     await authClient.signUp.email(
-      { name, email, password, callbackURL: "/my-programs" },
+      { name, email, password, callbackURL: VERIFY_CALLBACK },
       {
         onRequest: () => {
           setLoading(true)
         },
         onSuccess: () => {
-          router.push("/dashboard")
+          // No session exists yet — the account only becomes usable after the
+          // emailed link is clicked. (Better Auth also returns this same
+          // success for an already-registered email, so the wording below
+          // must not confirm or deny that the address is new.)
+          setLoading(false)
+          setSubmittedEmail(email)
         },
         onError: (ctx) => {
           setError(ctx.error.message)
           setLoading(false)
         },
       }
+    )
+  }
+
+  if (submittedEmail) {
+    return (
+      <div className="flex flex-col items-center gap-5 text-center">
+        <div className="w-14 h-14 rounded-2xl bg-zinc-950 flex items-center justify-center">
+          <MailCheck className="size-6 text-[#F0CC72]" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-lg font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
+            Check your email
+          </p>
+          {/* Deliberately neutral — Better Auth returns this same success for an
+              already-registered email (so nobody can probe which emails have
+              accounts), so we can't say "sent" for certain or "already exists". */}
+          <p className="text-sm font-medium text-zinc-500 [font-family:var(--font-barlow)]">
+            If <span className="font-bold text-zinc-950">{submittedEmail}</span>{" "}
+            isn&apos;t registered yet, we&apos;ve sent a verification link to it — click it to activate your account.
+          </p>
+          <p className="text-xs font-semibold text-zinc-400 [font-family:var(--font-barlow)]">
+            Don&apos;t see it? Check your spam/junk folder. Already have an account with this email?{" "}
+            <a href="/login" className="text-zinc-950 underline underline-offset-2">
+              Log in
+            </a>{" "}
+            with your password or Google instead.
+          </p>
+        </div>
+        <ResendVerification email={submittedEmail} callbackURL={VERIFY_CALLBACK} />
+        <a href="/login" className="text-xs font-bold text-zinc-500 underline underline-offset-2 [font-family:var(--font-barlow)]">
+          Back to login
+        </a>
+      </div>
     )
   }
 

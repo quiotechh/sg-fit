@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useCart } from "@/store/cartStore";
+import CurrencyNote from "@/components/CurrencyNote";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { programImages } from "@/data/programImages";
@@ -304,6 +305,8 @@ export default function CartSidebar() {
               {session ? `Checkout — R${total.toFixed(2)}` : "Sign In to Checkout"}
               <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
+
+            <CurrencyNote />
           </div>
         )}
       </div>

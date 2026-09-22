@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { Dumbbell, Salad, ArrowRight, Zap, Target, Users } from "lucide-react"
 
@@ -40,18 +41,15 @@ export default function ProgramsPage() {
     <main className="flex flex-col min-h-screen">
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-white">
+      <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-white -mt-19 xl:-mt-21">
 
-        {/* Video — drop your file in /public/videos/programs.mp4 when ready */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-75"
-        >
-          {/* <source src="/videos/programs.mp4" type="video/mp4" /> */}
-        </video>
+        <Image
+          src="/program-page-banner.jpg"
+          alt="SG FIT Programs"
+          fill
+          className="object-cover object-center"
+          priority
+        />
 
         {/* Bottom gradient so text is always legible */}
         <div className="absolute inset-x-0 bottom-0 h-4/5 bg-linear-to-t from-black via-black/55 to-transparent" />

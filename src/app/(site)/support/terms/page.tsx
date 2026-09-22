@@ -63,8 +63,8 @@ export default function TermsOfService() {
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">
           <li>
-            <strong>Stripe / Paystack:</strong> Payment processors that handle
-            your payment details securely according to their own policies.
+            <strong>Paystack:</strong> Our payment processor, which handles
+            your payment details securely according to its own policies.
           </li>
           <li>
             <strong>Shopify:</strong> Our merchandise store is powered by
@@ -111,7 +111,7 @@ export default function TermsOfService() {
           5. Payment and Billing
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          Payments for our services and products are processed through Stripe or
+          Payments for our services and products are processed through
           Paystack. By making a purchase, you agree to:
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">

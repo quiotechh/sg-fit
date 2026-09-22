@@ -13,8 +13,6 @@ const supplements = [
     description:
       "100% organic premium tea designed to cleanse your system, boost energy, and accelerate fat burning — naturally.",
     image: "/products/tea-bag-1.png",
-    price: "$34.99",
-    originalPrice: "$44.99",
     badge: "Best Seller",
     stats: [
       { value: "14", label: "Day detox cycle" },
@@ -30,8 +28,6 @@ const supplements = [
     description:
       "Science-backed capsules that support weight loss, healthy energy levels and bowel movement. 400mg per capsule, 60 count.",
     image: "/products/slim-capsules-1.png",
-    price: "$29.99",
-    originalPrice: "$39.99",
     badge: "New",
     stats: [
       { value: "400mg", label: "Per capsule" },
@@ -42,10 +38,14 @@ const supplements = [
 ]
 
 const gymwear = [
-  { id: "1", name: "SG Fit Training Set", price: "$79.99", image: "/products/gymwear-1.jpg" },
-  { id: "2", name: "SG Fit Sports Bra", price: "$34.99", image: "/products/gymwear-2.jpg" },
-  { id: "3", name: "SG Fit Leggings", price: "$49.99", image: "/products/gymwear-3.jpg" },
+  { id: "1", name: "SG Fit Training Set", price: "Price coming soon", image: "/products/gymwear-1.jpg" },
+  { id: "2", name: "SG Fit Sports Bra", price: "Price coming soon", image: "/products/gymwear-2.jpg" },
+  { id: "3", name: "SG Fit Leggings", price: "Price coming soon", image: "/products/gymwear-3.jpg" },
 ]
+
+// The activewear collection has no product photos yet (its images 404), so it's
+// hidden until the shop goes live.
+const SHOW_GYMWEAR = false
 
 export default function ShopSection() {
   const [activeTab, setActiveTab] = useState<"tea" | "capsule">("tea")
@@ -186,47 +186,35 @@ export default function ShopSection() {
               ))}
             </div>
 
-            {/* Price + CTA */}
-            <div className="flex items-center gap-4 mb-6">
+            {/* Price: not set yet. Shown in Rand once it is — no converted/guessed
+                numbers here (the old $ prices were placeholders). */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
               <span className="text-zinc-950 font-black text-2xl sm:text-3xl [font-family:var(--font-barlow)]">
-                {product.price}
-              </span>
-              <span className="text-zinc-400 line-through text-base sm:text-lg font-medium [font-family:var(--font-barlow)]">
-                {product.originalPrice}
+                Price coming soon
               </span>
               <span className="text-xs font-black uppercase tracking-wide text-white bg-zinc-800 px-2.5 py-1 [font-family:var(--font-barlow)]">
-                Save{" "}
-                {Math.round(
-                  ((parseFloat(product.originalPrice.replace("$", "")) -
-                    parseFloat(product.price.replace("$", ""))) /
-                    parseFloat(product.originalPrice.replace("$", ""))) *
-                    100
-                )}
-                %
+                In Rand (ZAR)
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/shop"
-                className="flex-1 text-center whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest rounded-lg text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150"
-                style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
-              >
-                Add to Cart
-              </Link>
-              <Link
-                href="/shop"
-                className="flex-1 text-center whitespace-nowrap border-2 border-zinc-950 text-zinc-950 font-black uppercase tracking-widest text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)] hover:bg-zinc-950 hover:text-white transition-all rounded-lg duration-200"
-              >
-                View Product →
-              </Link>
-            </div>
+            {/* Shop isn't live yet — one disabled button instead of Add to Cart /
+                View Product. w-full so it spans the row on every screen size. */}
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="w-full text-center whitespace-nowrap bg-zinc-100 text-zinc-500 border-2 border-zinc-200 cursor-not-allowed font-black uppercase tracking-widest rounded-lg text-xs md:text-xs lg:text-sm px-5 md:px-4 lg:px-8 py-4 [font-family:var(--font-barlow)]"
+            >
+              Coming Soon
+            </button>
 
           </div>
         </div>
       </div>
 
-      {/* ── Gymwear Block ───────────────────────────────────────────── */}
+      {/* ── Gymwear Block ─────────────────────────────────────────────
+          Hidden for now (SHOW_GYMWEAR). Set it to true to bring it back. */}
+      {SHOW_GYMWEAR && (
       <div className="border-t border-zinc-100 px-4 sm:px-8 lg:px-16 xl:px-24 pt-14 sm:pt-18 pb-16 sm:pb-20">
 
         {/* Gymwear heading */}
@@ -310,6 +298,7 @@ export default function ShopSection() {
         </div>
 
       </div>
+      )}
 
     </section>
   )

@@ -10,6 +10,11 @@ interface Props {
   params: Promise<{ category: string }>
 }
 
+// Public, DB-backed, same for every visitor — safe to cache as a static
+// page and only regenerate in the background at most once an hour, instead
+// of hitting the DB on every request.
+export const revalidate = 3600
+
 export async function generateStaticParams() {
   return getAllCategories().map((category) => ({ category }))
 }
@@ -86,7 +91,7 @@ export default async function CategoryPage({ params }: Props) {
             </p>
           </div>
           <Link
-            href="/get-started"
+            href="/signup"
             className="group shrink-0 inline-flex items-center gap-3 bg-white text-zinc-950 text-sm font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
           >
             Get Started

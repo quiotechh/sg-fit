@@ -8,7 +8,7 @@ export default function RetreatBanner() {
       {/* Desktop / Tablet: full background image */}
       <div className="relative w-full bg-zinc-950 overflow-hidden hidden md:block md:min-h-[60vh] xl:min-h-screen">
         <Image
-          src="/retreat-banner.png"
+          src="/retreat-banner.jpg"
           alt="SG FIT Luxury Retreat"
           fill
           sizes="(min-width: 768px) 100vw, 0px"
@@ -59,7 +59,7 @@ export default function RetreatBanner() {
       {/* Mobile: full background image */}
       <div className="relative w-full bg-zinc-950 overflow-hidden md:hidden min-h-[80vh] sm:min-h-screen">
         <Image
-          src="/retreat-banner.png"
+          src="/retreat-banner.jpg"
           alt="SG FIT Luxury Retreat"
           fill
           sizes="(max-width: 767px) 100vw, 0px"

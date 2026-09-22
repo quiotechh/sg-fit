@@ -5,21 +5,21 @@ import Link from "next/link"
 
 const tiles = [
   // Top-left
-  { src: "/cta/1.jpg", alt: "Member training",   w: "26%", top: "3%",  left: "1%",  z: 2, rot: "-2deg"   },
+  { src: "/collage/collage1.jpeg", alt: "Member training",   w: "26%", top: "3%",  left: "1%",  z: 2, rot: "-2deg"   },
   // Upper-mid — partially behind T0, creates first overlap
-  { src: "/cta/2.jpg", alt: "Member workout",    w: "31%", top: "14%", left: "19%", z: 1, rot: "1.5deg"  },
+  { src: "/collage/collage2.jpeg", alt: "Member workout",    w: "31%", top: "14%", left: "19%", z: 1, rot: "1.5deg"  },
   // Top-right
-  { src: "/cta/3.jpg", alt: "Member yoga",       w: "23%", top: "2%",  left: "54%", z: 2, rot: "2deg"    },
+  { src: "/collage/collage3.jpeg", alt: "Member yoga",       w: "23%", top: "2%",  left: "54%", z: 2, rot: "2deg"    },
   // Far-right top — overlaps T2 edge
-  { src: "/cta/4.jpg", alt: "Community group",   w: "21%", top: "9%",  left: "72%", z: 3, rot: "-1.5deg" },
+  { src: "/collage/collage4.jpeg", alt: "Community group",   w: "21%", top: "9%",  left: "72%", z: 3, rot: "-1.5deg" },
   // LARGE dominant center — diagonal anchor
-  { src: "/cta/5.jpg", alt: "Member progress",   w: "35%", top: "40%", left: "23%", z: 2, rot: "-1deg"   },
+  { src: "/collage/collage5.jpeg", alt: "Member progress",   w: "35%", top: "40%", left: "23%", z: 2, rot: "-1deg"   },
   // Mid-right — overlaps T4 edge and T3 bottom
-  { src: "/cta/6.jpg", alt: "Member stretching", w: "23%", top: "31%", left: "64%", z: 3, rot: "1.5deg"  },
+  { src: "/collage/collage6.jpeg", alt: "Member stretching", w: "23%", top: "31%", left: "64%", z: 3, rot: "1.5deg"  },
   // Bottom-left
-  { src: "/cta/7.jpg", alt: "Member running",    w: "26%", top: "64%", left: "3%",  z: 3, rot: "1deg"    },
+  { src: "/collage/collage7.jpeg", alt: "Member running",    w: "26%", top: "64%", left: "3%",  z: 3, rot: "1deg"    },
   // Bottom-right — overlaps T5 bottom edge
-  { src: "/cta/8.jpg", alt: "Group session",     w: "27%", top: "62%", left: "60%", z: 4, rot: "-2deg"   },
+  { src: "/collage/collage8.jpeg", alt: "Group session",     w: "27%", top: "62%", left: "60%", z: 4, rot: "-2deg"   },
 ]
 
 export default function CTASection() {
@@ -61,7 +61,7 @@ export default function CTASection() {
 
           <div className="flex flex-row gap-3 sm:gap-4">
             <Link
-              href="/get-started"
+              href="/signup"
               className="inline-block whitespace-nowrap text-zinc-950 font-black uppercase tracking-widest text-sm px-7 py-3.5 sm:px-9 sm:py-4 xl:px-10 [font-family:var(--font-barlow)] active:scale-95 transition-all duration-150 rounded-lg"
               style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
             >

@@ -1,11 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Clock, Zap, Users, CheckCircle } from "lucide-react";
 import { getPurchasedProgram } from "@/lib/data/purchases";
 import { getProgramWeeksGrouped } from "@/lib/data/day-templates";
 import { getCompletedDayIds, findNextIncompleteDay } from "@/lib/data/progress";
 import { auth } from "@/lib/auth";
+import { programImages } from "@/data/programImages";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -33,6 +35,7 @@ export default async function MyProgramDetailPage({ params }: Props) {
   const completedDayIds = await getCompletedDayIds(program.purchaseId);
 
   const nextDay = findNextIncompleteDay(weeks, completedDayIds);
+  const image = programImages[program.slug];
 
   const totalDays = weeks.reduce((sum, week) => sum + week.days.length, 0);
   const completedCount = completedDayIds.size;
@@ -65,12 +68,26 @@ export default async function MyProgramDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 xl:gap-14 items-start">
             {/* ── LEFT: Visual panel ─────────────────────────────────────── */}
             <div
-              className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-linear-to-br ${program.bgClass}
+              className={`relative rounded-2xl sm:rounded-3xl overflow-hidden ${image ? "bg-zinc-900" : `bg-linear-to-br ${program.bgClass}`}
                 min-h-72 sm:min-h-120 lg:min-h-150 xl:min-h-165
                 flex flex-col justify-between p-6 sm:p-10 xl:p-12`}
             >
+              {image && (
+                <>
+                  <Image
+                    src={image}
+                    alt={program.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-b from-black/45 via-transparent to-transparent" />
+                </>
+              )}
+
               {/* Top: label + tags */}
-              <div className="flex flex-col gap-3">
+              <div className="relative flex flex-col gap-3">
                 <p
                   className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
                   style={{
@@ -94,11 +111,13 @@ export default async function MyProgramDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Bottom: decorative large ghost title */}
-              <div className="select-none">
+              {/* Bottom: decorative large ghost title — stroke is more visible
+                  (0.7 vs 0.18) when it's sitting over a real photo, same as
+                  the public product page. */}
+              <div className="relative select-none">
                 <h2
                   className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-[clamp(3rem,8vw,6rem)] text-transparent"
-                  style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.18)" }}
+                  style={{ WebkitTextStroke: `1.5px rgba(255,255,255,${image ? 0.7 : 0.18})` }}
                 >
                   {program.title}
                 </h2>

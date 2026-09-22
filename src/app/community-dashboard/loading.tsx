@@ -1,15 +1,15 @@
-import { Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton"
 
-export default function CommunityDashboardLoading() {
+// Generic feed skeleton — CommunityDashboardClient renders its own chrome
+// (sidebar/topbar), so this only needs to look like a loading feed column.
+export default function Loading() {
   return (
-    <main className="flex flex-col min-h-screen bg-white">
-      <div className="flex-1 flex items-center justify-center">
-        <Loader2
-          className="size-8 animate-spin"
-          style={{ color: "#C9953A" }}
-          strokeWidth={2.5}
-        />
-      </div>
+    <main className="flex flex-col min-h-screen bg-zinc-50">
+      <section className="max-w-3xl mx-auto w-full px-4 py-10 flex flex-col gap-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="rounded-2xl h-40 w-full" />
+        ))}
+      </section>
     </main>
-  );
+  )
 }
