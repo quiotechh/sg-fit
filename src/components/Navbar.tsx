@@ -364,6 +364,7 @@ export default function Navbar() {
     pathname === "/community" ||
     pathname === "/shop" ||
     pathname === "/affiliates" ||
+    pathname === "/programs" ||
     isProgramsCategoryPage;
   const [hasMembership, setHasMembership] = useState(false);
 

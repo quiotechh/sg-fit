@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Shield, Tag, Mail, Loader2 } from "lucide-react"
 import { useCart } from "@/store/cartStore"
+import CurrencyNote from "@/components/CurrencyNote"
 import { authClient } from "@/lib/auth-client"
 import { programImages } from "@/data/programImages"
 
@@ -180,6 +181,8 @@ export default function CheckoutClient() {
             Secure payment via Paystack
           </p>
         </div>
+
+        <CurrencyNote />
 
       </div>
     </main>

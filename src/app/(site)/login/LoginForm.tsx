@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Loader2, AlertCircle, Eye, EyeOff, MailWarning } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import ResendVerification from "@/components/ResendVerification";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [needsVerification, setNeedsVerification] = useState(false);
 
   const inputClass =
     "w-full bg-zinc-50 border border-zinc-200 rounded-xl px-5 py-4 text-sm font-semibold text-zinc-950 placeholder:text-zinc-400 outline-none focus:border-zinc-950 focus:bg-white transition-all duration-200 [font-family:var(--font-barlow)]";
@@ -27,6 +29,7 @@ export default function LoginForm() {
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setNeedsVerification(false);
     await authClient.signIn.email(
       { email, password, callbackURL: redirect },
       {
@@ -37,8 +40,15 @@ export default function LoginForm() {
           window.location.href = redirect;
         },
         onError: (ctx) => {
-          setError(ctx.error.message);
           setLoading(false);
+          // 403 = correct password, but the email isn't verified yet. Better
+          // Auth has already emailed a fresh link (sendOnSignIn) — not a
+          // failed login, so it isn't logged as auth.login_failed either.
+          if (ctx.error.status === 403) {
+            setNeedsVerification(true);
+            return;
+          }
+          setError(ctx.error.message);
           fetch("/api/auth-log", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -108,6 +118,22 @@ export default function LoginForm() {
         >
           Forgot password?
         </a>
+
+        {needsVerification && (
+          <div className="flex flex-col gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
+            <div className="flex items-start gap-3">
+              <MailWarning className="size-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-sm font-semibold text-amber-800 [font-family:var(--font-barlow)]">
+                Please verify your email first. We&apos;ve just sent a new verification link to{" "}
+                <span className="font-black">{email}</span> — check your inbox and spam/junk folder.
+              </p>
+            </div>
+            <ResendVerification
+              email={email}
+              callbackURL={`/verify-email?next=${encodeURIComponent(redirect)}`}
+            />
+          </div>
+        )}
 
         {error && (
           <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-5 py-4">

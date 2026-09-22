@@ -10,6 +10,7 @@ import {
   Shield,
   Users,
 } from "lucide-react";
+import { COMMUNITY_PRICE_LABEL } from "@/lib/communityPricing";
 
 const goldGradient = "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)";
 
@@ -166,7 +167,7 @@ export default function CommunityPage() {
               {/* Price */}
               <div className="flex items-end gap-2 py-8 border-y border-white/10">
                 <span className="text-7xl font-black text-white [font-family:var(--font-barlow)]">
-                  $29
+                  {COMMUNITY_PRICE_LABEL}
                 </span>
                 <div className="mb-3 flex flex-col">
                   <span className="text-sm font-black text-zinc-400 [font-family:var(--font-barlow)]">
@@ -201,7 +202,7 @@ export default function CommunityPage() {
                 className="inline-flex items-center justify-center w-full sm:w-auto text-zinc-950 text-sm font-black uppercase tracking-widest px-12 py-4 rounded-xl active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
                 style={{ background: goldGradient }}
               >
-                Join SGians — $29/mo
+                Join SGians — {COMMUNITY_PRICE_LABEL}/mo
               </Link>
               <p className="text-xs font-semibold text-zinc-600 [font-family:var(--font-barlow)]">
                 Secure payment via Paystack. Auto-renews monthly.
@@ -375,14 +376,14 @@ export default function CommunityPage() {
             Become an SGian.
           </h2>
           <p className="text-base font-semibold text-white/60 max-w-sm mb-10 [font-family:var(--font-barlow)]">
-            $29/month. Cancel anytime. Start today.
+            {COMMUNITY_PRICE_LABEL}/month. Cancel anytime. Start today.
           </p>
           <Link
             href="/community/checkout"
             className="inline-flex items-center justify-center text-zinc-950 text-sm font-black uppercase tracking-widest px-12 py-4 rounded-xl active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             style={{ background: goldGradient }}
           >
-            Join SGians — $29/mo
+            Join SGians — {COMMUNITY_PRICE_LABEL}/mo
           </Link>
         </div>
       </section>

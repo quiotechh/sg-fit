@@ -10,7 +10,8 @@ import {
   FaTiktok,
   FaEnvelope,
 } from "react-icons/fa6";
-import { Heart } from "lucide-react";
+import { SiVisa } from "react-icons/si";
+import { Heart, Lock } from "lucide-react";
 
 const programs = [
   { label: "Workout Programs", href: "/programs/workouts" },
@@ -34,6 +35,28 @@ const support = [
   { label: "Terms of Service", href: "/support/terms" },
   { label: "Refund Policy", href: "/support/refund-policy" },
 ];
+
+// Card marks in their official brand colours, on white badges (the standard way
+// to show them on a dark background — the colours are designed for white).
+function VisaBadge() {
+  return (
+    <span role="img" aria-label="Visa" className="flex h-8 w-12 items-center justify-center rounded-md bg-white">
+      <SiVisa size={34} color="#1A1F71" aria-hidden />
+    </span>
+  );
+}
+
+function MastercardBadge() {
+  return (
+    <span role="img" aria-label="Mastercard" className="flex h-8 w-12 items-center justify-center rounded-md bg-white">
+      <svg viewBox="0 0 32 20" className="h-5 w-auto" aria-hidden>
+        <circle cx="10" cy="10" r="10" fill="#EB001B" />
+        <circle cx="22" cy="10" r="10" fill="#F79E1B" />
+        <path d="M16 2A10 10 0 0 1 16 18A10 10 0 0 1 16 2z" fill="#FF5F00" />
+      </svg>
+    </span>
+  );
+}
 
 const socials = [
   {
@@ -264,6 +287,22 @@ export default function Footer() {
           className="w-full h-44 md:h-96 lg:h-120 xl:h-152 object-cover object-center"
           style={{ mixBlendMode: "screen" }}
         />
+      </div>
+
+      {/* ── Payment methods ────────────────────────────────────────── */}
+      {/* Only methods Paystack South Africa actually accepts for us — don't add
+          Stripe/Amex/Apple Pay logos here unless they're really enabled. */}
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-zinc-500 [font-family:var(--font-barlow)]">
+            <Lock className="size-3.5" />
+            Secured by Paystack · Cards from any country accepted
+          </p>
+          <div className="flex items-center gap-2" aria-label="Accepted cards: Visa, Mastercard">
+            <VisaBadge />
+            <MastercardBadge />
+          </div>
+        </div>
       </div>
 
       {/* ── Bottom Strip ───────────────────────────────────────────── */}

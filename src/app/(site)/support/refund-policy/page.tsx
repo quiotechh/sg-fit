@@ -68,7 +68,7 @@ export default function RefundPolicy() {
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">
           <li>
-            Unauthorized or fraudulent charges processed through Stripe or
+            Unauthorized or fraudulent charges processed through
             Paystack.
           </li>
           <li>Duplicate charges for the same purchase.</li>
@@ -118,7 +118,7 @@ export default function RefundPolicy() {
           6. Payment Processing and Timing
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          All payments are processed through Stripe or Paystack. If a refund is
+          All payments are processed through Paystack. If a refund is
           approved, the amount will be returned through the original payment
           method whenever possible. Processing times may vary depending on your
           bank or payment provider.
@@ -134,7 +134,7 @@ export default function RefundPolicy() {
           7. Third-Party Policies
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          Third-party providers such as Shopify, Stripe and Paystack have their
+          Third-party providers such as Shopify and Paystack have their
           own policies. Your purchase may also be subject to their terms and
           conditions.
         </p>

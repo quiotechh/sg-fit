@@ -148,7 +148,7 @@ export default function AboutSection() {
           <div
           >
             <Link
-              href="/get-started"
+              href="/signup"
               className="inline-block bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-10 py-4 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             >
               Start Your Transformation

@@ -12,6 +12,10 @@ interface Props {
   params: Promise<{ category: string; slug: string }>
 }
 
+// Same reasoning as the category listing page — public product page, cache
+// it and refresh at most once an hour instead of querying the DB per visit.
+export const revalidate = 3600
+
 export async function generateStaticParams() {
   const all = await getAllProgramSlugs()
   return all.map((p) => ({ category: p.category, slug: p.slug }))

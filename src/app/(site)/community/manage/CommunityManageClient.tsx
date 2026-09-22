@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { COMMUNITY_PRICE_LABEL } from "@/lib/communityPricing"
 import { ArrowRight, Loader2, CheckCircle, AlertTriangle, XCircle } from "lucide-react"
 
 export default function CommunityManageClient({
@@ -66,7 +67,7 @@ export default function CommunityManageClient({
                 SG Fit Community Membership
               </p>
               <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] mt-0.5">
-                R99 / month
+                {COMMUNITY_PRICE_LABEL} / month
               </p>
             </div>
             <span

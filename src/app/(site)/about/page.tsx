@@ -74,7 +74,7 @@ export default function AboutPage() {
       <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-zinc-950 -mt-19 xl:-mt-21">
 
         <Image
-          src="/sg-fit-about-2.jpg"
+          src="/collage/collage8.jpeg"
           alt="Sharon Gambu — SG FIT"
           fill
           className="object-cover object-center xl:object-[center_15%] opacity-75"
@@ -102,7 +102,7 @@ export default function AboutPage() {
             </p>
 
             <Link
-              href="/get-started"
+              href="/signup"
               className="inline-block bg-white text-zinc-950 text-sm sm:text-base font-black uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             >
               Start Your Journey
@@ -170,7 +170,7 @@ export default function AboutPage() {
               </div>
 
               <Link
-                href="/get-started"
+                href="/signup"
                 className="inline-block bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-10 py-4 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)] w-fit"
               >
                 Start Your Transformation
@@ -274,7 +274,7 @@ export default function AboutPage() {
               Join SGians
             </Link>
             <Link
-              href="/get-started"
+              href="/signup"
               className="inline-flex items-center justify-center gap-2 border-2 border-white/30 text-white text-sm font-black uppercase tracking-widest px-10 py-4 rounded-full hover:border-white/60 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)] whitespace-nowrap"
             >
               <Zap className="size-4" />

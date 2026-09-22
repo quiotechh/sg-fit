@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "How do I purchase a program or membership?",
     answer:
-      "Visit our shop, select the workout program, nutrition guide, or membership plan you want, then complete checkout with Stripe or Paystack. Your digital product will be available immediately after purchase.",
+      "Visit our shop, select the workout program, nutrition guide, or membership plan you want, then complete checkout with Paystack. Your workout programs unlock in My Programs right after payment, and nutrition guides are also emailed to you (check your spam/junk folder if you don't see it).",
   },
   {
     question: "Can I get a refund?",
@@ -19,7 +19,12 @@ const faqs = [
   {
     question: "What payment methods do you accept?",
     answer:
-      "We accept payments through Stripe and Paystack. All payments are securely processed by these providers, and your payment information is never stored on our site.",
+      "We accept Visa and Mastercard debit and credit cards through Paystack. All payments are securely processed by Paystack, and your card details are never stored on our site.",
+  },
+  {
+    question: "Can I pay from outside South Africa?",
+    answer:
+      "Yes. Cards issued in other countries work, as long as they're Visa or Mastercard. All prices are in South African Rand (ZAR), so at checkout you'll see the amount in Rand. Your own bank converts it to your local currency at its exchange rate, so the amount on your statement may differ slightly from a straight conversion. If a payment is declined, your bank may need to allow international online payments — contact them, or email us at sgfitza@gmail.com.",
   },
   {
     question: "How do I access my purchased digital products?",

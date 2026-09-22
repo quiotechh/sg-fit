@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
         <ul className="list-disc list-inside mb-6 space-y-2">
           <li>
             <strong>Personal Information:</strong> Name, email address, shipping
-            address, payment information (processed securely through Stripe),
+            address, payment information (processed securely through Paystack),
             and any other details you provide.
           </li>
           <li>
@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
           <li>
             <strong>Service Providers:</strong> We share information with
             trusted third parties who assist us in operating our website,
-            processing payments (e.g., Stripe), managing our merchandise store
+            processing payments (e.g., Paystack), managing our merchandise store
             (e.g., Shopify), and analyzing usage (e.g., Google Analytics,
             Beehive).
           </li>
