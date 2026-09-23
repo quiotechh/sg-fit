@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ChevronRight, Clock, Zap, Users, CheckCircle, Mail } from "lucide-react"
 import { categoryConfigs } from "@/data/programs"
 import { programImages } from "@/data/programImages"
-import { getProgramBySlug, getProgramsByCategory, getAllProgramSlugs, getBonusProgram } from "@/lib/data/programs"
+import { getProgramBySlug, getProgramsByCategory, getBonusProgram } from "@/lib/data/programs"
 import ProgramCard from "@/components/ProgramCard"
 import AddToCartButton from "@/components/AddToCartButton"
 
@@ -15,11 +15,6 @@ interface Props {
 // Same reasoning as the category listing page — public product page, cache
 // it and refresh at most once an hour instead of querying the DB per visit.
 export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const all = await getAllProgramSlugs()
-  return all.map((p) => ({ category: p.category, slug: p.slug }))
-}
 
 export async function generateMetadata({ params }: Props) {
   const { category, slug } = await params
