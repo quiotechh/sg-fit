@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { categoryConfigs, getAllCategories } from "@/data/programs"
+import { categoryConfigs } from "@/data/programs"
 import { getProgramsByCategory } from "@/lib/data/programs"
 import PageHero from "@/components/PageHero"
 import ProgramCard from "@/components/ProgramCard"
@@ -13,11 +13,14 @@ interface Props {
 // Public, DB-backed, same for every visitor — safe to cache as a static
 // page and only regenerate in the background at most once an hour, instead
 // of hitting the DB on every request.
+//
+// No generateStaticParams here (even though getAllCategories() itself is
+// DB-free) — Next.js still fully prerenders every page it lists at build
+// time, and this page's body calls Prisma via getProgramsByCategory(),
+// which crashes the build on Railway (DB only reachable at runtime, not
+// during the build step). Pages render on-demand on first visit instead,
+// then stay cached per `revalidate` above.
 export const revalidate = 3600
-
-export async function generateStaticParams() {
-  return getAllCategories().map((category) => ({ category }))
-}
 
 export async function generateMetadata({ params }: Props) {
   const { category } = await params
