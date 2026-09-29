@@ -7,7 +7,7 @@ export default function PrivacyPolicy() {
         Privacy Policy
       </h1>
       <p className="mb-8 text-xl leading-relaxed">
-        At SG Fit, we are committed to protecting your privacy. This Privacy
+        At SG.FIT, we are committed to protecting your privacy. This Privacy
         Policy explains how we collect, use, disclose, and safeguard your
         information when you visit our website at sgfit.com or use our services,
         including our community features, workout programs, and merchandise
@@ -190,7 +190,7 @@ export default function PrivacyPolicy() {
           at:
         </p>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit
+          SG.FIT
           <br />
           Email: sgfitza@gmail.com
           <br />

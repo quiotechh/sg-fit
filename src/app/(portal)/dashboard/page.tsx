@@ -12,7 +12,8 @@ import {
   getBodyMetricHistory,
   getLatestPhoto,
 } from "@/lib/data/body-metrics";
-import { getUserPurchasePrograms } from "@/lib/data/purchases";
+import { getUserPurchasePrograms, hasPurchasedCategory } from "@/lib/data/purchases";
+import { getWorkoutVideos } from "@/lib/data/workout-videos";
 import ActivityHeatmap from "@/components/ActivityHeatmap";
 import ProgramProgressCard from "@/components/ProgramProgressCard";
 import WeightTrendChart from "@/components/WeightTrendChart";
@@ -24,7 +25,7 @@ import WorkoutCalendar from "@/components/WorkoutCalendar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Dashboard — SG Fit",
+  title: "Dashboard — SG.FIT",
 };
 
 const cardTitleCls =
@@ -35,7 +36,7 @@ export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
 
-  const [activityData, latestMeasurements, currentProgram, weightHistory, latestPhoto, purchasedPrograms] =
+  const [activityData, latestMeasurements, currentProgram, weightHistory, latestPhoto, purchasedPrograms, hasWorkoutVideoAccess] =
     await Promise.all([
       getActivityHeatmapData(session.user.id, 364),
       getLatestMeasurements(session.user.id),
@@ -43,7 +44,22 @@ export default async function DashboardPage() {
       getBodyMetricHistory(session.user.id),
       getLatestPhoto(session.user.id),
       getUserPurchasePrograms(session.user.id, "workouts"),
+      hasPurchasedCategory(session.user.id, "workouts"),
     ]);
+
+  // Signed R2 URLs are only generated for entitled users, same gating rule
+  // as the full Workout Library page — never fetched for a locked-out user.
+  // Preview widget only needs a taste of each category, not the whole library —
+  // 2 most-recent videos per category (GYM/CHAIR/HOME), 6 total.
+  let workoutVideos: Awaited<ReturnType<typeof getWorkoutVideos>> = [];
+  if (hasWorkoutVideoAccess) {
+    const allVideos = await getWorkoutVideos();
+    const perCategory: Record<string, typeof allVideos> = { GYM: [], CHAIR: [], HOME: [] };
+    for (const video of allVideos) {
+      if (perCategory[video.category].length < 2) perCategory[video.category].push(video);
+    }
+    workoutVideos = [...perCategory.CHAIR, ...perCategory.HOME, ...perCategory.GYM];
+  }
 
   const recentPrograms = purchasedPrograms
     .filter((p) => p.slug !== currentProgram?.slug)
@@ -197,7 +213,7 @@ export default async function DashboardPage() {
 
         {/* Workout Library + Calendar */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 sm:gap-8 items-stretch mb-10 sm:mb-14">
-          <WorkoutLibrarySlider />
+          <WorkoutLibrarySlider videos={workoutVideos} />
 
           <Card className="rounded-2xl border border-zinc-100 bg-white">
             <CardHeader>

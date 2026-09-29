@@ -15,10 +15,10 @@ import { COMMUNITY_PRICE_LABEL } from "@/lib/communityPricing";
 const goldGradient = "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)";
 
 const included = [
-  { icon: Users, text: "Private SGians community feed" },
+  { icon: Users, text: "Private Endgame Squad community feed" },
   { icon: ImageIcon, text: "Share your progress photos" },
   { icon: Heart, text: "Like & comment on member posts" },
-  { icon: MessageCircle, text: "Daily engagement with fellow SGians" },
+  { icon: MessageCircle, text: "Daily engagement with fellow Endgame Squad members" },
   { icon: Shield, text: "Moderated, safe space" },
   { icon: Check, text: "Cancel anytime — no contracts" },
 ];
@@ -36,7 +36,7 @@ const testimonials = [
   {
     avatar: "LM",
     name: "Lerato M.",
-    text: "Being an SGian changed everything. The accountability here is unreal — people actually show up for each other.",
+    text: "Being part of Endgame Squad changed everything. The accountability here is unreal — people actually show up for each other.",
   },
   {
     avatar: "TN",
@@ -57,7 +57,7 @@ export default function CommunityPage() {
       <section className="relative w-full h-screen overflow-hidden -mt-19 xl:-mt-21">
         <Image
           src="/community-page.jpg"
-          alt="SGians Community"
+          alt="Endgame Squad Community"
           fill
           sizes="100vw"
           className="object-cover object-center"
@@ -78,7 +78,7 @@ export default function CommunityPage() {
             >
               The Community
             </span>
-            <span className="block text-white/80">BECOME AN SGIAN.</span>
+            <span className="block text-white/80">JOIN ENDGAME SQUAD.</span>
           </h1>
         </div>
       </section>
@@ -89,7 +89,7 @@ export default function CommunityPage() {
             <div className="flex flex-col gap-8">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.28em] text-zinc-400 mb-4 [font-family:var(--font-barlow)]">
-                  What is SGians?
+                  What is Endgame Squad?
                 </p>
                 <h2 className="text-4xl sm:text-5xl font-black uppercase leading-[0.9] tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
                   More than
@@ -107,7 +107,7 @@ export default function CommunityPage() {
                 </h2>
               </div>
               <p className="text-base font-semibold text-zinc-500 leading-relaxed max-w-md [font-family:var(--font-barlow)]">
-                SGians is a private, paid membership community where SG FIT
+                Endgame Squad is a private, paid membership community where SG.FIT
                 members connect, share their fitness journey, post progress
                 photos, and hold each other accountable — every single day.
               </p>
@@ -121,7 +121,7 @@ export default function CommunityPage() {
             <div className="relative w-full rounded-3xl overflow-hidden h-80 sm:h-105 lg:h-120 xl:h-140">
               <Image
                 src="/community/sgfit-community-1.jpg"
-                alt="SGians Group"
+                alt="Endgame Squad Group"
                 fill
                 className="object-cover object-center"
               />
@@ -202,7 +202,7 @@ export default function CommunityPage() {
                 className="inline-flex items-center justify-center w-full sm:w-auto text-zinc-950 text-sm font-black uppercase tracking-widest px-12 py-4 rounded-xl active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
                 style={{ background: goldGradient }}
               >
-                Join SGians — {COMMUNITY_PRICE_LABEL}/mo
+                Join Endgame Squad — {COMMUNITY_PRICE_LABEL}/mo
               </Link>
               <p className="text-xs font-semibold text-zinc-600 [font-family:var(--font-barlow)]">
                 Secure payment via Paystack. Auto-renews monthly.
@@ -217,7 +217,7 @@ export default function CommunityPage() {
               >
                 <Image
                   src="/community/sgfit-community-3.jpg"
-                  alt="SGians training together"
+                  alt="Endgame Squad training together"
                   fill
                   className="object-cover object-center"
                 />
@@ -228,7 +228,7 @@ export default function CommunityPage() {
               >
                 <Image
                   src="/community/sgfit-community-2.jpg"
-                  alt="SGians community"
+                  alt="Endgame Squad community"
                   fill
                   className="object-cover object-top"
                 />
@@ -242,7 +242,7 @@ export default function CommunityPage() {
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-24 xl:py-32">
           <p className="text-[10px] font-black uppercase tracking-[0.28em] text-zinc-400 mb-4 [font-family:var(--font-barlow)]">
-            SGians Speak
+            Endgame Squad Speaks
           </p>
           <h2 className="text-4xl sm:text-5xl font-black uppercase leading-[0.9] tracking-tight text-zinc-950 mb-14 [font-family:var(--font-barlow)]">
             Real people.
@@ -277,7 +277,7 @@ export default function CommunityPage() {
                         WebkitTextFillColor: "transparent",
                       }}
                     >
-                      SGian ⚡
+                      Endgame Squad ⚡
                     </p>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export default function CommunityPage() {
             <div className="relative w-full aspect-3/4 rounded-3xl overflow-hidden order-2 lg:order-1">
               <Image
                 src="/community/sgfit-community-4.jpg"
-                alt="SGians community vibe"
+                alt="Endgame Squad community vibe"
                 fill
                 className="object-cover object-center"
               />
@@ -325,7 +325,7 @@ export default function CommunityPage() {
                 </h2>
                 <p className="mt-4 text-sm font-semibold text-zinc-400 max-w-sm leading-relaxed [font-family:var(--font-barlow)]">
                   To keep this space safe and positive for every member, we ask
-                  all SGians to follow these guidelines.
+                  all Endgame Squad members to follow these guidelines.
                 </p>
               </div>
               <div className="flex flex-col gap-4">
@@ -353,7 +353,7 @@ export default function CommunityPage() {
         <div className="relative h-[70vh] sm:h-[80vh]">
           <Image
             src="/community/sgfit-community-hero.jpg"
-            alt="Join SGians"
+            alt="Join Endgame Squad"
             fill
             className="object-cover object-top"
           />
@@ -373,7 +373,7 @@ export default function CommunityPage() {
             Ready to join?
           </p>
           <h2 className="text-5xl sm:text-6xl xl:text-7xl font-black uppercase leading-[0.88] tracking-tight text-white mb-6 [font-family:var(--font-barlow)]">
-            Become an SGian.
+            Become part of Endgame Squad.
           </h2>
           <p className="text-base font-semibold text-white/60 max-w-sm mb-10 [font-family:var(--font-barlow)]">
             {COMMUNITY_PRICE_LABEL}/month. Cancel anytime. Start today.
@@ -383,7 +383,7 @@ export default function CommunityPage() {
             className="inline-flex items-center justify-center text-zinc-950 text-sm font-black uppercase tracking-widest px-12 py-4 rounded-xl active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             style={{ background: goldGradient }}
           >
-            Join SGians — {COMMUNITY_PRICE_LABEL}/mo
+            Join Endgame Squad — {COMMUNITY_PRICE_LABEL}/mo
           </Link>
         </div>
       </section>

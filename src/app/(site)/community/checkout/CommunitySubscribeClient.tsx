@@ -37,7 +37,7 @@ export default function CommunitySubscribeClient({ email }: { email: string }) {
             className="text-[10px] font-black uppercase tracking-[0.28em] mb-1.5 [font-family:var(--font-barlow)]"
             style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
           >
-            Join SGians
+            Join Endgame Squad
           </p>
           <h1 className="text-3xl sm:text-4xl font-black uppercase leading-none tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
             Community Membership
@@ -54,7 +54,7 @@ export default function CommunitySubscribeClient({ email }: { email: string }) {
           <div className="flex items-center justify-between px-5 py-4">
             <div>
               <p className="text-sm font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
-                SG Fit Community Membership
+                SG.FIT Community Membership
               </p>
               <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] mt-0.5">
                 Billed monthly · cancel anytime

@@ -32,7 +32,7 @@ const sectionMeta: Record<
 
 export async function generateMetadata({ params }: Props) {
   const { weekNum, dayNum } = await params;
-  return { title: `Week ${weekNum} · Day ${dayNum} — SG Fit` };
+  return { title: `Week ${weekNum} · Day ${dayNum} — SG.FIT` };
 }
 
 export default async function DayPage({ params }: Props) {

@@ -3,7 +3,7 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 export const metadata = {
-  title: "Page Not Found — SG Fit",
+  title: "Page Not Found — SG.FIT",
 }
 
 export default function NotFound() {
@@ -12,7 +12,7 @@ export default function NotFound() {
       <Link href="/">
         <Image
           src="/logo/sg-fit-logo-1.png"
-          alt="SG FIT"
+          alt="SG.FIT"
           width={80}
           height={80}
           className="h-16 w-auto drop-shadow-xl"

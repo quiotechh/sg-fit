@@ -296,7 +296,7 @@ function ProfileDropdown({
           onSelect={() => router.push(communityHref)}
           className={`${itemCls} ${!hasMembership ? "text-zinc-400" : "text-zinc-700"}`}
         >
-          SGians (Community)
+          Endgame Squad (Community)
           {!hasMembership ? (
             <Lock className="size-3.5 text-zinc-300 shrink-0" />
           ) : (
@@ -429,7 +429,7 @@ export default function Navbar() {
             <Link href="/">
               <Image
                 src="/logo/sg-fit-logo-1.png"
-                alt="SG FIT"
+                alt="SG.FIT"
                 width={128}
                 height={128}
                 className="h-32 w-auto drop-shadow-xl"
@@ -513,7 +513,7 @@ export default function Navbar() {
             <Link href="/">
               <Image
                 src="/logo/sg-fit-logo-1.png"
-                alt="SG FIT"
+                alt="SG.FIT"
                 width={88}
                 height={88}
                 className="h-22 w-auto drop-shadow-lg"
@@ -577,8 +577,8 @@ export default function Navbar() {
 
                 {/* Sheet footer — changes based on auth state */}
                 {isLoggedIn ? (
-                  <div className="px-6 pt-1 pb-5 border-t border-zinc-100">
-                    <p className="py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 [font-family:var(--font-barlow)]">
+                  <div className="px-6 pt-1 pb-[calc(1.25rem+env(safe-area-inset-bottom))] border-t border-zinc-100">
+                    <p className="mt-2 pt-4 pb-2 border-t-2 border-zinc-200 text-[10px] font-black uppercase tracking-widest text-zinc-500 [font-family:var(--font-barlow)]">
                       My Account
                     </p>
                     <Link
@@ -612,7 +612,7 @@ export default function Navbar() {
                       }`}
                     >
                       <span className={!hasMembership ? "opacity-60" : ""}>
-                        SGians (Community)
+                        Endgame Squad (Community)
                       </span>
                       {!hasMembership && (
                         <Lock className="size-4 text-zinc-400" />

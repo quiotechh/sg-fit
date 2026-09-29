@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props) {
   const { category, slug } = await params
   const program = await getProgramBySlug(category, slug)
   if (!program) return {}
-  return { title: `${program.title} — SG Fit` }
+  return { title: `${program.title} — SG.FIT` }
 }
 
 export default async function ProgramDetailPage({ params }: Props) {

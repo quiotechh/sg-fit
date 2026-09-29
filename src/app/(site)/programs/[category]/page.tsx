@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props) {
   const { category } = await params
   const config = categoryConfigs[category]
   if (!config) return {}
-  return { title: `${config.label} — SG Fit` }
+  return { title: `${config.label} — SG.FIT` }
 }
 
 export default async function CategoryPage({ params }: Props) {

@@ -7,7 +7,7 @@ export default function RefundPolicy() {
         Refund Policy
       </h1>
       <p className="mb-8 text-xl leading-relaxed">
-        At SG Fit, we want every customer to feel confident in their purchase.
+        At SG.FIT, we want every customer to feel confident in their purchase.
         This Refund Policy explains how refunds are handled for purchases made
         on sgfit.com, including workout programs, community memberships,
         nutrition guides, and merchandise powered by Shopify.
@@ -19,7 +19,7 @@ export default function RefundPolicy() {
           1. Scope of this Policy
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          This policy applies to purchases made through SG Fit and our online
+          This policy applies to purchases made through SG.FIT and our online
           store. It covers digital products, memberships, and physical
           merchandise sold through Shopify. You should also review any
           additional terms presented at checkout or in product descriptions.
@@ -92,7 +92,7 @@ export default function RefundPolicy() {
           5. How to Request a Refund
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          To request a refund or report a purchase issue, please contact SG Fit
+          To request a refund or report a purchase issue, please contact SG.FIT
           within 14 days of the transaction. Provide the following information:
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">
@@ -150,7 +150,7 @@ export default function RefundPolicy() {
           8. No Guarantee of Refund
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit reserves the right to deny refund requests that do not meet the
+          SG.FIT reserves the right to deny refund requests that do not meet the
           policy terms. If a refund is denied, we will explain the reason and
           offer alternatives when appropriate.
         </p>
@@ -163,7 +163,7 @@ export default function RefundPolicy() {
         <p className="mb-6 text-lg leading-relaxed">
           We may update this Refund Policy at any time. Any changes will be
           posted on this page with an updated &quot;Last updated&quot; date.
-          Continued use of SG Fit means you accept the revised policy.
+          Continued use of SG.FIT means you accept the revised policy.
         </p>
       </section>
 
@@ -174,7 +174,7 @@ export default function RefundPolicy() {
           contact:
         </p>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit
+          SG.FIT
           <br />
           Email:{" "}
           <a className="text-primary underline" href="mailto:sgfitza@gmail.com">

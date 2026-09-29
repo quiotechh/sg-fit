@@ -149,7 +149,7 @@ export default function CommunityDashboardClient({
             {/* Mobile Header */}
             <div className="lg:hidden sticky top-0 z-80 flex items-center justify-between px-4.5 py-3.5 border-b border-[#eeece8] bg-white/95 backdrop-blur-lg">
               <div className="text-[18px] font-black uppercase tracking-[0.14em] [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)] bg-clip-text text-transparent">
-                SG FIT
+                SG.FIT
               </div>
               <div className="flex items-center gap-2">
                 <Button

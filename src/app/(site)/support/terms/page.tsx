@@ -7,7 +7,7 @@ export default function TermsOfService() {
         Terms of Service
       </h1>
       <p className="mb-8 text-xl leading-relaxed">
-        Welcome to SG Fit. These Terms of Service (&quot;Terms&quot;) govern
+        Welcome to SG.FIT. These Terms of Service (&quot;Terms&quot;) govern
         your use of our website at sgfit.com and our services, including workout
         programs, community features, nutrition guides, and merchandise store
         powered by Shopify. By accessing or using our services, you agree to be
@@ -31,7 +31,7 @@ export default function TermsOfService() {
           2. Description of Services
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit provides fitness and wellness services, including:
+          SG.FIT provides fitness and wellness services, including:
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">
           <li>Workout programs and nutrition guides.</li>
@@ -56,7 +56,7 @@ export default function TermsOfService() {
           3. Third-Party Services and Cookies
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit works with trusted third-party providers to process payments,
+          SG.FIT works with trusted third-party providers to process payments,
           deliver merchandise, and analyze site performance. These providers may
           collect information independently and are responsible for their own
           privacy practices.
@@ -161,12 +161,12 @@ export default function TermsOfService() {
           7. Intellectual Property Rights
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          All content on SG Fit, including workouts, guides, logos, and
-          software, is owned by SG Fit or our licensors. You may not copy,
+          All content on SG.FIT, including workouts, guides, logos, and
+          software, is owned by SG.FIT or our licensors. You may not copy,
           distribute, or use our content without permission.
         </p>
         <p className="mb-6 text-lg leading-relaxed">
-          By submitting content to our community, you grant SG Fit a
+          By submitting content to our community, you grant SG.FIT a
           non-exclusive, royalty-free license to use, display, and distribute
           your content.
         </p>
@@ -198,7 +198,7 @@ export default function TermsOfService() {
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
           Users may submit content to the community (e.g., posts, comments). You
-          retain ownership but grant SG Fit rights to use it. We reserve the
+          retain ownership but grant SG.FIT rights to use it. We reserve the
           right to moderate or remove content that violates these Terms.
         </p>
       </section>
@@ -219,14 +219,14 @@ export default function TermsOfService() {
           11. Disclaimers and Limitations of Liability
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          <strong>Medical Disclaimer:</strong> SG Fit is not a medical
+          <strong>Medical Disclaimer:</strong> SG.FIT is not a medical
           professional. Our content is for informational purposes only. Consult
           a doctor before starting any fitness program if you have health
           conditions. We are not responsible for injuries or health issues.
         </p>
         <p className="mb-6 text-lg leading-relaxed">
           Our services are provided &quot;as is&quot; without warranties. We
-          disclaim all warranties, express or implied. In no event shall SG Fit
+          disclaim all warranties, express or implied. In no event shall SG.FIT
           be liable for indirect, incidental, or consequential damages.
         </p>
       </section>
@@ -236,7 +236,7 @@ export default function TermsOfService() {
           12. Indemnification
         </h2>
         <p className="mb-6 text-lg leading-relaxed">
-          You agree to indemnify and hold SG Fit harmless from claims arising
+          You agree to indemnify and hold SG.FIT harmless from claims arising
           from your use of our services or violation of these Terms.
         </p>
       </section>
@@ -271,7 +271,7 @@ export default function TermsOfService() {
           If you have questions about these Terms, contact us at:
         </p>
         <p className="mb-6 text-lg leading-relaxed">
-          SG Fit
+          SG.FIT
           <br />
           Email: sgfitza@gmail.com
           <br />

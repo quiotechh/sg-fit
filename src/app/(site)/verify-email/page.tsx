@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth"
 import VerifyEmailResend from "./VerifyEmailResend"
 
 export const metadata = {
-  title: "Verify Email — SG Fit",
+  title: "Verify Email — SG.FIT",
 }
 
 // Only same-site relative paths — never redirect off-site from a query param.

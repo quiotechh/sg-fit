@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 import { getUserPurchasePrograms } from "@/lib/data/purchases";
 
 export const metadata = {
-  title: "My Programs — SG Fit",
+  title: "My Programs — SG.FIT",
 };
 
 const categories = [

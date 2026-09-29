@@ -1,8 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import Image from "next/image"
-import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa"
+import { FaInstagram, FaTiktok, FaYoutube, FaFacebook } from "react-icons/fa"
 import type { IconType } from "react-icons"
 
 type Stat = {
@@ -15,10 +14,10 @@ type Stat = {
 }
 
 const stats: Stat[] = [
-  { value: "2M+",   label: "Instagram",   Icon: FaInstagram, color: "#E1306C", href: "https://www.instagram.com/sharon_gambu/" },
-  { value: "917K+", label: "TikTok",      Icon: FaTiktok,    color: "#010101", href: "https://www.tiktok.com/@sharongambu" },
-  { value: "175K+", label: "Youtube",     Icon: FaYoutube,   color: "#FF0000", href: "https://www.youtube.com/@Sharon_ngambu" },
-  { value: "",      label: "South Africa", Icon: null, emoji: "🇿🇦" },
+  { value: "2.1M+", label: "Instagram", Icon: FaInstagram, color: "#E1306C", href: "https://www.instagram.com/sharon_gambu/" },
+  { value: "1.2M+", label: "TikTok",    Icon: FaTiktok,    color: "#010101", href: "https://www.tiktok.com/@sharongambu" },
+  { value: "2.3M+", label: "Facebook",  Icon: FaFacebook,  color: "#1877F2", href: "https://www.facebook.com/sharon.memela.73/" },
+  { value: "206K+", label: "Youtube",   Icon: FaYoutube,   color: "#FF0000", href: "https://www.youtube.com/@Sharon_ngambu" },
 ]
 
 export default function AboutSection() {
@@ -43,7 +42,7 @@ export default function AboutSection() {
               {/* Tag on photo */}
               <div className="absolute top-6 left-6">
                 <span className="text-[10px] font-black uppercase tracking-[0.28em] px-3 py-1.5 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", color: "#1a1a1a" }}>
-                  Founder · SG FIT
+                  Founder · SG.FIT
                 </span>
               </div>
             </div>
@@ -54,30 +53,19 @@ export default function AboutSection() {
           className="flex flex-col justify-center gap-14 order-1 md:order-2"
         >
 
-          {/* Eyebrow + Headline grouped so gap-14 doesn't split them */}
-          <div className="flex flex-col gap-4">
-            <p
-              className="text-sm sm:text-base font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
-              style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-            >
-              Meet Sharon Gambu
-            </p>
-
           {/* Headline */}
+          <div className="flex flex-col gap-4">
           <h2
             className="text-5xl sm:text-6xl md:text-4xl lg:text-6xl xl:text-7xl font-black uppercase leading-[1.05] tracking-tight [font-family:var(--font-barlow)]"
           >
-            <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Action.</span>
-            <span className="hidden sm:inline md:hidden text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Action.</span>
-            <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Action.</span>
-            <span className="hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Action.</span>
+            <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Meet</span>
+            <span className="hidden sm:inline md:hidden text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Meet</span>
+            <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Meet</span>
+            <span className="hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Meet</span>
             <br />
-            <span className="text-zinc-950">Discipline.</span>
+            <span className="text-zinc-950">Sharon</span>
             <br />
-            <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Results.</span>
-            <span className="hidden sm:inline md:hidden text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Results.</span>
-            <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Results.</span>
-            <span className="hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Results.</span>
+            <span className="text-zinc-950">Gambu.</span>
           </h2>
           </div>
 
@@ -85,8 +73,7 @@ export default function AboutSection() {
           <p
             className="text-base font-semibold text-zinc-500 leading-relaxed max-w-sm [font-family:var(--font-barlow)]"
           >
-            South African fitness entrepreneur. Luxury retreat instructor.
-            Founder of SG FIT. Building Africa{"'"}s strongest women — one transformation at a time.
+            Sharon Gambu is the founder of SG.FIT, a fitness, wellness and lifestyle brand built around training, consistency and community.
           </p>
 
           {/* Stats */}
@@ -142,17 +129,6 @@ export default function AboutSection() {
                 </div>
               )
             })}
-          </div>
-
-          {/* CTA */}
-          <div
-          >
-            <Link
-              href="/signup"
-              className="inline-block bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-10 py-4 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
-            >
-              Start Your Transformation
-            </Link>
           </div>
 
         </div>

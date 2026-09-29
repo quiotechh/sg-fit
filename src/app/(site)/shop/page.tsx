@@ -1,13 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ShopPage() {
   return (
     <main className="relative min-h-[85vh] flex items-center justify-center bg-zinc-950 overflow-hidden -mt-19 xl:-mt-21 pt-19 xl:pt-21">
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-black/40" />
+      <Image
+        src="/collage/collage8.jpeg"
+        alt="SG.FIT Shop"
+        fill
+        className="object-cover object-center"
+        priority
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/35" />
 
       <div className="relative z-10 text-center px-6 max-w-2xl">
         <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.3em] text-white/40 mb-4 [font-family:var(--font-barlow)]">
-          SG Fit Shop
+          SG.FIT Shop
         </p>
 
         <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-6xl xl:text-7xl mb-6">

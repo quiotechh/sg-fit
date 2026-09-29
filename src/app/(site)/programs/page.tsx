@@ -46,7 +46,7 @@ export default function ProgramsPage() {
 
         <Image
           src="/program-page-banner.jpg"
-          alt="SG FIT Programs"
+          alt="SG.FIT Programs"
           fill
           className="object-cover object-center"
           priority
@@ -291,7 +291,7 @@ export default function ProgramsPage() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              The SG Fit Difference
+              The SG.FIT Difference
             </p>
             <h2 className="text-3xl sm:text-4xl xl:text-5xl font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)]">
               <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>Why Our Programs</span>

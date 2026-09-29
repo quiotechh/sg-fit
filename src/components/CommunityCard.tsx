@@ -5,7 +5,7 @@ const hasMembership = true; // same toggle as Navbar.tsx
 
 const previewFeatures = [
   { icon: Trophy, text: "Monthly challenges & leaderboards" },
-  { icon: MessageCircle, text: "Chat with fellow SGians" },
+  { icon: MessageCircle, text: "Chat with fellow Endgame Squad members" },
   { icon: Flame, text: "Celebrate streaks together" },
 ];
 
@@ -18,7 +18,7 @@ export default function CommunityCard() {
         </div>
         <div>
           <p className="text-sm font-black uppercase tracking-tight text-white [font-family:var(--font-barlow)]">
-            SGians Community
+            Endgame Squad Community
           </p>
           <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] mt-1">
             Join thousands of women pushing each other to show up, every day.
@@ -28,7 +28,7 @@ export default function CommunityCard() {
           href="/membership"
           className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest px-6 py-3 rounded-lg text-zinc-950 [font-family:var(--font-barlow)] active:scale-95 transition-all bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)]"
         >
-          Join SGians
+          Join Endgame Squad
         </Link>
       </div>
     );
@@ -42,7 +42,7 @@ export default function CommunityCard() {
         </div>
         <div>
           <p className="text-base font-black uppercase tracking-tight text-white [font-family:var(--font-barlow)]">
-            SGians Community
+            Endgame Squad Community
           </p>
           <p className="text-[10px] font-bold uppercase tracking-wide text-zinc-500 [font-family:var(--font-barlow)]">
             Coming Soon

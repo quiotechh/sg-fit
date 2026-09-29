@@ -5,8 +5,6 @@ export interface CouponDef {
 
 export const COUPONS: Record<string, CouponDef> = {
   SGFIT10: { discount: 10, type: "percent" },
-  WELCOME20: { discount: 20, type: "percent" },
-  SG50: { discount: 50, type: "fixed" },
 }
 
 export function calculateDiscount(subtotal: number, code: string | null | undefined): number {

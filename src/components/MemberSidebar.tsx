@@ -74,7 +74,7 @@ export default function MemberSidebar() {
           href="/dashboard"
           className="text-lg font-black uppercase tracking-tight [font-family:var(--font-barlow)] bg-[linear-gradient(135deg,#C9953A,#F0CC72,#B8841F)] bg-clip-text text-transparent"
         >
-          SG FIT
+          SG.FIT
         </Link>
       </SidebarHeader>
 

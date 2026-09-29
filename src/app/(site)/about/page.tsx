@@ -1,13 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa"
+import { FaInstagram, FaTiktok, FaYoutube, FaFacebook } from "react-icons/fa"
 import { Users, Dumbbell, Salad, ShoppingBag, Zap, Heart, Globe } from "lucide-react"
 
 const socialStats = [
-  { value: "2M+",   label: "Instagram",  Icon: FaInstagram, color: "#E1306C", href: "https://www.instagram.com/sharon_gambu/" },
-  { value: "917K+", label: "TikTok",     Icon: FaTiktok,    color: "#09090b", href: "https://www.tiktok.com/@sharongambu" },
-  { value: "175K+", label: "YouTube",    Icon: FaYoutube,   color: "#FF0000", href: "https://www.youtube.com/@Sharon_ngambu" },
-  { value: "53.9K+",label: "SG FIT IG",  Icon: FaInstagram, color: "#E1306C", href: "https://www.instagram.com/sgfit.global/" },
+  { value: "2.1M+", label: "Instagram", Icon: FaInstagram, color: "#E1306C", href: "https://www.instagram.com/sharon_gambu/" },
+  { value: "1.2M+", label: "TikTok",    Icon: FaTiktok,    color: "#09090b", href: "https://www.tiktok.com/@sharongambu" },
+  { value: "2.3M+", label: "Facebook",  Icon: FaFacebook,  color: "#1877F2", href: "https://www.facebook.com/sharon.memela.73/" },
+  { value: "206K+", label: "YouTube",   Icon: FaYoutube,   color: "#FF0000", href: "https://www.youtube.com/@Sharon_ngambu" },
 ]
 
 const offerings = [
@@ -41,10 +41,10 @@ const offerings = [
   },
   {
     Icon: Users,
-    label: "SGians Community",
+    label: "Endgame Squad Community",
     desc: "A private community of thousands of women committed to showing up every day.",
     href: "/community",
-    cta: "Join SGians",
+    cta: "Join Endgame Squad",
   },
 ]
 
@@ -57,7 +57,7 @@ const values = [
   {
     num: "02",
     title: "Discipline",
-    desc: "Motivation gets you started. Discipline keeps you going. SG FIT is built around systems that make showing up easier.",
+    desc: "Motivation gets you started. Discipline keeps you going. SG.FIT is built around systems that make showing up easier.",
   },
   {
     num: "03",
@@ -75,9 +75,9 @@ export default function AboutPage() {
 
         <Image
           src="/collage/collage8.jpeg"
-          alt="Sharon Gambu — SG FIT"
+          alt="Sharon Gambu — SG.FIT"
           fill
-          className="object-cover object-center xl:object-[center_15%] opacity-75"
+          className="object-cover object-center xl:object-[center_15%]"
           priority
         />
 
@@ -98,7 +98,7 @@ export default function AboutPage() {
             </h1>
 
             <p className="text-white/60 text-sm sm:text-base xl:text-lg font-medium max-w-2xl mb-8 [font-family:var(--font-barlow)] leading-relaxed">
-              SG FIT was born from a simple belief — every woman deserves to feel strong, confident, and fully in control of her body.
+              SG.FIT was born from a simple belief — every woman deserves to feel strong, confident, and fully in control of her body.
             </p>
 
             <Link
@@ -128,7 +128,7 @@ export default function AboutPage() {
                 />
                 <div className="absolute top-6 left-6">
                   <span className="text-[10px] font-black uppercase tracking-[0.28em] px-3 py-1.5 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", color: "#1a1a1a" }}>
-                    Founder · SG FIT
+                    Founder · SG.FIT
                   </span>
                 </div>
               </div>
@@ -137,25 +137,18 @@ export default function AboutPage() {
             {/* Text */}
             <div className="flex flex-col gap-8 order-1 md:order-2">
               <div className="flex flex-col gap-4">
-                <p className="text-sm font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  Meet Sharon Gambu
-                </p>
                 <h2 className="text-5xl sm:text-6xl md:text-4xl lg:text-6xl xl:text-7xl font-black uppercase leading-[1.05] tracking-tight [font-family:var(--font-barlow)]">
-                  <span className="md:hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Action.</span>
-                  <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Action.</span>
+                  <span className="md:hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Meet</span>
+                  <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Meet</span>
                   <br />
-                  <span className="text-zinc-950">Discipline.</span>
+                  <span className="text-zinc-950">Sharon</span>
                   <br />
-                  <span className="md:hidden lg:inline text-transparent" style={{ WebkitTextStroke: "2px #09090b" }}>Results.</span>
-                  <span className="hidden md:inline lg:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Results.</span>
+                  <span className="text-zinc-950">Gambu.</span>
                 </h2>
               </div>
 
               <p className="text-base font-semibold text-zinc-500 leading-relaxed [font-family:var(--font-barlow)]">
-                Sharon Gambu is a South African fitness entrepreneur, wellness advocate, and the founder of SG FIT. With over 3 million followers across her platforms, Sharon has built one of Africa&apos;s most engaged fitness communities — fuelled by raw authenticity and real results.
-              </p>
-              <p className="text-base font-semibold text-zinc-500 leading-relaxed [font-family:var(--font-barlow)]">
-                From hosting luxury fitness retreats in Cape Town to building programs used by women across the world, Sharon&apos;s mission has always been the same: help women transform their bodies and mindsets through action, not excuses.
+                Sharon Gambu is the founder of SG.FIT, a fitness, wellness and lifestyle brand built around training, consistency and community.
               </p>
 
               {/* Social stats */}
@@ -168,13 +161,6 @@ export default function AboutPage() {
                   </a>
                 ))}
               </div>
-
-              <Link
-                href="/signup"
-                className="inline-block bg-zinc-950 text-white text-sm font-black uppercase tracking-widest px-10 py-4 rounded-lg hover:bg-zinc-800 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)] w-fit"
-              >
-                Start Your Transformation
-              </Link>
             </div>
 
           </div>
@@ -189,8 +175,8 @@ export default function AboutPage() {
               What We Stand For
             </p>
             <h2 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl">
-              <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>The SG FIT</span>
-              <span className="hidden sm:inline text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The SG FIT</span>
+              <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>The SG.FIT</span>
+              <span className="hidden sm:inline text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The SG.FIT</span>
               <br />
               <span className="text-white">Philosophy.</span>
             </h2>
@@ -215,7 +201,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 sm:mb-16">
             <p className="text-[10px] font-black uppercase tracking-[0.28em] mb-4 [font-family:var(--font-barlow)]" style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              The SG FIT Ecosystem
+              The SG.FIT Ecosystem
             </p>
             <h2 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl text-zinc-950">
               <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #09090b" }}>Everything</span>
@@ -259,7 +245,7 @@ export default function AboutPage() {
               <span className="sm:hidden text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>Join The</span>
               <span className="hidden sm:inline text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>Join The</span>
               <br />
-              <span className="text-white">SGians.</span>
+              <span className="text-white">Endgame Squad.</span>
             </h2>
             <p className="text-sm sm:text-base font-semibold text-zinc-400 max-w-md [font-family:var(--font-barlow)] leading-relaxed">
               Connect with thousands of women pushing each other to show up, stay consistent, and crush their fitness goals — together.
@@ -271,7 +257,7 @@ export default function AboutPage() {
               className="inline-flex items-center justify-center gap-2 bg-white text-zinc-950 text-sm font-black uppercase tracking-widest px-10 py-4 rounded-full hover:bg-zinc-200 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)] whitespace-nowrap"
             >
               <Heart className="size-4" />
-              Join SGians
+              Join Endgame Squad
             </Link>
             <Link
               href="/signup"

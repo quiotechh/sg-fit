@@ -47,7 +47,7 @@ export default function ProfileView({ posts, currentUser, onDelete }: Props) {
           {currentUser.name}
         </h2>
         <p className="text-[12px] text-[#9e9a90] font-medium [font-family:var(--font-barlow)] mb-6">
-          SGian · Member
+          Endgame Squad · Member
         </p>
 
         {/* Stats */}

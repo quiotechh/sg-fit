@@ -21,7 +21,7 @@ export default function PageHero({
 
       <Image
         src="/workout-program-page-hero-mobile.jpg"
-        alt="SG Fit programs"
+        alt="SG.FIT programs"
         fill
         priority
         sizes="(max-width: 639px) 100vw, 0px"
@@ -30,7 +30,7 @@ export default function PageHero({
 
       <Image
         src="/programs-page-hero.jpg"
-        alt="SG Fit programs"
+        alt="SG.FIT programs"
         fill
         priority
         sizes="(min-width: 640px) 100vw, 0px"

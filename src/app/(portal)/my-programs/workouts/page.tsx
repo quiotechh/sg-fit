@@ -9,7 +9,7 @@ import { auth } from "@/lib/auth";
 // Mock: slugs the logged-in user has purchased
 
 export const metadata = {
-  title: "My Workout Programs — SG Fit",
+  title: "My Workout Programs — SG.FIT",
 };
 
 export default async function MyWorkoutProgramsPage() {
