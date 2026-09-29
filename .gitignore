@@ -47,3 +47,8 @@ next-env.d.ts
 .claude/
 .windsurf/
 skills-lock.json
+
+# one-off local DB dumps (never commit — contain real user data; anchored to
+# repo root only, so this doesn't touch tracked files under prisma/migrations)
+/local_data.sql
+/workout_videos_final.sql

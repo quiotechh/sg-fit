@@ -6,7 +6,7 @@ import HelpForm from "./HelpForm"
 import { auth } from "@/lib/auth"
 
 export const metadata = {
-  title: "Help & Support — SG Fit",
+  title: "Help & Support — SG.FIT",
 }
 
 const quickLinks = [

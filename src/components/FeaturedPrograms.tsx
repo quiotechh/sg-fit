@@ -22,7 +22,7 @@ const features = [
   },
   {
     Icon: Users,
-    title: "SGians Community",
+    title: "Endgame Squad Community",
     desc: "Train alongside thousands of women who push each other to show up and get results.",
   },
 ];
@@ -89,7 +89,7 @@ export default function FeaturedPrograms() {
           <div className="relative order-1 md:order-2">
             {/* Main image */}
             <div className="relative w-full aspect-3/4 md:aspect-4/5 xl:aspect-3/4 rounded-3xl overflow-hidden bg-zinc-200">
-              <Image src="/home-program-section.jpg" alt="SG FIT Programs" fill sizes="(max-width: 767px) 100vw, 50vw" className="object-cover object-top" />
+              <Image src="/home-program-section.jpg" alt="SG.FIT Programs" fill sizes="(max-width: 767px) 100vw, 50vw" className="object-cover object-top" />
             </div>
 
             {/* Floating card — top left: active program */}
@@ -129,7 +129,7 @@ export default function FeaturedPrograms() {
                 </div>
               </div>
               <p className="text-xs font-semibold text-zinc-300 leading-snug [font-family:var(--font-barlow)]">
-                {'"'}Epic work SGians. Keep going — results don{"'"}t lie. 💪&quot;
+                {'"'}Epic work Endgame Squad. Keep going — results don{"'"}t lie. 💪&quot;
               </p>
             </div>
 

@@ -8,7 +8,7 @@ export default function CommunityBanner() {
       <div className="relative w-full bg-zinc-950 overflow-hidden hidden md:block md:min-h-[60vh] xl:min-h-screen">
         <Image
           src="/community-page.jpg"
-          alt="SGians Community"
+          alt="Endgame Squad Community"
           fill
           sizes="(min-width: 768px) 100vw, 0px"
           className="object-cover object-center"
@@ -22,8 +22,8 @@ export default function CommunityBanner() {
           </p>
 
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-white uppercase [font-family:var(--font-barlow)]">
-            <span className="hidden md:inline lg:hidden italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The SGians</span>
-            <span className="hidden lg:inline italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The SGians</span>
+            <span className="hidden md:inline lg:hidden italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The Endgame Squad</span>
+            <span className="hidden lg:inline italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The Endgame Squad</span>
             <br />
             <span className="text-white">Community</span>
           </h2>
@@ -38,7 +38,7 @@ export default function CommunityBanner() {
               href="/community"
               className="inline-flex items-center justify-center whitespace-nowrap bg-white text-zinc-950 text-sm font-black uppercase tracking-widest px-8 lg:px-10 py-4 rounded-full hover:bg-zinc-200 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             >
-              Join SGians
+              Join Endgame Squad
             </Link>
             <Link
               href="/community"
@@ -54,7 +54,7 @@ export default function CommunityBanner() {
       <div className="relative w-full bg-zinc-950 overflow-hidden md:hidden min-h-[80vh] sm:min-h-screen">
         <Image
           src="/community-page.jpg"
-          alt="SGians Community"
+          alt="Endgame Squad Community"
           fill
           sizes="(max-width: 767px) 100vw, 0px"
           className="object-cover object-center"
@@ -67,8 +67,8 @@ export default function CommunityBanner() {
           </p>
 
           <h2 className="text-3xl sm:text-4xl font-black leading-tight text-white uppercase [font-family:var(--font-barlow)]">
-            <span className="sm:hidden italic text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>The SGians</span>
-            <span className="hidden sm:inline italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The SGians</span>
+            <span className="sm:hidden italic text-transparent" style={{ WebkitTextStroke: "1px #fff" }}>The Endgame Squad</span>
+            <span className="hidden sm:inline italic text-transparent" style={{ WebkitTextStroke: "2px #fff" }}>The Endgame Squad</span>
             <br />
             <span className="text-white">Community</span>
           </h2>
@@ -83,7 +83,7 @@ export default function CommunityBanner() {
               href="/community"
               className="inline-flex items-center justify-center whitespace-nowrap bg-white text-zinc-950 text-xs font-black uppercase tracking-widest px-5 py-3 rounded-full hover:bg-zinc-200 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
             >
-              Join SGians
+              Join Endgame Squad
             </Link>
             <Link
               href="/community"

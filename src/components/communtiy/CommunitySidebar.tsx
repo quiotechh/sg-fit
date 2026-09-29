@@ -46,7 +46,7 @@ export default function Sidebar({
             backgroundClip: "text",
           }}
         >
-          SGIANS
+          ENDGAME SQUAD
         </div>
       </SidebarHeader>
 

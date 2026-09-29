@@ -34,7 +34,7 @@ export function buildVerificationEmail({
       <td style="padding:32px 28px 8px;">
         <p style="margin:0 0 4px;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${GOLD};">One last step</p>
         <h1 style="margin:0 0 16px;font-size:22px;font-weight:900;color:#09090b;">Verify your email</h1>
-        <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#52525b;">Hi ${safeName}, thanks for joining SG Fit. Confirm this is your email address to activate your account.</p>
+        <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#52525b;">Hi ${safeName}, thanks for joining SG.FIT. Confirm this is your email address to activate your account.</p>
         <table role="presentation" width="100%" style="margin-bottom:16px;">
           <tr>
             <td align="center" style="background:${GOLD};border-radius:10px;">
@@ -54,13 +54,13 @@ export function buildVerificationEmail({
     </tr>
     <tr>
       <td style="padding:0 28px 28px;">
-        <p style="margin:0;font-size:12px;color:#a1a1aa;">— SG Fit</p>
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">— SG.FIT</p>
       </td>
     </tr>
   </table>
 </div>`.trim()
 
-  const text = `Hi ${firstName},\n\nThanks for joining SG Fit. Confirm this is your email address to activate your account:\n\n${url}\n\nThis link expires in ${expiresInMinutes} minutes.\n\nDidn't create an account? You can safely ignore this email.\n\n— SG Fit`
+  const text = `Hi ${firstName},\n\nThanks for joining SG.FIT. Confirm this is your email address to activate your account:\n\n${url}\n\nThis link expires in ${expiresInMinutes} minutes.\n\nDidn't create an account? You can safely ignore this email.\n\n— SG.FIT`
 
   return { html, text }
 }

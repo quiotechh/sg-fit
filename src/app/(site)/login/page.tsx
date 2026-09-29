@@ -18,7 +18,7 @@ export default function LoginPage() {
               Welcome Back
             </p>
             <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-3xl sm:text-4xl text-zinc-950">
-              Login to SG Fit
+              Login to SG.FIT
             </h1>
           </div>
           <div className="bg-white border-2 border-zinc-100 rounded-3xl p-7 xl:p-10">

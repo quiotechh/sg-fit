@@ -254,7 +254,7 @@ async function sendDigitalDeliveryEmail({
     </tr>
     <tr>
       <td style="padding:0 28px 28px;">
-        <p style="margin:0;font-size:12px;color:#a1a1aa;">— SG Fit</p>
+        <p style="margin:0;font-size:12px;color:#a1a1aa;">— SG.FIT</p>
       </td>
     </tr>
   </table>
@@ -264,8 +264,8 @@ async function sendDigitalDeliveryEmail({
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: userEmail,
-      subject: programs.length === 1 ? `Your ${programs[0].title} is ready — SG Fit` : "Your Nutrition Guides are ready — SG Fit",
-      text: `Thanks for your purchase! Your PDF ${guideWord} ${programs.length === 1 ? "is" : "are"} ready:\n\n${titleList}\n\nDownload it here: ${primaryLink}\n\nOr go to My Programs → Nutrition Guides on the site anytime to download it again: ${myProgramsLink}\n\nDon't see this email in your inbox? Check your Spam/Junk folder.\n\n— SG Fit`,
+      subject: programs.length === 1 ? `Your ${programs[0].title} is ready — SG.FIT` : "Your Nutrition Guides are ready — SG.FIT",
+      text: `Thanks for your purchase! Your PDF ${guideWord} ${programs.length === 1 ? "is" : "are"} ready:\n\n${titleList}\n\nDownload it here: ${primaryLink}\n\nOr go to My Programs → Nutrition Guides on the site anytime to download it again: ${myProgramsLink}\n\nDon't see this email in your inbox? Check your Spam/Junk folder.\n\n— SG.FIT`,
       html,
     })
 
@@ -528,8 +528,8 @@ async function sendPaymentFailedEmail(userId: string, currentPeriodEnd: Date | n
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: user.email,
-      subject: "Your payment failed — update your card to keep your SGians access",
-      text: `Hi,\n\nWe tried to renew your SG Fit Community Membership, but the payment didn't go through.\n\nYour access continues until ${deadline} — after that, it will stop unless you resubscribe.\n\nUpdate your payment here: ${siteUrl}/community/checkout\n\nIf you need help, just reply to this email.\n\n— SG Fit`,
+      subject: "Your payment failed — update your card to keep your Endgame Squad access",
+      text: `Hi,\n\nWe tried to renew your SG.FIT Community Membership, but the payment didn't go through.\n\nYour access continues until ${deadline} — after that, it will stop unless you resubscribe.\n\nUpdate your payment here: ${siteUrl}/community/checkout\n\nIf you need help, just reply to this email.\n\n— SG.FIT`,
     })
     await logEvent({
       userId,

@@ -17,7 +17,7 @@ import PhotoUploadCard from "@/components/PhotoUploadCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Measurements — SG Fit",
+  title: "Measurements — SG.FIT",
 };
 
 const cardCls = "rounded-2xl border border-zinc-100 bg-white shadow-sm ring-0";

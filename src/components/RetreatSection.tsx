@@ -9,7 +9,7 @@ export default function RetreatBanner() {
       <div className="relative w-full bg-zinc-950 overflow-hidden hidden md:block md:min-h-[60vh] xl:min-h-screen">
         <Image
           src="/retreat-banner.jpg"
-          alt="SG FIT Luxury Retreat"
+          alt="SG.FIT Luxury Retreat"
           fill
           sizes="(min-width: 768px) 100vw, 0px"
           className="object-cover object-center"
@@ -21,7 +21,7 @@ export default function RetreatBanner() {
             className="text-xs font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
             style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
           >
-            SG FIT · Luxury Retreat
+            SG.FIT · Luxury Retreat
           </p>
 
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tight [font-family:var(--font-barlow)]">
@@ -60,7 +60,7 @@ export default function RetreatBanner() {
       <div className="relative w-full bg-zinc-950 overflow-hidden md:hidden min-h-[80vh] sm:min-h-screen">
         <Image
           src="/retreat-banner.jpg"
-          alt="SG FIT Luxury Retreat"
+          alt="SG.FIT Luxury Retreat"
           fill
           sizes="(max-width: 767px) 100vw, 0px"
           className="object-cover object-center"
@@ -72,7 +72,7 @@ export default function RetreatBanner() {
             className="text-[10px] font-black uppercase tracking-[0.28em] [font-family:var(--font-barlow)]"
             style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
           >
-            SG FIT · Luxury Retreat
+            SG.FIT · Luxury Retreat
           </p>
 
           <h2 className="text-3xl sm:text-4xl font-black uppercase leading-[0.9] tracking-tight [font-family:var(--font-barlow)]">

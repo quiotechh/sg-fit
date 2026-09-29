@@ -27,7 +27,7 @@ export default function AffiliatesPage() {
       <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden -mt-19 xl:-mt-21">
         <Image
           src="/affiliate-page-hero-mobile.jpg"
-          alt="SG Fit affiliates"
+          alt="SG.FIT affiliates"
           fill
           sizes="(max-width: 639px) 100vw, 0px"
           className="object-cover sm:hidden"
@@ -35,7 +35,7 @@ export default function AffiliatesPage() {
         />
         <Image
           src="/affiliate-page.jpg"
-          alt="SG Fit affiliates"
+          alt="SG.FIT affiliates"
           fill
           sizes="(min-width: 640px) 100vw, 0px"
           className="hidden object-cover sm:block"
@@ -84,7 +84,7 @@ export default function AffiliatesPage() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
             These recommended products bring quality and convenience to your
-            routine. Click through to shop and support SG Fit at no extra cost.
+            routine. Click through to shop and support SG.FIT at no extra cost.
           </p>
         </div>
 

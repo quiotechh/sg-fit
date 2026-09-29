@@ -38,7 +38,7 @@ export const auth = betterAuth({
         .sendMail({
           from: process.env.GMAIL_USER,
           to: user.email,
-          subject: "Verify your email — SG Fit",
+          subject: "Verify your email — SG.FIT",
           text,
           html,
         })
@@ -92,7 +92,7 @@ export const auth = betterAuth({
       void transporter.sendMail({
         from: process.env.GMAIL_USER,
         to: user.email,
-        subject: "Reset your password — SG Fit",
+        subject: "Reset your password — SG.FIT",
         text: `Click the link to reset your password: ${url}`,
       });
     },

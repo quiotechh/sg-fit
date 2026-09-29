@@ -41,7 +41,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "SG Fit",
+  title: "SG.FIT",
   description: "Your fitness journey starts here",
   icons: {
     icon: "/logo/sg-fit-logo-1.png",

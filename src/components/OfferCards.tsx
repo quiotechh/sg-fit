@@ -13,11 +13,11 @@ const cards = [
     back: {
       tagline: "Train with\npurpose",
       items: [
-        "Strength & Powerlifting",
-        "HIIT & Cardio",
-        "Yoga & Mobility",
-        "Body Recomposition",
-        "Beginner Foundations",
+        "Strength & Full-Body Training",
+        "No-Equipment Home Workouts",
+        "Low-Impact Chair Workouts",
+        "Nutrition Guides",
+        "Filmed Exercise Demonstrations",
       ],
     },
   },
@@ -31,10 +31,8 @@ const cards = [
       tagline: "Gear up.\nLevel up.",
       items: [
         "Training Apparel",
-        "Resistance Equipment",
         "Supplements & Nutrition",
-        "Recovery Tools",
-        "SG Fit Merch",
+        "SG.FIT Merch",
       ],
     },
   },
@@ -47,11 +45,11 @@ const cards = [
     back: {
       tagline: "Stronger\ntogether",
       items: [
-        "Monthly Challenges",
-        "Member Leaderboard",
-        "Live Q&A Sessions",
-        "Transformation Stories",
-        "Private Forums",
+        "Private Community Feed",
+        "Progress Photo Sharing",
+        "Likes & Comments",
+        "Daily Accountability",
+        "Moderated, Safe Space",
       ],
     },
   },
@@ -142,7 +140,7 @@ function CardBack({ card, padding }: { card: typeof cards[0], padding: string })
           style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)" }}
           onClick={(e) => e.stopPropagation()}
         >
-          Explore {card.label}
+          Explore {card.label}{card.id === "shop" ? " (Coming Soon)" : ""}
           <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
         </Link>
 
@@ -160,13 +158,9 @@ export default function OfferCards() {
       {/* Heading */}
       <div className="pt-16 sm:pt-20 pb-8 sm:pb-10 text-center px-4 sm:px-6">
         <h2 className="uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-4xl sm:text-5xl xl:text-6xl">
-          <span className="font-black sm:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>WHAT WE{" "}</span>
-          <span className="font-black hidden sm:inline" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>WHAT WE{" "}</span>
+          <span className="font-black text-black">WHAT WE{" "}</span>
           <span className="font-black text-black">OFFER</span>
         </h2>
-        <p className="mt-3 sm:mt-4 text-zinc-500 text-sm sm:text-base lg:text-lg font-medium [font-family:var(--font-barlow)] max-w-xl mx-auto">
-          Everything you need to train, gear up, and grow — in one place.
-        </p>
       </div>
 
       {/* ── DESKTOP (lg+) — 3D flip ──────────────────────────────────── */}

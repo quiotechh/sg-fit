@@ -26,13 +26,13 @@ export default function AnnouncementBar() {
               <span
                 style={{ background: "linear-gradient(135deg, #C9953A, #F0CC72, #C9953A)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
               >
-                This Week Only — 10% Off +{" "}$1,000 in Free Mobility Training
+                New Here? Get 10% Off Your First Program —{" "}Use Code SGFIT10
               </span>{" "}
               <Link
-                href="/signup"
+                href="/programs"
                 className="text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white hover:decoration-white transition-colors duration-150"
               >
-                When You Subscribe
+                At Checkout
               </Link>
             </p>
 

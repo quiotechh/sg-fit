@@ -64,7 +64,7 @@ export default function CommunityManageClient({
           <div className="flex items-center justify-between px-5 py-4">
             <div>
               <p className="text-sm font-black uppercase tracking-tight text-zinc-950 [font-family:var(--font-barlow)]">
-                SG Fit Community Membership
+                SG.FIT Community Membership
               </p>
               <p className="text-xs font-medium text-zinc-400 [font-family:var(--font-barlow)] mt-0.5">
                 {COMMUNITY_PRICE_LABEL} / month

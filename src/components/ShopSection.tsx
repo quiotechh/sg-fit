@@ -13,7 +13,7 @@ const supplements = [
     description:
       "100% organic premium tea designed to cleanse your system, boost energy, and accelerate fat burning — naturally.",
     image: "/products/tea-bag-1.png",
-    badge: "Best Seller",
+    badge: "Coming Soon",
     stats: [
       { value: "14", label: "Day detox cycle" },
       { value: "100%", label: "Organic ingredients" },
@@ -28,7 +28,7 @@ const supplements = [
     description:
       "Science-backed capsules that support weight loss, healthy energy levels and bowel movement. 400mg per capsule, 60 count.",
     image: "/products/slim-capsules-1.png",
-    badge: "New",
+    badge: "Coming Soon",
     stats: [
       { value: "400mg", label: "Per capsule" },
       { value: "60", label: "Capsules inside" },
@@ -38,9 +38,9 @@ const supplements = [
 ]
 
 const gymwear = [
-  { id: "1", name: "SG Fit Training Set", price: "Price coming soon", image: "/products/gymwear-1.jpg" },
-  { id: "2", name: "SG Fit Sports Bra", price: "Price coming soon", image: "/products/gymwear-2.jpg" },
-  { id: "3", name: "SG Fit Leggings", price: "Price coming soon", image: "/products/gymwear-3.jpg" },
+  { id: "1", name: "SG.FIT Training Set", price: "Price coming soon", image: "/products/gymwear-1.jpg" },
+  { id: "2", name: "SG.FIT Sports Bra", price: "Price coming soon", image: "/products/gymwear-2.jpg" },
+  { id: "3", name: "SG.FIT Leggings", price: "Price coming soon", image: "/products/gymwear-3.jpg" },
 ]
 
 // The activewear collection has no product photos yet (its images 404), so it's
@@ -83,7 +83,7 @@ export default function ShopSection() {
           <span className="font-black text-black">COLLECTION</span>
         </h2>
         <p className="mt-3 sm:mt-4 text-zinc-500 text-sm sm:text-base lg:text-lg font-medium [font-family:var(--font-barlow)] max-w-xl mx-auto">
-          Premium supplements and activewear — built for results.
+          Premium supplements and activewear — coming soon.
         </p>
       </div>
 
@@ -229,7 +229,7 @@ export default function ShopSection() {
             <span className="font-black sm:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>THE{" "}</span>
             <span className="font-black hidden sm:inline lg:hidden" style={{ WebkitTextStroke: "1px black", color: "transparent" }}>THE{" "}</span>
             <span className="font-black hidden lg:inline" style={{ WebkitTextStroke: "2px black", color: "transparent" }}>THE{" "}</span>
-            <span className="font-black text-black">SG FIT COLLECTION</span>
+            <span className="font-black text-black">SG.FIT COLLECTION</span>
           </h3>
         </div>
 

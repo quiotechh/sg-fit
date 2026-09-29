@@ -281,7 +281,7 @@ export default function Footer() {
       <div className="w-full overflow-hidden">
         <Image
           src="/logo/sg-fit-logo-2.png"
-          alt="SG FIT"
+          alt="SG.FIT"
           width={1920}
           height={400}
           className="w-full h-44 md:h-96 lg:h-120 xl:h-152 object-cover object-center"
@@ -309,7 +309,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 xl:px-16 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 [font-family:var(--font-barlow)]">
-            © {new Date().getFullYear()} SG Fit. All rights reserved.
+            © {new Date().getFullYear()} SG.FIT. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link

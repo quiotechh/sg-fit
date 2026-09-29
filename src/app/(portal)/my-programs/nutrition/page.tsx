@@ -7,7 +7,7 @@ import MyNutritionCard from "@/components/MyNutritionCard";
 import { auth } from "@/lib/auth";
 
 export const metadata = {
-  title: "My Nutrition Guides — SG Fit",
+  title: "My Nutrition Guides — SG.FIT",
 };
 
 export default async function MyNutritionProgramsPage() {

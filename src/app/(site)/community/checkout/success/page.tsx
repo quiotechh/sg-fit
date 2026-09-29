@@ -7,7 +7,7 @@ export default function CommunityCheckoutSuccessPage() {
       <CheckCircle className="size-12 text-[#C9953A]" />
       <div>
         <p className="text-2xl font-black uppercase text-zinc-950 [font-family:var(--font-barlow)] mb-2">
-          Welcome to SGians
+          Welcome to Endgame Squad
         </p>
         <p className="text-sm font-medium text-zinc-500 [font-family:var(--font-barlow)] max-w-sm">
           Your membership is being confirmed — this can take a few seconds while we verify your payment.

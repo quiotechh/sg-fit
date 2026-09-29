@@ -63,7 +63,7 @@ export default function ContactPage() {
       <section className="relative h-screen md:h-[75vh] lg:h-[78vh] xl:h-screen w-full overflow-hidden bg-zinc-950 -mt-19 xl:-mt-21">
         <Image
           src="/contact-page-hero-mobile.jpg"
-          alt="Contact SG FIT"
+          alt="Contact SG.FIT"
           fill
           sizes="(max-width: 639px) 100vw, 0px"
           className="object-cover object-[center_30%] sm:hidden"
@@ -71,7 +71,7 @@ export default function ContactPage() {
         />
         <Image
           src="/contact-us-page.jpg"
-          alt="Contact SG FIT"
+          alt="Contact SG.FIT"
           fill
           sizes="(min-width: 640px) 100vw, 0px"
           className="hidden object-cover object-[center_30%] sm:block"
@@ -169,7 +169,7 @@ export default function ContactPage() {
                   Community Support
                 </p>
                 <p className="text-sm font-semibold text-zinc-500 leading-relaxed [font-family:var(--font-barlow)]">
-                  Need fitness advice or peer support? Join the <Link href="/community" className="text-zinc-950 underline underline-offset-2 hover:opacity-70 transition-opacity">SGians Community</Link> — thousands of women ready to help.
+                  Need fitness advice or peer support? Join the <Link href="/community" className="text-zinc-950 underline underline-offset-2 hover:opacity-70 transition-opacity">Endgame Squad</Link> — thousands of women ready to help.
                 </p>
               </div>
             </div>

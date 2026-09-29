@@ -8,7 +8,7 @@ import { hasPurchasedCategory } from "@/lib/data/purchases";
 import WorkoutLibraryClient from "@/components/WorkoutLibraryClient";
 
 export const metadata = {
-  title: "Workout Library — SG Fit",
+  title: "Workout Library — SG.FIT",
 };
 
 export default async function WorkoutLibraryPage() {

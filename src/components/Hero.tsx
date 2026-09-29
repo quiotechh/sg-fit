@@ -10,7 +10,7 @@ export default function Hero() {
       {/* Mobile hero */}
       <Image
         src="/sgfit-mobile-hero.jpg"
-        alt="SG Fit — build your body through action, discipline and consistency"
+        alt="SG.FIT — build your body through action, discipline and consistency"
         fill
         priority
         sizes="(max-width: 639px) 100vw, 0px"
@@ -20,7 +20,7 @@ export default function Hero() {
       {/* Desktop hero */}
       <Image
         src="/sgfit-desktop-hero.jpg"
-        alt="SG Fit — build your body through action, discipline and consistency"
+        alt="SG.FIT — build your body through action, discipline and consistency"
         fill
         priority
         sizes="(min-width: 640px) 100vw, 0px"

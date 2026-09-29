@@ -14,7 +14,7 @@ export default function SignupPage() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Join SG Fit
+              Join SG.FIT
             </p>
             <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-3xl sm:text-4xl text-zinc-950">
               Create Account
