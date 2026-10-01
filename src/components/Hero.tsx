@@ -27,43 +27,40 @@ export default function Hero() {
         className="hidden object-cover sm:block"
       />
 
-      {/* Bottom gradient so text is always legible */}
-      <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black via-black/55 to-transparent" />
+      {/* Gradient so centered text stays legible wherever it sits on the photo */}
+      <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
-      {/* Hero content — bottom-left, sitting on the gradient */}
-      <div className="absolute inset-x-0 bottom-0 px-6 pb-14 sm:px-10 sm:pb-18 xl:px-16 xl:pb-15">
-        <div className="max-w-10xl">
+      {/* Hero content — centered column, sitting in the lower-middle of the frame, Nike-style */}
+      <div className="absolute inset-x-0 bottom-[14%] sm:bottom-[10%] xl:bottom-[8%] px-6 flex flex-col items-center text-center">
 
-          <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-2xl sm:text-5xl xl:text-6xl mb-5">
-            <span
-              style={{
-                background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              BUILD YOUR BODY
-            </span>
-            <br />
-            <span className="text-white/80">
-              it happens through action,<br />
-              discipline &amp; consistency.
-            </span>
-          </h1>
-
-          <p className="text-white/60 text-sm sm:text-base xl:text-lg font-medium max-w-4xl mb-8 [font-family:var(--font-barlow)] leading-relaxed">
-            Science-backed fitness programs built for people who are serious about results.
-            Train harder, recover smarter, and transform your body — for good.
-          </p>
-
-          <Link
-            href="/signup"
-            className="inline-block bg-white text-zinc-950 text-xs sm:text-base font-black uppercase tracking-widest px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
+        <h1 className="font-black uppercase leading-none tracking-tight [font-family:var(--font-barlow)] text-3xl sm:text-5xl xl:text-6xl mb-3">
+          <span
+            style={{
+              background: "linear-gradient(135deg, #C9953A, #F0CC72, #B8841F)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
           >
-            Start Your Journey
-          </Link>
+            Build Your Body
+          </span>
+        </h1>
 
-        </div>
+        <p className="text-white text-xs sm:text-sm xl:text-base font-semibold mb-6 leading-snug max-w-52 sm:max-w-xs xl:max-w-sm">
+          Train with Sharon Gambu&apos;s structured 4-week programs.
+        </p>
+
+        {/* <p className="text-white/60 text-sm sm:text-base xl:text-lg font-medium max-w-4xl mb-8 [font-family:var(--font-barlow)] leading-relaxed">
+          Science-backed fitness programs built for people who are serious about results.
+          Train harder, recover smarter, and transform your body — for good.
+        </p> */}
+
+        <Link
+          href="/signup"
+          className="inline-block bg-white text-zinc-950 text-xs sm:text-base font-black uppercase tracking-widest px-8 py-3.5 sm:px-10 sm:py-4 rounded-full hover:bg-zinc-100 active:scale-95 transition-all duration-150 [font-family:var(--font-barlow)]"
+        >
+          Start Your Journey
+        </Link>
+
       </div>
 
     </section>
