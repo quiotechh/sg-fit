@@ -34,8 +34,8 @@ const guidelines = [
 
 const testimonials = [
   {
-    avatar: "LM",
-    name: "Lerato M.",
+    avatar: "NK",
+    name: "Nandi K.",
     text: "Being part of Endgame Squad changed everything. The accountability here is unreal — people actually show up for each other.",
   },
   {
